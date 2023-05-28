@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,9 +17,11 @@ import org.firstinspires.ftc.teamcode.modules.opencv.SignalDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
+// Localization is doesn't show drift, follower if it does
+
 @Config
-@Autonomous(name = "AutoOp State Machines (LEFT)", group = "16481-Power-Play")
-public class AutoopStateMachinesLeft extends LinearOpMode {
+@Autonomous(name = "AutoOp State Machines", group = "16481-Power-Play")
+public class TemplateAutoop extends LinearOpMode {
 
     // Declare the motors and servos
     DcMotorEx motorLeft;
@@ -42,7 +45,7 @@ public class AutoopStateMachinesLeft extends LinearOpMode {
     final int liftLow = 0;
     final int liftHigherThanLow = -600;
     final int liftMid = -900;
-    final int liftHigh = -1275;
+    final int liftHigh = -1200;
 
 
     @Override
@@ -83,6 +86,8 @@ public class AutoopStateMachinesLeft extends LinearOpMode {
         sleep(100);
         int tagID=-1;
 
+        // Set flipbar to resting position
+
 
         telemetry.addData("# Detecting AprilTag ","");
         telemetry.update();
@@ -102,15 +107,17 @@ public class AutoopStateMachinesLeft extends LinearOpMode {
         // Import Roadrunner Trajectories
         RoadrunnerPointDataset Trajectories = new RoadrunnerPointDataset(drive, (MultipleTelemetry) telemetry, motorRight, motorLeft, claw);
 
+        claw.setPosition(0.45);
         waitForStart();
 
         if (isStopRequested()) return;
 
-        Boolean cycle = true;
+        Boolean cycle = false;
+        Boolean test = false;
         while(opModeIsActive()){
             /* Running Trajectories */
             // Just Parking
-            if(cycle == false){
+            if(cycle == false && test == false){
                 switch (RobotPosition) {
                     case STATE_POSITION_SP0:
                         drive.setPoseEstimate(Trajectories.S0_POS);
@@ -143,7 +150,7 @@ public class AutoopStateMachinesLeft extends LinearOpMode {
                 }
             }
             // Cycle
-            else if(cycle == true) {
+            else if(cycle == true && test == false) {
                 switch (RobotPosition) {
                     case STATE_POSITION_SP0:
                         drive.setPoseEstimate(Trajectories.S0_POS);
@@ -169,14 +176,14 @@ public class AutoopStateMachinesLeft extends LinearOpMode {
                         break;
                     case STATE_POSITION_SP2:
                         // Run High Preload
-                        Trajectories.HighPreloadLeftV2();
+                        //Trajectories.HighPreloadRight();
                         // Then run Parking
                         if (tagID == 0) {
-                            Trajectories.PreloadParkingLeftPP1();
+                            Trajectories.PreloadParkingRightPP1();
                         } else if (tagID == 1) {
-                            Trajectories.PreloadParkingLeftPP2();
+                            Trajectories.PreloadParkingRightPP2();
                         } else if (tagID == 2) {
-                            Trajectories.PreloadParkingLeftPP3();
+                            Trajectories.PreloadParkingRightPP3();
                         }
                         RobotPosition = STATE_POSITION.STATE_POSITION_SP9;
                         break;
@@ -189,6 +196,38 @@ public class AutoopStateMachinesLeft extends LinearOpMode {
                         } else if (tagID == 2) {
                             Trajectories.S3PP3();
                         }
+                        RobotPosition = STATE_POSITION.STATE_POSITION_SP9;
+                        break;
+                }
+            }
+            if(cycle == false && test == true){
+                switch (RobotPosition) {
+                    case STATE_POSITION_SP0:
+                        drive.setPoseEstimate(Trajectories.S0_POS);
+                        if(tagID == 0){ Trajectories.S0PP1(); }
+                        else if (tagID == 1) { Trajectories.S0PP2(); }
+                        else if (tagID == 2){  Trajectories.S0PP3(); }
+                        RobotPosition = STATE_POSITION.STATE_POSITION_SP9;
+                        break;
+                    case  STATE_POSITION_SP1:
+                        drive.setPoseEstimate(Trajectories.S1_POS);
+                        if(tagID == 0){ Trajectories.S1PP1(); }
+                        else if (tagID == 1) { Trajectories.S1PP2(); }
+                        else if (tagID == 2) { Trajectories.S1PP3(); }
+                        RobotPosition = STATE_POSITION.STATE_POSITION_SP9;
+                        break;
+                    case STATE_POSITION_SP2:
+                        drive.setPoseEstimate(new Pose2d(-34, 64.5, Math.toRadians(270)));
+                        if (tagID == 0) { Trajectories.HighCycleRightV3(); }
+                        else if (tagID == 1) { Trajectories.HighCycleRightV3(); }
+                        else if (tagID == 2) { Trajectories.HighCycleRightV3(); }
+                        RobotPosition = STATE_POSITION.STATE_POSITION_SP9;
+                        break;
+                    case STATE_POSITION_SP3:
+                        drive.setPoseEstimate(Trajectories.S3_POS);
+                        if(tagID == 0){ Trajectories.S3PP1(); }
+                        else if (tagID == 1) { Trajectories.S3PP2(); }
+                        else if (tagID == 2) { Trajectories.S3PP3(); }
                         RobotPosition = STATE_POSITION.STATE_POSITION_SP9;
                         break;
                 }

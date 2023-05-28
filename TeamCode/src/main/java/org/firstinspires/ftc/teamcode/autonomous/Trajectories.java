@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.modules.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.modules.drive.DriveConstants;
 
-public class RoadrunnerPointDataset {
+public class Trajectories {
 
     private SampleMecanumDrive lDrive;
     private MultipleTelemetry ltelementry;
@@ -38,7 +38,7 @@ public class RoadrunnerPointDataset {
     final double open = 0;
 
 
-    public RoadrunnerPointDataset(SampleMecanumDrive drive, MultipleTelemetry telemetry, DcMotorEx motorRight, DcMotorEx motorLeft, Servo claw) {
+    public Trajectories(SampleMecanumDrive drive, MultipleTelemetry telemetry, DcMotorEx motorRight, DcMotorEx motorLeft, Servo claw) {
         lDrive = drive;
         ltelementry = telemetry;
 
@@ -60,10 +60,6 @@ public class RoadrunnerPointDataset {
         lclaw = claw;
 
     }
-
-
-
-    AutoopStateMachines AutoCaller;
 
     public void test() {
         Pose2d StartPose = new Pose2d(36, -64.5, Math.toRadians(-270));

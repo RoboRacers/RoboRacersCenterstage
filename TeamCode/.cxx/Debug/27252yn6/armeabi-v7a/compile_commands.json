@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a",
+  "command": "/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=armv7-none-linux-androideabi23 --gcc-toolchain=/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -Dftcrobotcontroller_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC -o CMakeFiles/ftcrobotcontroller.dir/ftcrobotcontroller.cpp.o -c /Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/ftcrobotcontroller.cpp",
+  "file": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/ftcrobotcontroller.cpp"
+}
+]

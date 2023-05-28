@@ -1,0 +1,170 @@
+[
+  {
+    "level_": 0,
+    "message_": "Start JSON generation. Platform version: 23 min SDK version: armeabi-v7a",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1356699132
+  },
+  {
+    "level_": 0,
+    "message_": "rebuilding JSON /Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a/android_gradle_build.json due to:",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1797787227
+  },
+  {
+    "level_": 0,
+    "message_": "- expected json /Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a/android_gradle_build.json file is not present, will remove stale json folder",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 106784063
+  },
+  {
+    "level_": 0,
+    "message_": "- missing previous command file /Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a/metadata_generation_command.txt, will remove stale json folder",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 2061269309
+  },
+  {
+    "level_": 0,
+    "message_": "- command changed from previous, will remove stale json folder",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1121555230
+  },
+  {
+    "level_": 0,
+    "message_": "created folder \u0027/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a\u0027",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1107969664
+  },
+  {
+    "level_": 0,
+    "message_": "executing cmake Executable : /Users/vikramkommera/Library/Android/sdk/cmake/3.18.1/bin/cmake\narguments : \n-H/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_SYSTEM_VERSION\u003d23\n-DANDROID_PLATFORM\u003dandroid-23\n-DANDROID_ABI\u003darmeabi-v7a\n-DCMAKE_ANDROID_ARCH_ABI\u003darmeabi-v7a\n-DANDROID_NDK\u003d/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147\n-DCMAKE_ANDROID_NDK\u003d/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147\n-DCMAKE_TOOLCHAIN_FILE\u003d/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147/build/cmake/android.toolchain.cmake\n-DCMAKE_MAKE_PROGRAM\u003d/Users/vikramkommera/Library/Android/sdk/cmake/3.18.1/bin/ninja\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/build/intermediates/cxx/Debug/27252yn6/obj/armeabi-v7a\n-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/build/intermediates/cxx/Debug/27252yn6/obj/armeabi-v7a\n-DCMAKE_BUILD_TYPE\u003dDebug\n-B/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a\n-GNinja\njvmArgs : \n\n",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -308016152
+  },
+  {
+    "level_": 0,
+    "message_": "Executable : /Users/vikramkommera/Library/Android/sdk/cmake/3.18.1/bin/cmake\narguments : \n-H/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_SYSTEM_VERSION\u003d23\n-DANDROID_PLATFORM\u003dandroid-23\n-DANDROID_ABI\u003darmeabi-v7a\n-DCMAKE_ANDROID_ARCH_ABI\u003darmeabi-v7a\n-DANDROID_NDK\u003d/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147\n-DCMAKE_ANDROID_NDK\u003d/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147\n-DCMAKE_TOOLCHAIN_FILE\u003d/Users/vikramkommera/Library/Android/sdk/ndk/21.3.6528147/build/cmake/android.toolchain.cmake\n-DCMAKE_MAKE_PROGRAM\u003d/Users/vikramkommera/Library/Android/sdk/cmake/3.18.1/bin/ninja\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/build/intermediates/cxx/Debug/27252yn6/obj/armeabi-v7a\n-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/build/intermediates/cxx/Debug/27252yn6/obj/armeabi-v7a\n-DCMAKE_BUILD_TYPE\u003dDebug\n-B/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a\n-GNinja\njvmArgs : \n\n",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1722325209
+  },
+  {
+    "level_": 0,
+    "message_": "Exiting generation of /Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a/compile_commands.json.bin normally",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1977281627
+  },
+  {
+    "level_": 0,
+    "message_": "done executing cmake",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 809208979
+  },
+  {
+    "level_": 0,
+    "message_": "write command file /Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/.cxx/Debug/27252yn6/armeabi-v7a/metadata_generation_command.txt",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1666508177
+  },
+  {
+    "level_": 0,
+    "message_": "JSON generation completed without problems",
+    "file_": "/Users/vikramkommera/Files/FTC/FtcRobotController/TeamCode/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|armeabi-v7a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1547685233
+  }
+]

@@ -76,6 +76,7 @@ public class RobotCore {
     // Function to set the arm position
     public void setArmPos(int pos, double liftSpeed) {
         motorLeft.setPower(0);
+        motorRight.setPower(0);
         motorRight.setTargetPosition(pos);
         motorLeft.setTargetPosition(pos);
         motorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);

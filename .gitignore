@@ -96,3 +96,13 @@ TeamCode/.DS_Store
 TeamCode/src/.DS_Store
 TeamCode/src/main/.DS_Store
 TeamCode/src/main/java/.DS_Store
+*.lock
+*.bin
+*.lock
+*.xml
+.idea/misc.xml
+.idea/gradle.xml
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.gradle/7.4.2/fileHashes/fileHashes.lock
+.gradle/7.4.2/fileHashes/fileHashes.bin
+.gradle/7.4.2/executionHistory/executionHistory.lock

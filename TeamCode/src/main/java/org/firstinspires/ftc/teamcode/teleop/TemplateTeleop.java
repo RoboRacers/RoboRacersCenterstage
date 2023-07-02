@@ -63,6 +63,4 @@ public class TemplateTeleop extends LinearOpMode {
 
         }
     }
-
-
 }

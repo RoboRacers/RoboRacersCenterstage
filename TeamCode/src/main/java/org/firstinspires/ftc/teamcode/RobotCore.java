@@ -42,9 +42,9 @@ public class RobotCore {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        motorLeft = hardwareMap.get(DcMotorEx .class, "LiftLeft");
+        motorLeft = hardwareMap.get(DcMotorEx.class, "LiftLeft");
         motorRight = hardwareMap.get(DcMotorEx.class, "LiftRight");
-        claw = hardwareMap.get(Servo .class, "claw");
+        claw = hardwareMap.get(Servo.class, "claw");
 
         motorLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         motorRight.setDirection(DcMotorSimple.Direction.REVERSE);

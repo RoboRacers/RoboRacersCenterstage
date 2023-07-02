@@ -106,3 +106,5 @@ TeamCode/src/main/java/.DS_Store
 .gradle/7.4.2/fileHashes/fileHashes.lock
 .gradle/7.4.2/fileHashes/fileHashes.bin
 .gradle/7.4.2/executionHistory/executionHistory.lock
+.gradle/7.4.2/fileHashes/fileHashes.lock
+.idea/gradle.xml

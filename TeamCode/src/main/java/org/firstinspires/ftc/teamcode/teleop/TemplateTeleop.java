@@ -5,28 +5,25 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 
-@TeleOp(name = "Templete Teleop", group = "16481-Power-Play")
+@TeleOp(name = "Template Teleop", group = "16481-Centerstage")
 public class TemplateTeleop extends LinearOpMode {
 
-    RobotCore robot = new RobotCore(hardwareMap);
-
-    int baseEncoderValue;
     final int liftLow = 0;
-    final int liftHigherThanLow = -750;
-    final int liftMid = -1075;
-    final int liftHigh = -1350;
+    final int liftHigherThanLow = 300;
+    final int liftMid = 700;
+    final int liftHigh = 1200;
 
-    double driveSensitivity = .5;
+    double driveSensitivity = 1;
     double turnSensitivity = .75;
     double liftSpeed = .5;
 
-
     final double closed = 0.25;
-    final double open = 0;
+    final double open = 0.7;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
-
+        RobotCore robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
 
         while (opModeInInit()) {
             robot.setClawPos(open);
@@ -39,27 +36,21 @@ public class TemplateTeleop extends LinearOpMode {
 
             if(gamepad2.right_bumper) {
                 robot.claw.setPosition(closed);
-                gamepad1.rumble(500);
-                gamepad2.rumble(500);
             } else if(gamepad2.left_bumper){
                 robot.claw.setPosition(open);
-                gamepad1.rumble(500);
-                gamepad2.rumble(500);
             } else if(gamepad2.dpad_up) {
                 // Set arm Position to High
-                baseEncoderValue = liftHigh;
+                robot.setArmPos(liftHigh, liftSpeed);
             } else if(gamepad2.dpad_down) {
                 // Set arm Position to Low
                 robot.setArmPos(liftLow, liftSpeed);
             }else if(gamepad2.dpad_left) {
                 // Set arm Position to Medium
-                baseEncoderValue = liftMid;
+                robot.setArmPos(liftMid, liftSpeed);
             }else if(gamepad2.dpad_right) {
                 // Set arm Position to a bit lower than High
                 robot.setArmPos(liftHigherThanLow, liftSpeed);
             }
-
-
 
             // Telemetry
             telemetry.addData("Roboracers Teleop for League Tournament", "");

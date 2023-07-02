@@ -18,16 +18,17 @@ public class TemplateAutoop extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        RobotCore robot = new RobotCore(hardwareMap);
+        RobotCore robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
         robot.initOpenCV();
+
+        Trajectories.init(robot, telemetry);
+
+        // Init
+        Trajectories.templateTraj.init();
 
         while(!isStopRequested() && !opModeIsActive()) {
 
         }
-
-        // Initi
-        Trajectories.init(robot, (MultipleTelemetry) telemetry);
-        Trajectories.templateTraj.init();
 
         waitForStart();
 

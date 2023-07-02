@@ -10,6 +10,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -29,7 +30,6 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 
 public class RobotCore {
 
-
     // Declare the motors and servos
     public DcMotorEx motorLeft;
     public DcMotorEx motorRight;
@@ -37,10 +37,16 @@ public class RobotCore {
     public SampleMecanumDrive drive;
     public OpenCvCamera camera;
 
-    // Initialization
-    public RobotCore(HardwareMap hardwareMap){
+    public Gamepad gamepad1;
+    public Gamepad gamepad2;
 
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+    public HardwareMap hardwareMap;
+
+    // Constructor, run during initialization
+    public RobotCore(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2){
+
+        // Telemetry object commented out because we don't need it
+        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         motorLeft = hardwareMap.get(DcMotorEx .class, "LiftLeft");
         motorRight = hardwareMap.get(DcMotorEx.class, "LiftRight");
@@ -61,6 +67,11 @@ public class RobotCore {
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
+
+        this.hardwareMap = hardwareMap;
     }
 
     public void initOpenCV (){

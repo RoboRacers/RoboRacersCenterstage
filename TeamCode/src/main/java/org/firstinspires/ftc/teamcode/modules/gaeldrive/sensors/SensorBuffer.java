@@ -10,22 +10,18 @@ import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocaliz
  */
 public class SensorBuffer {
     /* Flags for user to change */
-    public boolean hasTrackingWheels = true;
 
-    StandardTrackingWheelLocalizer trackingWheelLocalizer;
-    public Pose2d trackingWheelPose;
-    public double trackingWheelWeight = 1.1;
+    static StandardTrackingWheelLocalizer trackingWheelLocalizer;
+    static public Pose2d trackingWheelPose;
+    static public double trackingWheelWeight = 1.1;
 
-    public SensorBuffer(HardwareMap hardwareMap){
-        if (hasTrackingWheels){
-            this.trackingWheelLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
-        }
+    static public void init(HardwareMap hardwareMap) {
+        trackingWheelLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
     }
 
-    public void update(){
-        if (hasTrackingWheels){
-            this.trackingWheelLocalizer.update();
-            this.trackingWheelPose = this.trackingWheelLocalizer.getPoseEstimate();
-        }
+    public static void update(){
+        trackingWheelLocalizer.update();
+        trackingWheelPose = trackingWheelLocalizer.getPoseEstimate();
+
     }
 }

@@ -13,13 +13,15 @@ public class Particle2d {
 
     Pose2d pose;
     RealVector state;
-    public float weight;
-    public int id;
+    public double weight;
+    public Integer id;
+    ParticleMap map;
 
-    public Particle2d(Pose2d pose2d, float weight, int id) {
+    public Particle2d(Pose2d pose2d, double weight, Integer id, ParticleMap map) {
         this.pose = pose2d;
         this.weight = weight;
         this.id = id;
+        this.map = map;
 
         PoseToState();
     }
@@ -45,6 +47,12 @@ public class Particle2d {
     public double getWeight(){
         return this.weight;
     }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+        map.setParticleWeight(this.getId(), this.weight);
+    }
+
     public int getId() { return this.id; }
 
     void PoseToState () {

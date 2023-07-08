@@ -5,13 +5,18 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.Particle2d;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.ParticleMap;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ParticleFilter {
     List<Particle2d> Particles;
+
     List ParticleIds;
+
+    ParticleMap particleMap;
 
     public void initializeParticles(int numParticles, Pose2d startingLocation) {
         Particles = null;
@@ -26,13 +31,16 @@ public class ParticleFilter {
             double deviation2 = ThreadLocalRandom.current().nextDouble(min, max);
             double deviation3 = ThreadLocalRandom.current().nextDouble(-0.05, 0.05);
 
+            // Random Weight (For Testing Purposes) TODO: Remove Random Particle Weighting
+            double weight = ThreadLocalRandom.current().nextDouble(0, 1);
+
             // Create the new pose
             Pose2d addedPose = new Pose2d(  startingLocation.getX() + deviation1,
                                             startingLocation.getY() + deviation2,
                                             startingLocation.getHeading() + deviation3);
-            if (!(ParticleIds.contains(i))) {
-                Particles.add(new Particle2d(addedPose, 0, i ));
-            }
+
+            Particles.add(new Particle2d(addedPose, weight, i, particleMap));
+
 
         }
 
@@ -42,6 +50,18 @@ public class ParticleFilter {
         for (Particle2d particle : Particles) {
             particle.setState(particle.getState().add(translationVector));
         }
+    }
+
+    public Pose2d getBestPose () {
+        double highestWeight= 0;
+        Pose2d bestPose = new Pose2d(0,0,0);
+        for (Particle2d particle : Particles) {
+            if (particle.getWeight() > highestWeight){
+                highestWeight = particle.getWeight();
+                bestPose = particle.getPose();
+            }
+        }
+        return bestPose;
     }
 
 }

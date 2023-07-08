@@ -6,14 +6,9 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.Particle2d;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.ThreeWheelMotionModel;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TrackingWheelMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
-
-import java.util.Vector;
 
 
 /**
@@ -27,7 +22,7 @@ public class MonteCarloLocalizer implements Localizer {
     int particleCount = 50;
 
     ParticleFilter particleFilter;
-    ThreeWheelMotionModel motionModel;
+    TrackingWheelMotionModel motionModel;
 
 
     
@@ -37,7 +32,7 @@ public class MonteCarloLocalizer implements Localizer {
     public MonteCarloLocalizer(HardwareMap hardwareMap){
         SensorBuffer.init(hardwareMap);
         particleFilter.initializeParticles(particleCount, poseEstimate);
-        motionModel = new ThreeWheelMotionModel(poseEstimate);
+        motionModel = new TrackingWheelMotionModel(poseEstimate);
     }
 
     /**

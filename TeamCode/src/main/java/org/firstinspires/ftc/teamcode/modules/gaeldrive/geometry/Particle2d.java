@@ -2,9 +2,8 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.Pose2dUtils;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
 
 
 /**
@@ -49,11 +48,11 @@ public class Particle2d {
     public int getId() { return this.id; }
 
     void PoseToState () {
-        state = Pose2dUtils.poseToVecor(pose);
+        state = PoseUtils.poseToVecor(pose);
     }
 
     void StateToPose () {
-        pose = Pose2dUtils.vectorToPose(state);
+        pose = PoseUtils.vectorToPose(state);
     }
 
 

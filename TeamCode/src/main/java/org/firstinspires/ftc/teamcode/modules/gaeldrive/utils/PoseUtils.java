@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.utils;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.OpenMapRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
-public class Pose2dUtils {
+public class PoseUtils {
 
     /**
      * Util method to convert a Pose2d object to a RealVector object.
@@ -27,4 +26,5 @@ public class Pose2dUtils {
     public static Pose2d vectorToPose(RealVector vector) {
         return new Pose2d(vector.getEntry(0), vector.getEntry(1), vector.getEntry(2));
     }
+
 }

@@ -39,7 +39,7 @@ public class ParticleFilter {
                                             startingLocation.getY() + deviation2,
                                             startingLocation.getHeading() + deviation3);
 
-            Particles.add(new Particle2d(addedPose, weight, i, particleMap));
+            particleMap.add(new Particle2d(addedPose, weight, i, particleMap));
 
 
         }
@@ -53,14 +53,7 @@ public class ParticleFilter {
     }
 
     public Pose2d getBestPose () {
-        double highestWeight= 0;
-        Pose2d bestPose = new Pose2d(0,0,0);
-        for (Particle2d particle : Particles) {
-            if (particle.getWeight() > highestWeight){
-                highestWeight = particle.getWeight();
-                bestPose = particle.getPose();
-            }
-        }
+        Pose2d bestPose = particleMap.getBestParticle().getPose();
         return bestPose;
     }
 

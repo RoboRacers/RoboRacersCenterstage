@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry;
 
 import android.os.Build;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,12 +24,14 @@ public class ParticleMap {
         ParticleWeights.put(id, weight);
     }
 
-    public void getBestParticle () {
+    public Particle2d getBestParticle () {
 
+        Particle2d bestParticle = new Particle2d(new Pose2d(0,0,0), 0, 0, this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Collections.max(ParticleWeights.entrySet(), Map.Entry.comparingByValue()).getKey();
+            bestParticle = Particles.get(Collections.max(ParticleWeights.entrySet(), Map.Entry.comparingByValue()).getKey());
         }
-        
+
+        return bestParticle;
 
     }
 

@@ -19,7 +19,7 @@ public class MonteCarloLocalizerTest implements Localizer {
 
     Pose2d  poseEstimate;
     Pose2d startPose;
-    int particleCount = 50;
+    int particleCount = 10;
 
     ParticleFilter particleFilter;
     TrackingWheelMotionModel motionModel;

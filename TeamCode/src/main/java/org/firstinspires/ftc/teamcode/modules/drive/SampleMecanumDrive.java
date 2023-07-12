@@ -28,6 +28,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizer;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizerTest;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequenceRunner;
@@ -148,7 +149,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: reverse any motors using DcMotor.setDirection()
 
         // TODO: if desired, use setLocalizer() to change the localization method
-        setLocalizer(new MonteCarloLocalizer(hardwareMap));
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }

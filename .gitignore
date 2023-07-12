@@ -108,3 +108,13 @@ TeamCode/src/main/java/.DS_Store
 .gradle/7.4.2/executionHistory/executionHistory.lock
 .gradle/7.4.2/fileHashes/fileHashes.lock
 .idea/gradle.xml
+local.properties
+*.hprof
+.gradle/7.4.2/executionHistory/executionHistory.lock
+.gradle/7.4.2/fileHashes/fileHashes.bin
+.gradle/7.4.2/fileHashes/fileHashes.lock
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.idea/gradle.xml
+java_pid16920.hprof
+java_pid24624.hprof
+local.properties

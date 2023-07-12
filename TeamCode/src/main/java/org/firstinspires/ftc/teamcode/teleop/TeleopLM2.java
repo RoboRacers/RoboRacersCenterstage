@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 
-@TeleOp(name = "Teleop For League Tournament", group = "16481-Power-Play")
+@TeleOp(name = "Teleop For League Tournament", group = "Test")
 public class TeleopLM2 extends LinearOpMode {
 
     DcMotorEx motorLeft;

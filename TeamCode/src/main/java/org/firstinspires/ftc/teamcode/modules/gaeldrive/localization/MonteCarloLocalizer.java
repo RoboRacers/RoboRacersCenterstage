@@ -25,9 +25,6 @@ public class MonteCarloLocalizer implements Localizer {
     TrackingWheelMotionModel motionModel;
 
 
-    
-
-
 
     public MonteCarloLocalizer(HardwareMap hardwareMap){
         SensorBuffer.init(hardwareMap);

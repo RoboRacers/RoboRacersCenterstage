@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.RobotCore;
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Autonomous(name = "AutoOp State Machines", group = "16481-Power-Play")
+@Autonomous(name = "Template Autoop", group = "Test")
 public class TemplateAutoop extends LinearOpMode {
 
     boolean finished = false;
@@ -19,7 +19,6 @@ public class TemplateAutoop extends LinearOpMode {
     public void runOpMode() {
 
         RobotCore robot = new RobotCore(hardwareMap);
-        robot.initOpenCV();
 
         while(!isStopRequested() && !opModeIsActive()) {
 

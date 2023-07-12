@@ -40,56 +40,10 @@ public class RobotCore {
     // Initialization
     public RobotCore(HardwareMap hardwareMap){
 
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-        motorLeft = hardwareMap.get(DcMotorEx.class, "LiftLeft");
-        motorRight = hardwareMap.get(DcMotorEx.class, "LiftRight");
-        claw = hardwareMap.get(Servo.class, "claw");
-
-        motorLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        motorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        motorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        motorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void initOpenCV (){
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().
-                getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.
-                get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        SignalDetection mySignalDetection = new SignalDetection(camera, (MultipleTelemetry) telemetry);
-        mySignalDetection.openConnection();
-    }
-
-    // Function to set the arm position
-    public void setArmPos(int pos, double liftSpeed) {
-        motorLeft.setPower(0);
-        motorRight.setPower(0);
-        motorRight.setTargetPosition(pos);
-        motorLeft.setTargetPosition(pos);
-        motorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorLeft.setPower(liftSpeed);
-        motorRight.setPower(liftSpeed);
-    }
-
-    // Function to set the claw position
-    public void setClawPos(double posclaw) {
-        claw.setPosition(posclaw);
-        gamepad1.rumble(500);
-        gamepad2.rumble(500);
-    }
 
 }

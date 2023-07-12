@@ -7,20 +7,20 @@ import org.apache.commons.math3.linear.RealVector;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.Particle2d;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.ParticleMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ParticleFilter {
-    List<Particle2d> Particles;
+    public ParticleMap particleMap;
 
-    List ParticleIds;
-
-    ParticleMap particleMap;
+    public ParticleFilter() {
+        particleMap = new ParticleMap();
+    }
 
     public void initializeParticles(int numParticles, Pose2d startingLocation) {
-        Particles = null;
-        ParticleIds = null;
 
         // Deviation Threshold for spawning new particles
         double min = -0.1;
@@ -41,20 +41,29 @@ public class ParticleFilter {
 
             particleMap.add(new Particle2d(addedPose, weight, i, particleMap));
 
-
         }
 
     }
 
     public void translateParticles(RealVector translationVector) {
-        for (Particle2d particle : Particles) {
-            particle.setState(particle.getState().add(translationVector));
-        }
+        particleMap.translateParticles(translationVector);
     }
 
     public Pose2d getBestPose () {
         Pose2d bestPose = particleMap.getBestParticle().getPose();
         return bestPose;
     }
+
+    public List<Pose2d> getParticlePoses (){
+        List<Pose2d> poses = new ArrayList<Pose2d>();
+        HashMap<Integer, Particle2d> particles = particleMap.getParticles();
+
+        for (Map.Entry<Integer,Particle2d> particle2dEntry : particles.entrySet()) {
+            poses.add(particle2dEntry.getValue().getPose());
+        }
+
+        return poses;
+    }
+
 
 }

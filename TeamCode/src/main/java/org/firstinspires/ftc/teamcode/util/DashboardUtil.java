@@ -51,4 +51,8 @@ public class DashboardUtil {
         double x2 = pose.getX() + v.getX(), y2 = pose.getY() + v.getY();
         canvas.strokeLine(x1, y1, x2, y2);
     }
+
+    public static void drawParticle(Canvas canvas, Pose2d pose) {
+        canvas.strokeCircle(pose.getX(), pose.getY(), 0.5);
+    }
 }

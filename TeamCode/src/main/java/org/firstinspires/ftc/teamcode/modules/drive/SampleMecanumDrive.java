@@ -119,10 +119,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         // For example, if +Y in this diagram faces downwards, you would use AxisDirection.NEG_Y.
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "Fl"); //Fl
-        leftRear = hardwareMap.get(DcMotorEx.class, "Bl"); //Bl
-        rightRear = hardwareMap.get(DcMotorEx.class, "Br"); //Br
-        rightFront = hardwareMap.get(DcMotorEx.class, "Fr");// Fr
+        leftFront = hardwareMap.get(DcMotorEx.class, "Fl"); //Fl P0
+        leftRear = hardwareMap.get(DcMotorEx.class, "Bl"); //Bl P1
+        rightRear = hardwareMap.get(DcMotorEx.class, "Br"); //Br P3
+        rightFront = hardwareMap.get(DcMotorEx.class, "Fr");// Fr P2
 
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -149,7 +149,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: reverse any motors using DcMotor.setDirection()
 
         // TODO: if desired, use setLocalizer() to change the localization method
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new MonteCarloLocalizerTest(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }

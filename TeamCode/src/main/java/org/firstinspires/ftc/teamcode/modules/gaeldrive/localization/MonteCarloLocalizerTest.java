@@ -8,10 +8,13 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.apache.commons.math3.linear.MatrixUtils;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TrackingWheelMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.TestSensorBuffer;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
 
 import java.util.List;
 
@@ -25,13 +28,12 @@ public class MonteCarloLocalizerTest implements Localizer {
     Pose2d  poseEstimate = new Pose2d(0,0,0);
     int particleCount = 20;
     FtcDashboard dashboard;
-    Telemetry telemetry;
 
     ParticleFilter particleFilter;
     TrackingWheelMotionModel motionModel;
 
-    public MonteCarloLocalizerTest(HardwareMap hardwareMap){
-        SensorBuffer.init(hardwareMap);
+    public MonteCarloLocalizerTest(){
+        TestSensorBuffer.init();
         particleFilter = new ParticleFilter();
         dashboard = FtcDashboard.getInstance();
         particleFilter.initializeParticles(this.particleCount, this.poseEstimate);
@@ -48,11 +50,7 @@ public class MonteCarloLocalizerTest implements Localizer {
 
     @Override
     public void setPoseEstimate(@NonNull Pose2d pose2d) {
-        if (pose2d != null) {
-            this.poseEstimate = pose2d;
-        } else {
-            this.poseEstimate = new Pose2d(0,0,0);;
-        }
+        this.poseEstimate = pose2d;
         particleFilter.initializeParticles(particleCount, poseEstimate);
     }
 
@@ -62,13 +60,12 @@ public class MonteCarloLocalizerTest implements Localizer {
     }
 
     /**
-     * Runs one localization cycle
-     * This function is inherited from the Localizer class and is used by the drive object.
+     * Runs one localization cycle.
      */
     @Override
     public void update() {
-        SensorBuffer.update();
-        particleFilter.translateParticles(motionModel.getTranslationVector());
+        TestSensorBuffer.update();
+        particleFilter.translateParticles(PoseUtils.poseToVecor(TestSensorBuffer.mockPoseEstimate));
         poseEstimate = particleFilter.getBestPose();
 
         /*

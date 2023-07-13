@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizer;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizerTest;
 
 /**
@@ -34,7 +35,7 @@ public class LocalizationTest extends LinearOpMode {
 
         while (!isStopRequested()) {
             if (gamepad1.dpad_up){
-                drive.setLocalizer(new MonteCarloLocalizerTest(hardwareMap));
+                drive.setLocalizer(new MonteCarloLocalizer(hardwareMap));
             } else if (gamepad1.dpad_down) {
                 drive.setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
             }

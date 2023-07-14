@@ -6,6 +6,11 @@ import org.apache.commons.math3.linear.RealVector;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
 
+/**
+ * A motion model that uses the tracking wheel estimate to estimate the movement of a robot in a given timeframe.
+ * Used in Monte Carlo Localization
+ * @see MotionModel
+ */
 public class TrackingWheelMotionModel implements MotionModel{
 
     RealVector prevState;
@@ -17,7 +22,7 @@ public class TrackingWheelMotionModel implements MotionModel{
 
     /**
      * Gets the translation in state using the delta in the tracking wheel pose.
-     * @return
+     * @return Translational vector
      */
     @Override
     public  RealVector getTranslationVector() {

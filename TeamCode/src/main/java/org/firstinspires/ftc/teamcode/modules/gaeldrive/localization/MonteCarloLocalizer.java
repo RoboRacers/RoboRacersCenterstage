@@ -3,44 +3,37 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.localization;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter2d;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TrackingWheelMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
 
-import java.util.List;
-
 
 /**
- * Localizer that uses Monte Carlo Localization (MCL) to get the position of the robot,
- * given a set of sensor values
+ * Localizer class that uses a method called Monte Carlo Localization (MCL) estimate the position of a robot
+ * using probabilistic techniques, given a set of sensor values and constraints.
  */
 public class MonteCarloLocalizer implements Localizer {
 
-    Pose2d  poseEstimate = new Pose2d(0,0,0);
-    int particleCount = 20;
-    FtcDashboard dashboard;
-    Telemetry telemetry;
+    // Change these in LocalizationConstants only!
+    Pose2d  poseEstimate = LocalizationConstants.START_POSE;
+    int particleCount = LocalizationConstants.PARTICLE_COUNT;
 
-    ParticleFilter particleFilter;
+    ParticleFilter2d particleFilter2d;
     TrackingWheelMotionModel motionModel;
 
     public MonteCarloLocalizer(HardwareMap hardwareMap){
         SensorBuffer.init(hardwareMap);
-        particleFilter = new ParticleFilter();
-        dashboard = FtcDashboard.getInstance();
-        particleFilter.initializeParticles(this.particleCount, this.poseEstimate);
+        particleFilter2d = new ParticleFilter2d();
+        particleFilter2d.initializeParticles(this.particleCount, this.poseEstimate);
         motionModel = new TrackingWheelMotionModel(poseEstimate);
     }
 
-    /**
-     * Getting and Setting the PoseEstimate
-     */
     @Override
     public Pose2d getPoseEstimate() {
         return this.poseEstimate;
@@ -49,34 +42,24 @@ public class MonteCarloLocalizer implements Localizer {
     @Override
     public void setPoseEstimate(@NonNull Pose2d pose2d) {
         this.poseEstimate = pose2d;
-        particleFilter.initializeParticles(particleCount, poseEstimate);
+        particleFilter2d.initializeParticles(particleCount, poseEstimate);
     }
 
+    //TODO: Implement Pose Velocity (Maybe?)
     @Override
     public Pose2d getPoseVelocity() {
         return null;
     }
 
     /**
-     * Runs one localization cycle.
+     * Runs one localization cycle of Monte Carlo Localization.
      */
     @Override
     public void update() {
+        // Run the sensor buffer to collect all new sensor values
         SensorBuffer.update();
-        particleFilter.translateParticles(motionModel.getTranslationVector());
-        poseEstimate = particleFilter.getBestPose();
-
-        /*
-        List<Pose2d> poses = particleFilter.getParticlePoses();
-
-
-        TelemetryPacket packet = new TelemetryPacket();
-
-        for (Pose2d drawnPose : poses) {
-            packet.fieldOverlay().strokeCircle(drawnPose.getX(), drawnPose.getY(), 0.5);
-            dashboard.sendTelemetryPacket(packet);
-        }
-        */
+        particleFilter2d.translateParticles(motionModel.getTranslationVector());
+        poseEstimate = particleFilter2d.getBestPose();
 
     }
 

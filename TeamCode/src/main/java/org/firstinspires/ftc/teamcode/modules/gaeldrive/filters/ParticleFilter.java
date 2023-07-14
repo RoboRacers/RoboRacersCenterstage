@@ -1,69 +1,78 @@
 package org.firstinspires.ftc.teamcode.modules.gaeldrive.filters;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+import android.provider.Telephony;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.Particle2d;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.ParticleMap;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.Particle;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ParticleFilter {
-    public ParticleMap particleMap;
 
-    public ParticleFilter() {
-        particleMap = new ParticleMap();
+    /**
+     * Hashmap that stores all the particles in Integer/Particle pairs.
+     */
+    public HashMap<Integer, Particle> Particles = new HashMap<>();
+
+    /**
+     * Add a particle to the internal Hashmap.
+     * @param particle
+     */
+    public void add(Particle particle) {
+        Particles.put(particle.getId(), particle);
     }
 
-    public void initializeParticles(int numParticles, Pose2d startingLocation) {
+    /**
+     * Clear all particles.
+     */
+    public void clear() {
+        Particles.clear();
+    }
 
-        // Deviation Threshold for spawning new particles
-        double min = -0.1;
-        double max = 0.1;
+    /**
+     * Return the Hashmap that stores the particles.
+     * @return
+     */
+    public HashMap<Integer, Particle> getParticles() {
+        return  this.Particles;
+    }
 
-        for(int i=0; i < numParticles; i++ ) {
-            double deviation1 = ThreadLocalRandom.current().nextDouble(min, max);
-            double deviation2 = ThreadLocalRandom.current().nextDouble(min, max);
-            double deviation3 = ThreadLocalRandom.current().nextDouble(-0.05, 0.05);
 
-            // Random Weight (For Testing Purposes) TODO: Remove Random Particle Weighting
-            double weight = ThreadLocalRandom.current().nextDouble(0, 1);
+    /**
+     * Translate every particle
+     * @param translationVector The translation vector that the other particles will be translated by.
+     */
+    public void translateParticles (RealVector translationVector) {
 
-            // Create the new pose
-            Pose2d addedPose = new Pose2d(  startingLocation.getX() + deviation1,
-                                            startingLocation.getY() + deviation2,
-                                            startingLocation.getHeading() + deviation3);
+        for (Map.Entry<Integer,Particle> particle2dEntry : Particles.entrySet()) {
+            Particle translatedParticle = particle2dEntry.getValue();
+            translatedParticle.setState(translatedParticle.getState().add(translationVector));
+            particle2dEntry.setValue(translatedParticle);
 
-            particleMap.add(new Particle2d(addedPose, weight, i, particleMap));
+        }
+    }
+
+    /**
+     * Gets the particle with the highest weight.
+     * @return Particle2d of the highest weighted particle.
+     */
+    public Particle getBestParticle () {
+
+        double highestWeight = 0;
+        Integer bestParticleKey = 0;
+
+        // Loop through all weights and get highest weight
+        for (Map.Entry<Integer, Particle> particle2dEntry : Particles.entrySet()) {
+            double particleWeight = particle2dEntry.getValue().getWeight();
+            if (particleWeight > highestWeight) {
+                bestParticleKey = particle2dEntry.getKey();
+                highestWeight = particleWeight;
+            }
 
         }
 
+        return Particles.get(bestParticleKey);
+
     }
-
-    public void translateParticles(RealVector translationVector) {
-        particleMap.translateParticles(translationVector);
-    }
-
-    public Pose2d getBestPose () {
-        Pose2d bestPose = particleMap.getBestParticle().getPose();
-        return bestPose;
-    }
-
-    public List<Pose2d> getParticlePoses (){
-        List<Pose2d> poses = new ArrayList<Pose2d>();
-        HashMap<Integer, Particle2d> particles = particleMap.getParticles();
-
-        for (Map.Entry<Integer,Particle2d> particle2dEntry : particles.entrySet()) {
-            poses.add(particle2dEntry.getValue().getPose());
-        }
-
-        return poses;
-    }
-
-
 }

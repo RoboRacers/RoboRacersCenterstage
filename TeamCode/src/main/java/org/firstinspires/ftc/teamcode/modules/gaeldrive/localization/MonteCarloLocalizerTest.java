@@ -3,41 +3,34 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.localization;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter2d;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TestMotionModel;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TrackingWheelMotionModel;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.TestSensorBuffer;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
-
-import java.util.List;
+import org.jetbrains.annotations.TestOnly;
 
 
 /**
  * Localizer that uses Monte Carlo Localization (MCL) to get the position of the robot,
  * given a set of sensor values
  */
+@TestOnly
 public class MonteCarloLocalizerTest implements Localizer {
 
     Pose2d  poseEstimate =  new Pose2d(0,0,0);
     int particleCount = 20;
     FtcDashboard dashboard;
 
-    ParticleFilter particleFilter;
+    ParticleFilter2d particleFilter2d;
     TestMotionModel motionModel;
 
     public MonteCarloLocalizerTest(){
         TestSensorBuffer.init();
-        particleFilter = new ParticleFilter();
+        particleFilter2d = new ParticleFilter2d();
         dashboard = FtcDashboard.getInstance();
-        particleFilter.initializeParticles(particleCount, poseEstimate);
+        particleFilter2d.initializeParticles(particleCount, poseEstimate);
         motionModel = new TestMotionModel(poseEstimate);
     }
 
@@ -52,7 +45,7 @@ public class MonteCarloLocalizerTest implements Localizer {
     @Override
     public void setPoseEstimate(@NonNull Pose2d pose2d) {
         this.poseEstimate = pose2d;
-        particleFilter.initializeParticles(particleCount, poseEstimate);
+        particleFilter2d.initializeParticles(particleCount, poseEstimate);
     }
 
     @Override
@@ -66,8 +59,8 @@ public class MonteCarloLocalizerTest implements Localizer {
     @Override
     public void update() {
         TestSensorBuffer.update();
-        particleFilter.translateParticles(motionModel.getTranslationVector());
-        this.poseEstimate = particleFilter.getBestPose();
+        particleFilter2d.translateParticles(motionModel.getTranslationVector());
+        this.poseEstimate = particleFilter2d.getBestPose();
 
         /*
         List<Pose2d> poses = particleFilter.getParticlePoses();

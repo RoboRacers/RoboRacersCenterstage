@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.apache.commons.math3.linear.RealVector;
 
@@ -8,13 +7,19 @@ import org.apache.commons.math3.linear.RealVector;
  * Elementary class to represent a particle of an arbitrary amount of dimensions.
  */
 public class Particle {
+
     /**
      * Represents the state of the particle via a vector of arbitrary dimension.
      */
     RealVector state;
+    /**
+     * The weightage of this particle.
+     */
     public double weight;
+    /**
+     * This id of this particle for tracking purposes.
+     */
     Integer id;
-    public Integer dimensions;
 
 
     public void setState(RealVector newState) {
@@ -50,4 +55,12 @@ public class Particle {
      * @return The ID of the particle.
      */
     public Integer getId() { return this.id; }
+
+    /**
+     * Get the shape (dimensions) of the state of this particle.
+     * @return Dimensions of this particle's state vector.
+     */
+    public int getDimensions() {
+        return this.state.getDimension();
+    }
 }

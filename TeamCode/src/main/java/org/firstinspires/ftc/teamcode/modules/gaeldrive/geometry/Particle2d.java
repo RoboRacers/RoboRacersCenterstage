@@ -13,45 +13,18 @@ import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
  */
 public class Particle2d extends Particle {
 
-    Pose2d pose;
-    ParticleMap map;
-
-    public Particle2d(Pose2d pose2d, double weight, Integer id, ParticleMap map) {
-        this.pose = pose2d;
+    public Particle2d(Pose2d pose2d, double weight, Integer id) {
+        this.state = PoseUtils.poseToVecor(pose2d);
         this.weight = weight;
         this.id = id;
-        this.map = map;
-
-        PoseToState();
     }
 
 
     public void setPose(Pose2d newPose){
-        pose = newPose;
-        PoseToState();
+        state = PoseUtils.poseToVecor(newPose);
     }
     public Pose2d getPose(){
-        return this.pose;
+        return PoseUtils.vectorToPose(state);
     }
-
-    @Override
-    public void setState(RealVector newState) {
-        state = newState;
-        StateToPose();
-    }
-
-    @Override
-    public void setWeight(Double weight) {
-        this.weight = weight;
-    }
-
-    void PoseToState () {
-        state = PoseUtils.poseToVecor(pose);
-    }
-
-    void StateToPose () {
-        pose = PoseUtils.vectorToPose(state);
-    }
-
 
 }

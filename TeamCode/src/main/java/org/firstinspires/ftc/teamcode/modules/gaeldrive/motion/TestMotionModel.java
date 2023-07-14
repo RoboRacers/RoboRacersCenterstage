@@ -6,7 +6,9 @@ import org.apache.commons.math3.linear.RealVector;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.TestSensorBuffer;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
+import org.jetbrains.annotations.TestOnly;
 
+@TestOnly
 public class TestMotionModel implements MotionModel{
 
     RealVector prevState;

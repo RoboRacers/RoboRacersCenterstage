@@ -3,10 +3,11 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 /**
- * Class ful of constants to tune the localization.
+ * Class full of constants to tune the localization.
  */
 public class LocalizationConstants {
 
+    //TODO: Tune Localization Constants
     /**
      * Number of particles in the particle filter. More particles means higher accuracy,
      * but worse performance. Tune to a value you feel right with.

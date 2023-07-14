@@ -7,14 +7,13 @@ import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
 
 
 /**
- * A class to represent a pose and a weight, the building block of the particle filter.
+ * Extension of the Particle class, intended for used with a 2d robot localization system.
+ * Note that the state of this particle is actually 3 dimensions (x,y, heading).
+ * @see Particle
  */
-public class Particle2d {
+public class Particle2d extends Particle {
 
     Pose2d pose;
-    RealVector state;
-    public double weight;
-    public Integer id;
     ParticleMap map;
 
     public Particle2d(Pose2d pose2d, double weight, Integer id, ParticleMap map) {
@@ -35,25 +34,16 @@ public class Particle2d {
         return this.pose;
     }
 
+    @Override
     public void setState(RealVector newState) {
         state = newState;
         StateToPose();
     }
 
-    public RealVector getState() {
-        return state;
-    }
-
-    public double getWeight(){
-        return this.weight;
-    }
-
+    @Override
     public void setWeight(Double weight) {
         this.weight = weight;
-        map.setParticleWeight(this.getId(), this.weight);
     }
-
-    public int getId() { return this.id; }
 
     void PoseToState () {
         state = PoseUtils.poseToVecor(pose);

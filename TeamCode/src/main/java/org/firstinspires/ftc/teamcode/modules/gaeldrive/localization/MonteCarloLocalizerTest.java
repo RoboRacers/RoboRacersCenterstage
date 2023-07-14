@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TestMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TrackingWheelMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.TestSensorBuffer;
@@ -25,19 +26,19 @@ import java.util.List;
  */
 public class MonteCarloLocalizerTest implements Localizer {
 
-    Pose2d  poseEstimate = new Pose2d(0,0,0);
+    Pose2d  poseEstimate =  new Pose2d(0,0,0);
     int particleCount = 20;
     FtcDashboard dashboard;
 
     ParticleFilter particleFilter;
-    TrackingWheelMotionModel motionModel;
+    TestMotionModel motionModel;
 
     public MonteCarloLocalizerTest(){
         TestSensorBuffer.init();
         particleFilter = new ParticleFilter();
         dashboard = FtcDashboard.getInstance();
-        particleFilter.initializeParticles(this.particleCount, this.poseEstimate);
-        motionModel = new TrackingWheelMotionModel(poseEstimate);
+        particleFilter.initializeParticles(particleCount, poseEstimate);
+        motionModel = new TestMotionModel(poseEstimate);
     }
 
     /**
@@ -65,8 +66,8 @@ public class MonteCarloLocalizerTest implements Localizer {
     @Override
     public void update() {
         TestSensorBuffer.update();
-        particleFilter.translateParticles(PoseUtils.poseToVecor(TestSensorBuffer.mockPoseEstimate));
-        poseEstimate = particleFilter.getBestPose();
+        particleFilter.translateParticles(motionModel.getTranslationVector());
+        this.poseEstimate = particleFilter.getBestPose();
 
         /*
         List<Pose2d> poses = particleFilter.getParticlePoses();

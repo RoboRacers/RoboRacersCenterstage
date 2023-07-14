@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocaliz
 /**
  * Class to store and load sensor values used by the MCL (Monte Carlo Localizer)
  */
-public class SensorBuffer {
+public class SensorBuffer implements Sensors {
     /* Flags for user to change */
 
     static StandardTrackingWheelLocalizer trackingWheelLocalizer;

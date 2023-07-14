@@ -22,37 +22,54 @@ public class ParticleMap {
 
     }
 
-    //TODO: Get Highest Weighed Particle
+    /**
+     * Add a particle to the internal Hashmap.
+     * @param particle
+     */
     public void add(Particle2d particle) {
         Particles.put(particle.getId(), particle);
-        ParticleWeights.put(particle.getId(), particle.getWeight());
-
     }
 
-    public void setParticleWeight(Integer id, Double weight) {
-        ParticleWeights.put(id, weight);
-    }
-
+    /**
+     * Gets the particle with the highest weight.
+     * @return Particle2d of the highest weighted particle.
+     */
     public Particle2d getBestParticle () {
 
-        // Default value
-        Particle2d bestParticle = new Particle2d(new Pose2d(0,0,0), 0, 0, this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        /* Previous Code
+        if (Build.VERSION.SDK_INT >= 0) {
             bestParticle = Particles.get(Collections.max(ParticleWeights.entrySet(), Map.Entry.comparingByValue()).getKey());
         }
+        */
 
-        return bestParticle;
+        double highestWeight = 0;
+        Integer bestParticleKey = 0;
+
+        // Loop through all weights and get highest weight
+        for (Map.Entry<Integer,Particle2d> particle2dEntry : Particles.entrySet()) {
+            double particleWeight = particle2dEntry.getValue().getWeight();
+            if (particleWeight > highestWeight) {
+                bestParticleKey = particle2dEntry.getKey();
+                highestWeight = particleWeight;
+            }
+
+        }
+
+        return Particles.get(bestParticleKey);
 
     }
 
+    /**
+     * Translate every particle
+     * @param translationVector The translation vector that the other particles will be translated by.
+     */
     public void translateParticles (RealVector translationVector) {
+
         for (Map.Entry<Integer,Particle2d> particle2dEntry : Particles.entrySet()) {
             Particle2d translatedParticle = particle2dEntry.getValue();
             translatedParticle.setState(translatedParticle.getState().add(translationVector));
             particle2dEntry.setValue(translatedParticle);
 
-            //Draw particle on FtcDash
         }
     }
 

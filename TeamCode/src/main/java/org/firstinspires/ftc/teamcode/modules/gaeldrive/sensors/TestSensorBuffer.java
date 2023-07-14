@@ -8,12 +8,14 @@ import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocaliz
 import java.util.ArrayList;
 import java.util.List;
 
+import kotlin.Experimental;
 import kotlin.collections.ArrayDeque;
 
 /**
  * Class to store and load sensor values used by the MCL (Monte Carlo Localizer)
  */
-public class TestSensorBuffer {
+
+public class TestSensorBuffer implements Sensors {
     /* Flags for user to change */
     static List<Pose2d> path = new ArrayList<>();
 

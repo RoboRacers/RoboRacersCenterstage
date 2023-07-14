@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.filters;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.Particle;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.Particle2d;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.particles.Particle;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.particles.Particle2d;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
 
 import java.util.ArrayList;

@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.modules.gaeldrive.filters;
 
-import android.provider.Telephony;
 
 import org.apache.commons.math3.linear.RealVector;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.geometry.Particle;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.particles.Particle;
 
 import java.util.HashMap;
 import java.util.Map;

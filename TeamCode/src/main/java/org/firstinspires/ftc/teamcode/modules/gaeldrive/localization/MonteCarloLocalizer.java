@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter2d
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TrackingWheelMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
 
+import java.util.List;
+
 
 /**
  * Localizer class that uses a method called Monte Carlo Localization (MCL) estimate the position of a robot
@@ -49,6 +51,10 @@ public class MonteCarloLocalizer implements Localizer {
     @Override
     public Pose2d getPoseVelocity() {
         return null;
+    }
+
+    public List<Pose2d> getParticlePoses() {
+        return particleFilter2d.getParticlePoses();
     }
 
     /**

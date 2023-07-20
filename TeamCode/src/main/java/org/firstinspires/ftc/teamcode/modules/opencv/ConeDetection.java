@@ -21,24 +21,20 @@
 
 package org.firstinspires.ftc.teamcode.modules.opencv;
 
-import static java.lang.Thread.sleep;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
-import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // ToDo: Get localisation information for coneDetection to work in desired location

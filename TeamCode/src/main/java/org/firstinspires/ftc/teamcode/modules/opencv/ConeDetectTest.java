@@ -29,17 +29,12 @@
 
 package org.firstinspires.ftc.teamcode.modules.opencv;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.teamcode.modules.opencv.ConeDetection;
-import org.opencv.core.Point;
-import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
-import java.util.concurrent.TimeUnit;
 
 @TeleOp(name="Cone Detect OpMode", group="Linear Opmode")
 public class ConeDetectTest extends LinearOpMode {

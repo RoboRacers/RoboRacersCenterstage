@@ -6,4 +6,3 @@ Vikram Kommera
 Aadi Patangi
 Shreesh Senthil
 Prasham Yadothare
-Mohit Varikuti

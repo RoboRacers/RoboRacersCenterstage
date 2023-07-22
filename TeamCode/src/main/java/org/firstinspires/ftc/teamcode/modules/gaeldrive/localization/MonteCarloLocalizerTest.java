@@ -8,10 +8,8 @@ import com.acmerobotics.roadrunner.localization.Localizer;
 
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter2d;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TestMotionModel;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.TestSensorBuffer;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.readings.TestSensorStack;
 import org.jetbrains.annotations.TestOnly;
-
-import java.util.List;
 
 
 /**
@@ -29,7 +27,7 @@ public class MonteCarloLocalizerTest implements Localizer {
     TestMotionModel motionModel;
 
     public MonteCarloLocalizerTest(){
-        TestSensorBuffer.init();
+        TestSensorStack.init();
         particleFilter2d = new ParticleFilter2d();
         dashboard = FtcDashboard.getInstance();
         particleFilter2d.initializeParticles(particleCount, poseEstimate);
@@ -61,7 +59,7 @@ public class MonteCarloLocalizerTest implements Localizer {
      */
     @Override
     public void update() {
-        TestSensorBuffer.update();
+        TestSensorStack.update();
         particleFilter2d.translateParticles(motionModel.getTranslationVector());
         this.poseEstimate = particleFilter2d.getBestPose();
 

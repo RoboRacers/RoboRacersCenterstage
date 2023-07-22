@@ -1,12 +1,19 @@
 package org.firstinspires.ftc.teamcode.modules.gaeldrive.filters;
 
 
+import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.linear.RealVector;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.particles.Particle;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorModel;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * A filter that uses Monte Carlo methods to find approximate solutions
+ *  to filtering problems in a non-linear state space.
+ */
 public class ParticleFilter {
 
     /**
@@ -49,6 +56,53 @@ public class ParticleFilter {
             translatedParticle.setState(translatedParticle.getState().add(translationVector));
             particle2dEntry.setValue(translatedParticle);
 
+        }
+    }
+
+    /**
+     * Weigh all the particles in our state space given a set of sensor models.
+     * We compared the delta between the actual sensor reading and the
+     * sensor value simulated for each one of our sensors.
+     * @param models List of models to be used.
+     */
+    public void weighParticles(List<SensorModel> models) {
+        // For every sensor model that we are considering
+
+
+        // For every particle in our state space
+        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
+            // Get the particle from the entry
+            Particle particle = entry.getValue();
+
+            // Create our Chi2 distribution
+            ChiSquaredDistribution distribution = new ChiSquaredDistribution(1);
+
+            double cumalativeWeight = 0;
+            double cumalativeWeightModifer = 0;
+
+            for (SensorModel model: models) {
+
+                RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
+                RealVector actualSensorValue = model.getActualReading();
+
+                System.out.println("Real Sensor Value: "  + actualSensorValue);
+                System.out.println("Simulated (Random) Sensor Value: " + simulatedSensorValue);
+
+                // Get the difference in the delta of our reading
+                RealVector readingDelta = actualSensorValue.subtract(simulatedSensorValue);
+                // Plug the normalized (Euclidean Distance) of the delta into our Chi2 distribution.
+                double probSensorGivenState = distribution.density(readingDelta.getNorm());
+
+                cumalativeWeight += probSensorGivenState * model.getWeightModifier();
+                cumalativeWeightModifer += model.getWeightModifier();
+
+
+            }
+
+            particle.setWeight(cumalativeWeight/cumalativeWeightModifer);
+            System.out.println("Likeness: " + particle.getWeight() + ", ID: " + particle.getId());
+            // Add the particle with the updated weight back into our particle set.
+            add(particle);
         }
     }
 

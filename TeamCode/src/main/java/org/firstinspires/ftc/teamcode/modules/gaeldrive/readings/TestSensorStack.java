@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors;
+package org.firstinspires.ftc.teamcode.modules.gaeldrive.readings;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * Class to store and load sensor values used by the MCL (Monte Carlo Localizer)
  */
 @TestOnly
-public class TestSensorBuffer implements Sensors {
+public class TestSensorStack implements SensorStack {
     /* Flags for user to change */
     static List<Pose2d> path = new ArrayList<>();
 

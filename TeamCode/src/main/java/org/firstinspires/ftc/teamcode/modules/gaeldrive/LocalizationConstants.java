@@ -19,4 +19,14 @@ public class LocalizationConstants {
      * "drive.setPoseEstimate()" in the start of your autonomous cycle.
      */
     public static Pose2d START_POSE = new Pose2d(0,0,0);
+
+    /**
+     * The positional deviation in which the particles are spawned in relation to their X and Y coordinates.
+     */
+    public static double POSITIONAL_DEVIATION = 0.1;
+
+    /**
+     * The rotational deviation in which the particles are spawned in relation to heading.
+     */
+    public static double ROTATIONAL_DEVIATION = 0.01;
 }

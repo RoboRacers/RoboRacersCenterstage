@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.modules.gaeldrive.motion;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.apache.commons.math3.linear.RealVector;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorBuffer;
+import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.readings.StandardSensorStack;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
 
 /**
@@ -13,11 +15,22 @@ import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
  */
 public class TrackingWheelMotionModel implements MotionModel{
 
+    StandardTrackingWheelLocalizer trackingWheelLocalizer;
+
+    Pose2d trackingWheelPose;
+
     RealVector prevState;
     RealVector currentState;
 
-    public TrackingWheelMotionModel(Pose2d startPose) {
+
+    public TrackingWheelMotionModel(Pose2d startPose, HardwareMap hardwareMap) {
         currentState = PoseUtils.poseToVecor(startPose);
+        trackingWheelLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
+    }
+
+    public void update() {
+        trackingWheelLocalizer.update();
+        trackingWheelPose = trackingWheelLocalizer.getPoseEstimate();
     }
 
     /**
@@ -27,9 +40,15 @@ public class TrackingWheelMotionModel implements MotionModel{
     @Override
     public  RealVector getTranslationVector() {
         prevState = currentState;
-        currentState = PoseUtils.poseToVecor(SensorBuffer.trackingWheelPose);
+        currentState = PoseUtils.poseToVecor(trackingWheelPose);
         RealVector translation = currentState.subtract(prevState);
 
         return translation;
     }
+
+    public Pose2d getTrackingWheelPose() {
+        return trackingWheelPose;
+    }
+
+
 }

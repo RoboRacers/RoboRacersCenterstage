@@ -22,19 +22,21 @@ public class StandardSensorStack implements SensorStack {
 
     public static TrackingWheelMotionModel trackingWheelMotionModel;
     public static DistanceSensorModel distanceSensorModel;
+    static List<SensorModel> sensorModels = new ArrayList<>();
 
     static public void init(HardwareMap hardwareMap) {
         trackingWheelMotionModel = new TrackingWheelMotionModel(LocalizationConstants.START_POSE, hardwareMap);
         distanceSensorModel = new DistanceSensorModel(hardwareMap.get(DistanceSensor.class, "range"));
+
+        sensorModels.add(distanceSensorModel);
     }
 
     public static void update(){
         trackingWheelMotionModel.update();
+        distanceSensorModel.update();
     }
 
     public static List<SensorModel> getSensorModels() {
-        List<SensorModel> sensorModels = new ArrayList<>();
-        sensorModels.add(distanceSensorModel);
        return sensorModels;
     }
 

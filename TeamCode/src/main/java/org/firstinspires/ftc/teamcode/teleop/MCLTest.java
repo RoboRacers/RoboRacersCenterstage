@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizer;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.particles.Particle;
 
+import java.util.HashMap;
 import java.util.List;
 
 @TeleOp(name = "MCL Localization Teleop", group = "Test")
@@ -30,6 +32,7 @@ public class MCLTest extends LinearOpMode {
         long loopTime = 0;
 
         List<Pose2d> poses;
+        HashMap<Integer, Particle> map;
 
         while (opModeInInit()) {
 
@@ -42,6 +45,12 @@ public class MCLTest extends LinearOpMode {
             robot.drive.update();
 
             poses = mcl.getParticlePoses();
+            map = mcl.getParticleMap();
+
+
+
+
+
 
             TelemetryPacket packet = new TelemetryPacket();
             for (Pose2d pose: poses) {

@@ -39,7 +39,8 @@ public class DistanceSensorModel implements SensorModel {
      */
     @Override
     public RealVector getSimulatedReading(RealVector state) {
-        return null;
+        RealVector simulatedReading = new ArrayRealVector(new double[] {10});
+        return simulatedReading;
     }
 
     @Override

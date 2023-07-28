@@ -23,6 +23,9 @@ public class ParticleFilter {
      */
     public HashMap<Integer, Particle> Particles = new HashMap<>();
 
+    /**
+     * Distribution used in the resampling of particles. TODO: Make degreesOfFreed changeable.
+     */
     public ChiSquaredDistribution distribution = new ChiSquaredDistribution(1);
 
     /**
@@ -105,6 +108,10 @@ public class ParticleFilter {
             // Add the particle with the updated weight back into our particle set.
             add(particle);
         }
+    }
+
+    public static void resampleParticles() {
+
     }
 
     /**

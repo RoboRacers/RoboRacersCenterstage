@@ -23,7 +23,7 @@ public class TrackingWheelMotionModel implements MotionModel{
 
 
     public TrackingWheelMotionModel(Pose2d startPose, ThreeTrackingWheelLocalizer localizer) {
-        currentState = PoseUtils.poseToVecor(startPose);
+        currentState = PoseUtils.poseToVector(startPose);
         trackingWheelLocalizer = localizer;
     }
 
@@ -39,7 +39,7 @@ public class TrackingWheelMotionModel implements MotionModel{
     @Override
     public  RealVector getTranslationVector() {
         prevState = currentState;
-        currentState = PoseUtils.poseToVecor(trackingWheelPose);
+        currentState = PoseUtils.poseToVector(trackingWheelPose);
         RealVector translation = currentState.subtract(prevState);
 
         return translation;

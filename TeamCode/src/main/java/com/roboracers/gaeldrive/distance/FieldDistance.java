@@ -13,17 +13,37 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Classes to represent field obstacles in code and to calculate distances from objects to obstacles.
+ * Used in DistanceSensorModel implementations.
+ */
 public class FieldDistance {
 
+    /**
+     * List of field geometry consisting of lines.
+     */
     public static List<Vector2d[]> FieldGeometry = new ArrayList<>();
 
     static  {
+        // Geometry Added Here
         FieldGeometry.add(new Vector2d[] {new Vector2d(-72, 72), new Vector2d(72, 72)});
         FieldGeometry.add(new Vector2d[] {new Vector2d(72, 72), new Vector2d(72, -72)});
         FieldGeometry.add(new Vector2d[] {new Vector2d(72, -72), new Vector2d(-72, -72)});
-        FieldGeometry.add(new Vector2d[] {new Vector2d(-72, -72), new Vector2d(72, -72)});
+        FieldGeometry.add(new Vector2d[] {new Vector2d(-72, -72), new Vector2d(-72, 72)});
     }
 
+    /** Add your own custom geometry to the field.
+     * @param line Array of two Vector2d entries.
+     */
+    public static void addGeometery(Vector2d[] line) {
+        FieldGeometry.add(line);
+    }
+
+    /**
+     * Calculates a simulated distance reading given an origin point.
+     * @param origin the origin of the distance reading
+     * @return simulated distance from the sensor to the nearest field geometry.
+     */
     public static double calculateSimulatedDistance(Pose2d origin) {
 
         List<Double> distances = new ArrayList<>();
@@ -41,14 +61,19 @@ public class FieldDistance {
         return 0;
     }
 
-
+    /**
+     * Find the intersection between a ray and line.
+     * @param pose
+     * @param point1
+     * @param point2
+     * @return Distance between ray and line
+     */
     public static double getRayToLineSegmentIntersection(Pose2d pose, Vector2d point1, Vector2d point2) {
 
         Vector2d rayOrigin = new Vector2d(pose.getX(), pose.getY());
         Vector2d v1 = rayOrigin.minus(point1);
         Vector2d v2 = point2.minus(point1);
         Vector2d v3 = new Vector2d(-sin(pose.getHeading()), cos(pose.getHeading()));
-
         double dot = v2.dot(v3);
 
         if (abs(dot) < 0.000001) {

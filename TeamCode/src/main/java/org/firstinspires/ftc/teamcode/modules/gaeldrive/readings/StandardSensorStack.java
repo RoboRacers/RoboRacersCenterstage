@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules.gaeldrive.readings;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.roboracers.gaeldrive.motion.MotionModel;
@@ -27,7 +28,11 @@ public class StandardSensorStack implements SensorStack {
     static public void init(HardwareMap hardwareMap) {
         trackingWheelMotionModel = new TrackingWheelMotionModel(LocalizationConstants.START_POSE, new StandardTrackingWheelLocalizer(hardwareMap));
 
-        SensorModel distanceSensorModel = new DistanceSensorModel(hardwareMap.get(DistanceSensor.class, "range"));
+        // Config our Distance Sensor
+        DistanceSensorModel distanceSensorModel = new DistanceSensorModel(
+                hardwareMap.get(DistanceSensor.class, "range"),
+                7.87402, 301.181,
+                new Pose2d(10,5, Math.toRadians(90)));
         sensorModels.add(distanceSensorModel);
     }
 

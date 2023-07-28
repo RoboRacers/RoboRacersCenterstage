@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.roboracers.gaeldrive.distance.FieldDistance;
+import com.roboracers.gaeldrive.sensors.SensorModel;
+import com.roboracers.gaeldrive.utils.PoseUtils;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
@@ -17,6 +20,10 @@ public class DistanceSensorModel implements SensorModel {
         this.sensor = sensor;
     }
 
+    /**
+     * Gets the weight modifier assigned to this model.
+     * @return Weight modifier
+     */
     @Override
     public double getWeightModifier() {
         return weight;
@@ -39,7 +46,7 @@ public class DistanceSensorModel implements SensorModel {
      */
     @Override
     public RealVector getSimulatedReading(RealVector state) {
-        RealVector simulatedReading = new ArrayRealVector(new double[] {10});
+        RealVector simulatedReading = new ArrayRealVector(new double[] {FieldDistance.calculateSimulatedDistance(PoseUtils.vectorToPose(state))});
         return simulatedReading;
     }
 

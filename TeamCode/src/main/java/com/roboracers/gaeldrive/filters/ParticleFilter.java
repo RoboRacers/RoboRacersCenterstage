@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode.modules.gaeldrive.filters;
+package com.roboracers.gaeldrive.filters;
 
 
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.linear.RealVector;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.particles.Particle;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorModel;
+import com.roboracers.gaeldrive.LocalizationConstants;
+import com.roboracers.gaeldrive.particles.Particle;
+
+import com.roboracers.gaeldrive.sensors.SensorModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,8 @@ public class ParticleFilter {
      * Hashmap that stores all the particles in Integer/Particle pairs.
      */
     public HashMap<Integer, Particle> Particles = new HashMap<>();
+
+    public ChiSquaredDistribution distribution = new ChiSquaredDistribution(1);
 
     /**
      * Add a particle to the internal Hashmap.
@@ -38,7 +42,7 @@ public class ParticleFilter {
 
     /**
      * Return the Hashmap that stores the particles.
-     * @return
+     * @return Hashmap of particles
      */
     public HashMap<Integer, Particle> getParticles() {
         return  this.Particles;
@@ -55,7 +59,6 @@ public class ParticleFilter {
             Particle translatedParticle = particle2dEntry.getValue();
             translatedParticle.setState(translatedParticle.getState().add(translationVector));
             particle2dEntry.setValue(translatedParticle);
-
         }
     }
 
@@ -66,27 +69,25 @@ public class ParticleFilter {
      * @param models List of models to be used.
      */
     public void weighParticles(List<SensorModel> models) {
-        // For every sensor model that we are considering
-
-
         // For every particle in our state space
         for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
             // Get the particle from the entry
             Particle particle = entry.getValue();
 
-            // Create our Chi2 distribution
-            ChiSquaredDistribution distribution = new ChiSquaredDistribution(1);
-
             double cumalativeWeight = 0;
             double cumalativeWeightModifer = 0;
 
+            // For every sensor model that we are considering
             for (SensorModel model: models) {
 
+                // Get both the actual and simulated reading
                 RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
                 RealVector actualSensorValue = model.getActualReading();
 
-                System.out.println("Real Sensor Value: "  + actualSensorValue);
-                System.out.println("Simulated (Random) Sensor Value: " + simulatedSensorValue);
+                if (LocalizationConstants.TESTING) {
+                    System.out.println("Real Sensor Value: "  + actualSensorValue);
+                    System.out.println("Simulated (Random) Sensor Value: " + simulatedSensorValue);
+                }
 
                 // Get the difference in the delta of our reading
                 RealVector readingDelta = actualSensorValue.subtract(simulatedSensorValue);

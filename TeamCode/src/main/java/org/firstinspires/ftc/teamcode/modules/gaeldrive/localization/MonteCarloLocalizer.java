@@ -6,13 +6,11 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.filters.ParticleFilter2d;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.MotionModel;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.TrackingWheelMotionModel;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.particles.Particle;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.readings.SensorStack;
+import com.roboracers.gaeldrive.LocalizationConstants;
+import com.roboracers.gaeldrive.filters.ParticleFilter2d;
+import com.roboracers.gaeldrive.particles.Particle;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.readings.StandardSensorStack;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,14 +27,12 @@ public class MonteCarloLocalizer implements Localizer {
     int particleCount = LocalizationConstants.PARTICLE_COUNT;
 
     ParticleFilter2d particleFilter2d;
-    MotionModel motionModel;
 
     public MonteCarloLocalizer(HardwareMap hardwareMap){
 
         StandardSensorStack.init(hardwareMap);
         particleFilter2d = new ParticleFilter2d();
         particleFilter2d.initializeParticles(this.particleCount, this.poseEstimate);
-        motionModel = new TrackingWheelMotionModel(poseEstimate, hardwareMap);
     }
 
     @Override
@@ -48,10 +44,9 @@ public class MonteCarloLocalizer implements Localizer {
     public void setPoseEstimate(@NonNull Pose2d pose2d) {
         this.poseEstimate = pose2d;
         particleFilter2d.initializeParticles(particleCount, poseEstimate);
+
     }
 
-
-    //TODO: Implement Pose Velocity (Maybe?)
     @Override
     public Pose2d getPoseVelocity() {
         return null;
@@ -74,9 +69,9 @@ public class MonteCarloLocalizer implements Localizer {
         StandardSensorStack.update();
         // Translate all particles in our particle filter
         particleFilter2d.translateParticles(StandardSensorStack.trackingWheelMotionModel.getTranslationVector());
-        // Weigh Particle
+        // Weigh Particles
         particleFilter2d.weighParticles(StandardSensorStack.getSensorModels());
-
+        // Get the best pose estimate
         poseEstimate = particleFilter2d.getBestPose();
 
     }

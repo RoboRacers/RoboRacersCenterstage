@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.modules.gaeldrive.motion;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
+import com.roboracers.gaeldrive.motion.MotionModel;
 
 import org.apache.commons.math3.linear.RealVector;
-import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.readings.StandardSensorStack;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
+import com.roboracers.gaeldrive.utils.PoseUtils;
 
 /**
  * A motion model that uses the tracking wheel estimate to estimate the movement of a robot in a given timeframe.
@@ -15,7 +14,7 @@ import org.firstinspires.ftc.teamcode.modules.gaeldrive.utils.PoseUtils;
  */
 public class TrackingWheelMotionModel implements MotionModel{
 
-    StandardTrackingWheelLocalizer trackingWheelLocalizer;
+    ThreeTrackingWheelLocalizer trackingWheelLocalizer;
 
     Pose2d trackingWheelPose;
 
@@ -23,9 +22,9 @@ public class TrackingWheelMotionModel implements MotionModel{
     RealVector currentState;
 
 
-    public TrackingWheelMotionModel(Pose2d startPose, HardwareMap hardwareMap) {
+    public TrackingWheelMotionModel(Pose2d startPose, ThreeTrackingWheelLocalizer localizer) {
         currentState = PoseUtils.poseToVecor(startPose);
-        trackingWheelLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
+        trackingWheelLocalizer = localizer;
     }
 
     public void update() {
@@ -46,7 +45,8 @@ public class TrackingWheelMotionModel implements MotionModel{
         return translation;
     }
 
-    public Pose2d getTrackingWheelPose() {
+    @Override
+    public Pose2d getRawEstimate() {
         return trackingWheelPose;
     }
 

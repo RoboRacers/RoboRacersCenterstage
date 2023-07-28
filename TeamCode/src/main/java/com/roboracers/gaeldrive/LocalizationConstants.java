@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.modules.gaeldrive;
+package com.roboracers.gaeldrive;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
@@ -29,4 +29,6 @@ public class LocalizationConstants {
      * The rotational deviation in which the particles are spawned in relation to heading.
      */
     public static double ROTATIONAL_DEVIATION = 0.01;
+
+    public static boolean TESTING = false;
 }

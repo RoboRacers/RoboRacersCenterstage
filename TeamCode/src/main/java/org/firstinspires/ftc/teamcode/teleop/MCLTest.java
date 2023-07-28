@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizer;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.particles.Particle;
+import com.roboracers.gaeldrive.particles.Particle;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,18 +1,10 @@
 package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotCore;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizer;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizerTest;
-
-import java.util.List;
 
 @TeleOp(name = "Base Template Teleop", group = "Test")
 public class TemplateTeleop extends LinearOpMode {

@@ -7,9 +7,21 @@ import org.apache.commons.math3.linear.RealVector;
 
 public class VectorUtils {
 
+    /**
+     * Converts the roadrunner Vector2d to an Array Real Vector
+     * @param vector2d
+     * @return Array Real Vector
+     */
     public static RealVector Vector2dToVector (Vector2d vector2d) {
         return new ArrayRealVector(new double[] {vector2d.getX(), vector2d.getY()});
     }
+
+    /**
+     * Takes the cross product of two 2d vectors. Returns a scalar. Not communative.
+     * @param t1 First Vector
+     * @param t2 Second Vector
+     * @return Scalar
+     */
     public static double CrossProduct2d (RealVector t1, RealVector t2) {
         return t1.getEntry(0)*t2.getEntry(1)-t1.getEntry(1)*t2.getEntry(0);
     }

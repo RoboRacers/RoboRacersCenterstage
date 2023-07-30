@@ -23,12 +23,23 @@ public class LocalizationConstants {
     /**
      * The positional deviation in which the particles are spawned in relation to their X and Y coordinates.
      */
-    public static double POSITIONAL_DEVIATION = 0.1;
+    public static double POSITIONAL_COVARIANCES = 0.1;
 
     /**
      * The rotational deviation in which the particles are spawned in relation to heading.
      */
-    public static double ROTATIONAL_DEVIATION = 0.01;
+    public static double ROTATIONAL_COVARIANCES = 0.01;
+
+    /**
+     * After how many update cycles the particle set is resampled. Lower values mean more performance,
+     * but at the cost of accuracy.
+     */
+    public static int RESAMPLING_CYCLES = 2;
+
+    /**
+     * How much the robot has to move for the particles to be updated.
+     */
+    public static double UPDATE_THRESHOLD = 0;
 
     public static boolean TESTING = false;
 }

@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Specialized Particle Filter class for 2d robot localization.
+ * Note that this is technically a 2d particle filter.
  */
 public class ParticleFilter2d extends ParticleFilter {
 
@@ -24,10 +25,10 @@ public class ParticleFilter2d extends ParticleFilter {
     public void initializeParticles(int numParticles, Pose2d startingLocation) {
 
         // Deviation Threshold for spawning new particles
-        double min = -LocalizationConstants.POSITIONAL_DEVIATION;
-        double max = LocalizationConstants.POSITIONAL_DEVIATION;
-        double heading_min = -LocalizationConstants.ROTATIONAL_DEVIATION;
-        double heading_max = LocalizationConstants.ROTATIONAL_DEVIATION;
+        double min = -LocalizationConstants.POSITIONAL_COVARIANCES;
+        double max = LocalizationConstants.POSITIONAL_COVARIANCES;
+        double heading_min = -LocalizationConstants.ROTATIONAL_COVARIANCES;
+        double heading_max = LocalizationConstants.ROTATIONAL_COVARIANCES;
 
         for(int i=0; i < numParticles; i++ ) {
             // Generate random deviances TODO: Make a more mathematical resampling system

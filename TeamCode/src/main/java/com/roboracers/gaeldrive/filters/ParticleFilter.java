@@ -3,6 +3,8 @@ package com.roboracers.gaeldrive.filters;
 
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.linear.RealVector;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorUtils;
+
 import com.roboracers.gaeldrive.LocalizationConstants;
 import com.roboracers.gaeldrive.particles.Particle;
 
@@ -72,46 +74,63 @@ public class ParticleFilter {
      * @param models List of models to be used.
      */
     public void weighParticles(List<SensorModel> models) {
-        // For every particle in our state space
+
+        double cumalativeWeightModifer = 0;
+
+        HashMap<Integer, Double> weightNumerator = new HashMap<>();
+
+        // Initialize our weight numerators
         for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
-            // Get the particle from the entry
-            Particle particle = entry.getValue();
+            weightNumerator.put(entry.getKey(), 0.0);
+        }
 
-            double cumalativeWeight = 0;
-            double cumalativeWeightModifer = 0;
+        double overallWeight = 0;
 
-            // For every sensor model that we are considering
-            for (SensorModel model: models) {
+        for (SensorModel model: models) {
 
-                // Get both the actual and simulated reading
-                RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
-                RealVector actualSensorValue = model.getActualReading();
+            for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
+                Particle particle = entry.getValue();
 
-                if (LocalizationConstants.TESTING) {
-                    System.out.println("Real Sensor Value: "  + actualSensorValue);
-                    System.out.println("Simulated (Random) Sensor Value: " + simulatedSensorValue);
-                }
+                double probSensorGivenState = getDeltaProbability(particle, model);
 
-                // Get the difference in the delta of our reading
-                RealVector readingDelta = actualSensorValue.subtract(simulatedSensorValue);
-                // Plug the normalized (Euclidean Distance) of the delta into our Chi2 distribution.
-                double probSensorGivenState = distribution.density(readingDelta.getNorm());
+                double sensorLikelihood = probSensorGivenState * model.getWeightModifier();
 
-                cumalativeWeight += probSensorGivenState * model.getWeightModifier();
-                cumalativeWeightModifer += model.getWeightModifier();
+                weightNumerator.put(entry.getKey(), weightNumerator.get(entry.getKey())+sensorLikelihood);
 
-
+                overallWeight += sensorLikelihood;
             }
 
-            particle.setWeight(cumalativeWeight/cumalativeWeightModifer);
-            System.out.println("Likeness: " + particle.getWeight() + ", ID: " + particle.getId());
-            // Add the particle with the updated weight back into our particle set.
-            add(particle);
+            // The sum of all the weight modifiers of all the sensor models
+            cumalativeWeightModifer += model.getWeightModifier();
+
         }
+
+        // For every particle in our state space
+        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
+            double weight = ((weightNumerator.get(entry.getKey())/cumalativeWeightModifer)*entry.getValue().getWeight())
+                    /(overallWeight);
+        }
+
     }
 
-    public static void resampleParticles() {
+    public void resampleParticles() {
 
+    }
+
+    private double getDeltaProbability(Particle particle, SensorModel model) {
+        // Get both the actual and simulated reading
+        RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
+        RealVector actualSensorValue = model.getActualReading();
+
+        if (LocalizationConstants.TESTING) {
+            System.out.println("Real Sensor Value: "  + actualSensorValue);
+            System.out.println("Simulated (Random) Sensor Value: " + simulatedSensorValue);
+        }
+
+        // Get the difference in the delta of our reading
+        RealVector readingDelta = actualSensorValue.subtract(simulatedSensorValue);
+        // Plug the normalized (Euclidean Distance) of the delta into our Chi2 distribution.
+        return distribution.density(readingDelta.getNorm());
     }
 
     /**

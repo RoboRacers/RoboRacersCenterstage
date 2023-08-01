@@ -1,7 +1,7 @@
 # GaelDrive for Roadrunner
 
 Robot odometry library for Roadrunner that uses Monte Carlo Localization to estimate the robot's position.
-Iniital idea by GaelSuite
+Inital idea by GaelSuite
 
 ## Credits
 

@@ -72,6 +72,8 @@ public class ParticleFilter {
      * @param models List of models to be used.
      */
     public void weighParticles(List<SensorModel> models) {
+
+
         // For every particle in our state space
         for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
             // Get the particle from the entry
@@ -100,11 +102,12 @@ public class ParticleFilter {
                 cumalativeWeight += probSensorGivenState * model.getWeightModifier();
                 cumalativeWeightModifer += model.getWeightModifier();
 
-
             }
 
             particle.setWeight(cumalativeWeight/cumalativeWeightModifer);
-            System.out.println("Likeness: " + particle.getWeight() + ", ID: " + particle.getId());
+            if (LocalizationConstants.TESTING) {
+                System.out.println("Likeness: " + particle.getWeight() + ", ID: " + particle.getId());
+            }
             // Add the particle with the updated weight back into our particle set.
             add(particle);
         }

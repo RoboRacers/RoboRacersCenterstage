@@ -20,10 +20,10 @@ public class WeightingUnitTest {
     static List<SensorModel> models = new ArrayList<>();
     public static void main(String[] args) {
         loop = System.nanoTime();
-        models.add(new TestDistanceSensorModel(20));
-        models.add(new TestDistanceSensorModel(40));
-        models.add(new TestDistanceSensorModel(60));
-        filter.initializeParticles(20, new Pose2d(0,0,0));
+        models.add(new TestDistanceSensorModel(51, new Pose2d(0,0, 0)));
+        models.add(new TestDistanceSensorModel(51, new Pose2d(0,0,Math.toRadians(-45))));
+        models.add(new TestDistanceSensorModel(51, new Pose2d(0,0,Math.toRadians(45))));
+        filter.initializeParticles(200000, new Pose2d(0,0,Math.toRadians(45)));
         filter.weighParticles(StandardSensorStack.getSensorModels());
         loopTime = System.nanoTime();
         System.out.println("Time for function call: " + (loopTime-loop) + "Best Pose: " + filter.getBestPose());

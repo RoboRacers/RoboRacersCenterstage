@@ -23,6 +23,7 @@ public class TestDistanceSensorModel implements SensorModel {
     double weight = 0.7;
     public double minDistance = 10;
     public double maxDistance = 400;
+    Pose2d location;
     double dist;
 
     /**
@@ -30,7 +31,8 @@ public class TestDistanceSensorModel implements SensorModel {
      *
      *
      */
-    public TestDistanceSensorModel(double dist) {
+    public TestDistanceSensorModel(double dist, Pose2d location) {
+        this.location = location;
         this.dist = dist;
     }
 
@@ -60,7 +62,7 @@ public class TestDistanceSensorModel implements SensorModel {
      */
     @Override
     public RealVector getSimulatedReading(RealVector state) {
-        double simulatedDistance = FieldDistance.calculateSimulatedDistance(PoseUtils.vectorToPose(state));
+        double simulatedDistance = FieldDistance.calculateSimulatedDistance(PoseUtils.vectorToPose(state.add(PoseUtils.poseToVector(location))));
         // Limiting Readings to min and max distances
         if (simulatedDistance < minDistance) {
             simulatedDistance = minDistance;

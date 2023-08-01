@@ -23,7 +23,7 @@ public class LocalizationConstants {
     /**
      * The positional deviation in which the particles are spawned in relation to their X and Y coordinates.
      */
-    public static double POSITIONAL_COVARIANCES = 0.1;
+    public static double POSITIONAL_COVARIANCES = 72;
 
     /**
      * The rotational deviation in which the particles are spawned in relation to heading.

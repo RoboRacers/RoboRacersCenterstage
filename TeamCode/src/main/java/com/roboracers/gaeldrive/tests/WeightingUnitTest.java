@@ -23,9 +23,9 @@ public class WeightingUnitTest {
         models.add(new TestDistanceSensorModel(51, new Pose2d(0,0, 0)));
         models.add(new TestDistanceSensorModel(51, new Pose2d(0,0,Math.toRadians(-45))));
         models.add(new TestDistanceSensorModel(51, new Pose2d(0,0,Math.toRadians(45))));
-        filter.initializeParticles(200000, new Pose2d(0,0,Math.toRadians(45)));
+        filter.initializeParticles(20, new Pose2d(0,0,Math.toRadians(45)));
         filter.weighParticles(StandardSensorStack.getSensorModels());
         loopTime = System.nanoTime();
-        System.out.println("Time for function call: " + (loopTime-loop) + "Best Pose: " + filter.getBestPose());
+        System.out.println("Time for function call: " + (loopTime-loop) + "Best Pose: " + filter.getBestParticle().getWeight());
     }
 }

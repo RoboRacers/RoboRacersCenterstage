@@ -15,29 +15,23 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * You can create your own models for whatever sensor, just use the SensorModel interface.
  * Use the FieldDistance class for distance calculations (Included in GD for your use).
  */
-public class DistanceSensorModel implements SensorModel {
+public class TestDistanceSensorModel implements SensorModel {
 
-    DistanceSensor sensor;
     double rawReading;
 
     // Config variables
     double weight = 0.7;
-    public double minDistance;
-    public double maxDistance;
-    public Pose2d location;
+    public double minDistance = 10;
+    public double maxDistance = 400;
+    double dist;
 
     /**
      * Constructor for a distance sensor.
-     * @param sensor The sensor
-     * @param minDistance The minimum reading distance for this sensor
-     * @param maxDistance The maximum reading distance for this sensor
-     * @param location Location of the sensor on the robot. See: <a href="https://cdn.statically.io/gh/NoahBres/LearnRoadRunner/1c0fe8d5/docs/assets/dead-wheels/andrew-bot-wheel-location-quarter.jpg">LearnRoadrunner.com</a> for coordinate system
+     *
+     *
      */
-    public DistanceSensorModel(DistanceSensor sensor, double minDistance, double maxDistance, Pose2d location) {
-        this.sensor = sensor;
-        this.minDistance = minDistance;
-        this.maxDistance = maxDistance;
-        this.location = location;
+    public TestDistanceSensorModel(double dist) {
+        this.dist = dist;
     }
 
     /**
@@ -66,7 +60,7 @@ public class DistanceSensorModel implements SensorModel {
      */
     @Override
     public RealVector getSimulatedReading(RealVector state) {
-        double simulatedDistance = FieldDistance.calculateSimulatedDistance(PoseUtils.vectorToPose(state.add(PoseUtils.poseToVector(location))));
+        double simulatedDistance = FieldDistance.calculateSimulatedDistance(PoseUtils.vectorToPose(state));
         // Limiting Readings to min and max distances
         if (simulatedDistance < minDistance) {
             simulatedDistance = minDistance;
@@ -86,7 +80,7 @@ public class DistanceSensorModel implements SensorModel {
 
     @Override
     public void update() {
-        rawReading = sensor.getDistance(DistanceUnit.INCH);
+        rawReading = 10;
     }
 
 

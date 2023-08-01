@@ -77,38 +77,57 @@ public class ParticleFilter {
 
         double cumalativeWeightModifer = 0;
 
-        HashMap<Integer, Double> weightNumerator = new HashMap<>();
-
-        // Initialize our weight numerators
-        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
-            weightNumerator.put(entry.getKey(), 0.0);
+        for(SensorModel model: models) {
+            // The sum of all the weight modifiers of all the sensor models
+            cumalativeWeightModifer += model.getWeightModifier();
         }
 
-        double overallWeight = 0;
+        // Probability of the current sensor given a particle
+        HashMap<Integer, Double> sumIndividualProbablities = new HashMap<>();
+
+        // Initialize our Map with the keys from Particles
+        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
+            sumIndividualProbablities.put(entry.getKey(), 0.0);
+        }
 
         for (SensorModel model: models) {
+
+            // Overall probability of the the sexor
+            double pZ = 0;
+            // Probability of the current sensor given a particle
+            HashMap<Integer, Double> pZgivenXMap = new HashMap<>();
+
+            // Initialize our Map with the keys from Particles
+            for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
+                pZgivenXMap.put(entry.getKey(), 0.0);
+            }
+
+            // Calculate the probabilities for all the particles given the sensor reading
+            for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
+                Particle particle = entry.getValue();
+
+                double sensorLikelihood = getDeltaProbability(particle, model) * model.getWeightModifier();
+
+                pZgivenXMap.put(entry.getKey(), sensorLikelihood);
+
+                pZ += sensorLikelihood;
+            }
 
             for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
                 Particle particle = entry.getValue();
 
-                double probSensorGivenState = getDeltaProbability(particle, model);
-
-                double sensorLikelihood = probSensorGivenState * model.getWeightModifier();
-
-                weightNumerator.put(entry.getKey(), weightNumerator.get(entry.getKey())+sensorLikelihood);
-
-                overallWeight += sensorLikelihood;
+                double particleWeightGivenSensor = ((pZgivenXMap.get(entry.getKey())) * particle.getWeight())/
+                                                    (pZ);
+                sumIndividualProbablities.put(entry.getKey(), sumIndividualProbablities.get(entry.getKey())+particleWeightGivenSensor);
             }
-
-            // The sum of all the weight modifiers of all the sensor models
-            cumalativeWeightModifer += model.getWeightModifier();
 
         }
 
         // For every particle in our state space
         for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
-            double weight = ((weightNumerator.get(entry.getKey())/cumalativeWeightModifer)*entry.getValue().getWeight())
-                    /(overallWeight);
+            Particle particle = entry.getValue();
+
+            particle.setWeight(sumIndividualProbablities.get(entry.getKey())/cumalativeWeightModifer);
         }
 
     }

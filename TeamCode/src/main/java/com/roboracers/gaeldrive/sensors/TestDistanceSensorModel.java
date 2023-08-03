@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors;
+package com.roboracers.gaeldrive.sensors;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -82,7 +82,7 @@ public class TestDistanceSensorModel implements SensorModel {
 
     @Override
     public void update() {
-        rawReading = 10;
+        rawReading = dist;
     }
 
 

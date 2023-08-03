@@ -13,13 +13,13 @@ public interface SensorModel extends Updatable {
 
     /**
      * Returns a vectorized version of the reading.
-     * @return
+     * @return Actual reading of the sensor
      */
     public RealVector getActualReading();
 
     /**
      * Returns the expected vectorized sensor reading from a particular state.
-     * @param state
+     * @param state State of the particle the reading is based on
      * @return Simulated sensor value
      */
     public RealVector getSimulatedReading(RealVector state);

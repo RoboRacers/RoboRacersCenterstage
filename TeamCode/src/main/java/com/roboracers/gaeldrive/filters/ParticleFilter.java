@@ -26,7 +26,7 @@ public class ParticleFilter {
     /**
      * Distribution used in the resampling of particles. TODO: Make degreesOfFreed changeable.
      */
-    public ChiSquaredDistribution distribution = new ChiSquaredDistribution(1);
+    public ChiSquaredDistribution distribution = new ChiSquaredDistribution(2);
 
     /**
      * Add a particle to the internal Hashmap.

@@ -23,12 +23,12 @@ public class LocalizationConstants {
     /**
      * The positional deviation in which the particles are spawned in relation to their X and Y coordinates.
      */
-    public static double POSITIONAL_COVARIANCES = 10;
+    public static double POSITIONAL_COVARIANCES = 72;
 
     /**
      * The rotational deviation in which the particles are spawned in relation to heading.
      */
-    public static double ROTATIONAL_COVARIANCES = 0.01;
+    public static double ROTATIONAL_COVARIANCES = Math.toRadians(180);
 
     /**
      * After how many update cycles the particle set is resampled. Lower values mean more performance,

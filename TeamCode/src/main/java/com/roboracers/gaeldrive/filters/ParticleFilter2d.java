@@ -22,6 +22,11 @@ public class ParticleFilter2d extends ParticleFilter {
     public ParticleFilter2d() {
     }
 
+    /**
+     * Initialize the particle set
+     * @param numParticles The number of particles in the particle set
+     * @param startingLocation The origin of the particles
+     */
     public void initializeParticles(int numParticles, Pose2d startingLocation) {
 
         // Deviation Threshold for spawning new particles

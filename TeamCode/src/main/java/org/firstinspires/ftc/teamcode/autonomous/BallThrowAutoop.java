@@ -34,7 +34,6 @@ public class BallThrowAutoop extends LinearOpMode {
 
         while(opModeIsActive() && !finished){
             Trajectories.BallDropTraj.run();
-            finished = true;
         }
 
     }

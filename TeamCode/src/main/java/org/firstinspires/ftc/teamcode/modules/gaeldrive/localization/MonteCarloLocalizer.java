@@ -68,7 +68,7 @@ public class MonteCarloLocalizer implements Localizer {
         // Update all sensor values
         StandardSensorStack.update();
         // Translate all particles in our particle filter
-        particleFilter2d.translateParticles(StandardSensorStack.trackingWheelMotionModel.getTranslationVector());
+        particleFilter2d.translateParticles(StandardSensorStack.motionModel.getTranslationVector());
         // Weigh Particles
         particleFilter2d.weighParticles(StandardSensorStack.getSensorModels());
         // Get the best pose estimate

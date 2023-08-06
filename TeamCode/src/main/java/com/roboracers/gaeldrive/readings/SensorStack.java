@@ -16,4 +16,8 @@ public interface SensorStack {
     public static List<SensorModel> getSensorModels () {
         return null;
     }
+
+    public static void addSensorModel (SensorModel model) {
+
+    }
 }

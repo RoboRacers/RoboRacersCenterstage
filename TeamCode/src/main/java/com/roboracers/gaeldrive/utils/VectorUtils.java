@@ -25,4 +25,16 @@ public class VectorUtils {
     public static double CrossProduct2d (RealVector t1, RealVector t2) {
         return t1.getEntry(0)*t2.getEntry(1)-t1.getEntry(1)*t2.getEntry(0);
     }
-}
+
+    /**
+     * Create a vector with 3 elements, most commonly used for localization algortihms.
+     * @param x
+     * @param y
+     * @param heading
+     * @return 3 Element vector
+     */
+    public static RealVector create3DVector (double x, double y, double heading) {
+        return  new ArrayRealVector(new double[] {x, y, heading});
+    }
+
+ }

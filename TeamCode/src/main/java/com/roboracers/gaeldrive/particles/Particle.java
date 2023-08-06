@@ -15,7 +15,7 @@ public class Particle {
     /**
      * The weightage of this particle.
      */
-    public double weight;
+     double weight;
     /**
      * This id of this particle for tracking purposes.
      */

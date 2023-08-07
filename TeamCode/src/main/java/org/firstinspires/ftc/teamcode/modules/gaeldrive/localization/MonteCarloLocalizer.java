@@ -57,7 +57,7 @@ public class MonteCarloLocalizer implements Localizer {
     }
 
     public HashMap<Integer, Particle> getParticleMap() {
-        return particleFilter2d.Particles;
+        return particleFilter2d.getParticles();
     }
 
     /**

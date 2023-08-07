@@ -21,12 +21,12 @@ public class ParticleFilter {
     /**
      * Hashmap that stores all the particles in Integer/Particle pairs.
      */
-    public HashMap<Integer, Particle> Particles = new HashMap<>();
+     HashMap<Integer, Particle> Particles = new HashMap<>();
 
     /**
      * Distribution used in the resampling of particles. TODO: Make degreesOfFreed changeable.
      */
-    public ChiSquaredDistribution distribution = new ChiSquaredDistribution(2);
+    private ChiSquaredDistribution distribution = new ChiSquaredDistribution(2);
 
     /**
      * Add a particle to the internal Hashmap.
@@ -48,7 +48,7 @@ public class ParticleFilter {
      * @return Hashmap of particles
      */
     public HashMap<Integer, Particle> getParticles() {
-        return  this.Particles;
+        return this.Particles;
     }
 
 
@@ -57,10 +57,13 @@ public class ParticleFilter {
      * @param translationVector The translation vector that the other particles will be translated by.
      */
     public void translateParticles (RealVector translationVector) {
-
+        // For every particle in our set of Particles
         for (Map.Entry<Integer,Particle> particle2dEntry : Particles.entrySet()) {
+            // Get the Particle
             Particle translatedParticle = particle2dEntry.getValue();
+            // Add our translational vector
             translatedParticle.setState(translatedParticle.getState().add(translationVector));
+            // Set the value as our updated particle
             particle2dEntry.setValue(translatedParticle);
         }
     }
@@ -94,17 +97,21 @@ public class ParticleFilter {
                     System.out.println("Simulated (Random) Sensor Value: " + simulatedSensorValue);
                 }
 
-                // Get the difference in the delta of our reading
+                // Get the delta between our simulated and actual sensor values
                 RealVector readingDelta = actualSensorValue.subtract(simulatedSensorValue);
                 // Plug the normalized (Euclidean Distance) of the delta into our Chi2 distribution.
                 double probSensorGivenState = distribution.density(readingDelta.getNorm());
 
+                // Add the probability multiplied by the weight of the model.
                 cumalativeWeight += probSensorGivenState * model.getWeightModifier();
+                // Add the weight of this sensor model to the overall weight modifier
                 cumalativeWeightModifer += model.getWeightModifier();
 
             }
 
+            // Calculate the average weights of all the sensors and assign it to the particle
             particle.setWeight(cumalativeWeight/cumalativeWeightModifer);
+
             if (LocalizationConstants.TESTING) {
                 System.out.println("Likeness: " + particle.getWeight() + ", ID: " + particle.getId());
             }
@@ -119,7 +126,7 @@ public class ParticleFilter {
 
     /**
      * Gets the particle with the highest weight.
-     * @return Particle2d of the highest weighted particle.
+     * @return Particle of the highest weighted particle.
      */
     public Particle getBestParticle () {
 

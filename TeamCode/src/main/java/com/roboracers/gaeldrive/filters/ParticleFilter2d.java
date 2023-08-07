@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Specialized Particle Filter class for 2d robot localization.
- * Note that this is technically a 2d particle filter.
+ * Note that this is technically a 3d (x,y,Heading) particle filter.
  */
 public class ParticleFilter2d extends ParticleFilter {
 
@@ -47,8 +47,8 @@ public class ParticleFilter2d extends ParticleFilter {
                                             startingLocation.getY() + deviation2,
                                             startingLocation.getHeading() + deviation3);
 
+            // Add the given particle back into the particle set
             add(new Particle2d(addedPose, 0, i));
-
         }
 
     }

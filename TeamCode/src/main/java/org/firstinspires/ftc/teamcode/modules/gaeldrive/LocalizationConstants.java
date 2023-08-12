@@ -1,4 +1,4 @@
-package com.roboracers.gaeldrive;
+package org.firstinspires.ftc.teamcode.modules.gaeldrive;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
@@ -23,12 +23,12 @@ public class LocalizationConstants {
     /**
      * The positional deviation in which the particles are spawned in relation to their X and Y coordinates.
      */
-    public static double POSITIONAL_COVARIANCES = 72;
+    public static double POSITIONAL_COVARIANCES = 0.1;
 
     /**
      * The rotational deviation in which the particles are spawned in relation to heading.
      */
-    public static double ROTATIONAL_COVARIANCES = Math.toRadians(180);
+    public static double ROTATIONAL_COVARIANCES = Math.toRadians(0.01);
 
     /**
      * After how many update cycles the particle set is resampled. Lower values mean more performance,

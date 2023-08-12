@@ -6,6 +6,7 @@ import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.utils.PoseUtils;
 
 import org.apache.commons.math3.linear.RealVector;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
 
 import com.roboracers.gaeldrive.sensors.TestDistanceSensorModel;
 
@@ -16,7 +17,7 @@ public class WeightingUnitTest {
     static long loop;
     static long loopTime = 0;
 
-    static ParticleFilter2d filter = new ParticleFilter2d();
+    static ParticleFilter2d filter = new ParticleFilter2d(72, 180);
     static List<SensorModel> models = new ArrayList<>();
     public static void main(String[] args) {
 

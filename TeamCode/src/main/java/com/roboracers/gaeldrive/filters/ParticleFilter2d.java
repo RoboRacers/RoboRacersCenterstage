@@ -2,7 +2,6 @@ package com.roboracers.gaeldrive.filters;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import com.roboracers.gaeldrive.LocalizationConstants;
 import com.roboracers.gaeldrive.particles.Particle;
 import com.roboracers.gaeldrive.particles.Particle2d;
 import com.roboracers.gaeldrive.utils.PoseUtils;
@@ -19,7 +18,12 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class ParticleFilter2d extends ParticleFilter {
 
-    public ParticleFilter2d() {
+    double positionalCovariances;
+    double rotationalCovariances;
+
+    public ParticleFilter2d(double positionalCovariances, double rotationalCovariances) {
+        this.positionalCovariances = positionalCovariances;
+        this.rotationalCovariances = rotationalCovariances;
     }
 
     /**
@@ -30,10 +34,10 @@ public class ParticleFilter2d extends ParticleFilter {
     public void initializeParticles(int numParticles, Pose2d startingLocation) {
 
         // Deviation Threshold for spawning new particles
-        double min = -LocalizationConstants.POSITIONAL_COVARIANCES;
-        double max = LocalizationConstants.POSITIONAL_COVARIANCES;
-        double heading_min = -LocalizationConstants.ROTATIONAL_COVARIANCES;
-        double heading_max = LocalizationConstants.ROTATIONAL_COVARIANCES;
+        double min = -positionalCovariances;
+        double max = positionalCovariances;
+        double heading_min = -rotationalCovariances;
+        double heading_max = rotationalCovariances;
 
         for(int i=0; i < numParticles; i++ ) {
             // Generate random deviances TODO: Make a more mathematical resampling system
@@ -51,6 +55,11 @@ public class ParticleFilter2d extends ParticleFilter {
             add(new Particle2d(addedPose, 0, i));
         }
 
+    }
+
+    public void setCovariances (double positionalCovariances, double rotationalCovariances) {
+        this.positionalCovariances = positionalCovariances;
+        this.rotationalCovariances = rotationalCovariances;
     }
 
 

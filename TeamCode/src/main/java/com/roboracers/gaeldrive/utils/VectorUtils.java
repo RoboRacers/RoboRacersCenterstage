@@ -17,7 +17,7 @@ public class VectorUtils {
     }
 
     /**
-     * Takes the cross product of two 2d vectors. Returns a scalar. Not communative.
+     * Takes the cross product of two 2d vectors. Returns a scalar. Not commutative.
      * @param t1 First Vector
      * @param t2 Second Vector
      * @return Scalar
@@ -27,11 +27,11 @@ public class VectorUtils {
     }
 
     /**
-     * Create a vector with 3 elements, most commonly used for localization algortihms.
+     * Create a vector with 3 elements, most commonly used for localization algorithms.
      * @param x
      * @param y
      * @param heading
-     * @return 3 Element vector
+     * @return 3 Element vector in the format <x, y, heading>
      */
     public static RealVector create3DVector (double x, double y, double heading) {
         return  new ArrayRealVector(new double[] {x, y, heading});

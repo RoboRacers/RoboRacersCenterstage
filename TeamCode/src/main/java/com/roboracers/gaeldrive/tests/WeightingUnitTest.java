@@ -36,10 +36,10 @@ public class WeightingUnitTest {
             model.update();
         }
 
-        System.out.println("Actual Sensor Reading: " + models.get(0).getActualReading() + ", Relative Sensor Location " + pose1);
+        System.out.println("Actual Sensor Reading: " + models.get(0).getActualReading() + ", Relative Sensor Location: " + pose1);
         System.out.println("Actual Sensor Reading: " + models.get(1).getActualReading() + ", Relative Sensor Location: " + pose2);
         System.out.println("Actual Sensor Reading: " + models.get(2).getActualReading() + ", Relative Sensor Location: " + pose3);
-        filter.initializeParticles(200000, new Pose2d(0, 0,Math.toRadians(0)));
+        filter.initializeParticles(2000, new Pose2d(0, 0,Math.toRadians(0)));
         filter.weighParticles(models);
         loopTime = System.nanoTime();
 

@@ -24,4 +24,9 @@ public interface SensorModel extends Updatable {
      */
     public RealVector getSimulatedReading(RealVector state);
 
+    /**
+     * @return Degrees of freedom of the sensor model
+     */
+    public int getDOF();
+
 }

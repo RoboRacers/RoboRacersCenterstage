@@ -23,7 +23,7 @@ import java.util.List;
 public class MonteCarloLocalizer implements Localizer {
 
     // Change these in LocalizationConstants only!
-    Pose2d  poseEstimate = LocalizationConstants.START_POSE;
+    Pose2d poseEstimate = LocalizationConstants.START_POSE;
     int particleCount = LocalizationConstants.PARTICLE_COUNT;
 
     ParticleFilter2d particleFilter2d;

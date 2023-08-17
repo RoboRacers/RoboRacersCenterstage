@@ -73,6 +73,14 @@ public class TestDistanceSensorModel implements SensorModel {
     }
 
     /**
+     * @return Degrees of freedom of the sensor model
+     */
+    @Override
+    public int getDOF() {
+        return 2;
+    }
+
+    /**
      * Gets the raw reading from the sensor.
      * @return Distance sensor reading
      */

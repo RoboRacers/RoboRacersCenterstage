@@ -90,10 +90,6 @@ public class StateMachinesTeleopLM2 extends LinearOpMode {
 
         switch (InitCLAW) {
             case STATE_CLAW_CLOSE:
-                if (gamepad2.x) {
-                    InitCLAW = STATE_CLAW.STATE_CLAW_CLOSE;
-                    break;
-                }
                 if (gamepad2.y) {
                     InitCLAW = STATE_CLAW.STATE_CLAW_OPEN;
                     break;

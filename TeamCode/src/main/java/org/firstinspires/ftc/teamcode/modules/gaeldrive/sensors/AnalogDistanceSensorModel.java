@@ -2,13 +2,8 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.roboracers.gaeldrive.distance.FieldDistance;
 import com.roboracers.gaeldrive.sensors.DistanceSensorModel;
-import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.utils.PoseUtils;
-
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
 
 /**
  * Base class for an Analog Distance Sensor.
@@ -31,7 +26,7 @@ public class AnalogDistanceSensorModel extends DistanceSensorModel {
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
         this.conversionFactor = conversionFactor;
-        this.location = location;
+        this.location = PoseUtils.poseToVector(location);
     }
 
 

@@ -2,13 +2,9 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.roboracers.gaeldrive.distance.FieldDistance;
 import com.roboracers.gaeldrive.sensors.DistanceSensorModel;
-import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.utils.PoseUtils;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
@@ -32,7 +28,7 @@ public class I2CDistanceSensorModel extends DistanceSensorModel {
         this.weight = weight;
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
-        this.location = location;
+        this.location = PoseUtils.poseToVector(location);
     }
 
     @Override

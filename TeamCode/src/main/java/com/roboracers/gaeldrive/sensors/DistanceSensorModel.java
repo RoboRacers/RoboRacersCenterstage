@@ -18,7 +18,7 @@ public abstract class DistanceSensorModel implements SensorModel {
     // These values may not be the same as the manufacturer specified minimum and max distances. Tune them to your liking.
     public double minDistance;
     public double maxDistance;
-    public Pose2d location;
+    public RealVector location;
 
     /**
      * Gets the weight modifier assigned to this model.
@@ -46,7 +46,7 @@ public abstract class DistanceSensorModel implements SensorModel {
      */
     @Override
     public RealVector getSimulatedReading(RealVector state) {
-        double simulatedDistance = FieldDistance.calculateSimulatedDistance(PoseUtils.vectorToPose(state));
+        double simulatedDistance = FieldDistance.calculateSimulatedDistance(PoseUtils.vectorToPose(state.add(location)));
         // Limiting Readings to min and max distances
         if (simulatedDistance < minDistance) {
             simulatedDistance = minDistance;

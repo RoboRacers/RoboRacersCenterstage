@@ -3,11 +3,6 @@ package com.roboracers.gaeldrive.tests;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.filters.ParticleFilter2d;
 import com.roboracers.gaeldrive.sensors.SensorModel;
-import com.roboracers.gaeldrive.utils.PoseUtils;
-
-import org.apache.commons.math3.linear.RealVector;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
-
 import com.roboracers.gaeldrive.sensors.TestDistanceSensorModel;
 
 import java.util.ArrayList;
@@ -17,7 +12,7 @@ public class WeightingUnitTest {
     static long loop;
     static long loopTime = 0;
 
-    static ParticleFilter2d filter = new ParticleFilter2d(72, 180);
+    static ParticleFilter2d filter = new ParticleFilter2d(72, Math.toRadians(0.0001));
     static List<SensorModel> models = new ArrayList<>();
     public static void main(String[] args) {
 
@@ -32,14 +27,11 @@ public class WeightingUnitTest {
         models.add(new TestDistanceSensorModel(51, pose1));
         models.add(new TestDistanceSensorModel(51, pose2));
         models.add(new TestDistanceSensorModel(51, pose3));
-        for (SensorModel model: models) {
-            model.update();
-        }
 
         System.out.println("Actual Sensor Reading: " + models.get(0).getActualReading() + ", Relative Sensor Location " + pose1);
         System.out.println("Actual Sensor Reading: " + models.get(1).getActualReading() + ", Relative Sensor Location: " + pose2);
         System.out.println("Actual Sensor Reading: " + models.get(2).getActualReading() + ", Relative Sensor Location: " + pose3);
-        filter.initializeParticles(200000, new Pose2d(0, 0,Math.toRadians(0)));
+        filter.initializeParticles(2000, new Pose2d(0, 0,Math.toRadians(45)));
         filter.weighParticles(models);
         loopTime = System.nanoTime();
 

@@ -7,8 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 
 @TeleOp(name = "Teleop For League Tournament", group = "16481-Power-Play")
 public class StateMachinesTeleopLM2 extends LinearOpMode {
@@ -76,57 +75,89 @@ public class StateMachinesTeleopLM2 extends LinearOpMode {
 
     public STATE_ARM InitARM = STATE_ARM.STATE_ARM_LOW;
 
-     while runOpMode {
-        switch (STATE_CLAW) {
-            case InitCLAW:
+    int previousTargetEncoderValue;
+    int targetEncoderValue;
+    int previousCommonModifier;
+    int commonModifier = 0;
+    int baseEncoderValue;
+    final int liftLow = 0;
+    final int liftHigherThanLow = -750;
+    final int liftMid = -1075;
+    final int liftHigh = -1357;
+
+    @Override
+    public void runOpMode(){
+
+        switch (InitCLAW) {
+            case STATE_CLAW_CLOSE:
                 if (gamepad2.x) {
                     InitCLAW = STATE_CLAW.STATE_CLAW_CLOSE;
                     break;
                 }
-            case STATE_CLAW.STATE_CLAW_CLOSE:
                 if (gamepad2.y) {
                     InitCLAW = STATE_CLAW.STATE_CLAW_OPEN;
                     break;
                 }
-            case STATE_CLAW.STATE_CLAW_OPEN:
+            case STATE_CLAW_OPEN:
                 if (gamepad2.x) {
                     InitCLAW = STATE_CLAW.STATE_CLAW_CLOSE;
                     break;
                 }
         }
-        switch (STATE_ARM) {
-            case InitARM:
-                if (gamepad1.a) {
-                    InitARM = STATE_ARM.STATE_ARM_MED;
-                    break;
-                }
-            case InitARM:
-                if (gamepad1.b) {
-                    InitARM = STATE_ARM.STATE_ARM_HIGH;
-                    break;
-                }
-            case InitARM:
-                if (gamepad1.right_trigger) {
+        switch (InitARM) {
+            case STATE_ARM_HIGH:
+                if (0 < gamepad1.right_trigger) {
                     InitARM = STATE_ARM.STATE_ARM_MANUAL_UP;
                     break;
                 }
-            case InitARM:
-                if (gamepad1.left_trigger) {
+
+                if (0 < gamepad1.left_trigger) {
                     InitARM = STATE_ARM.STATE_ARM_MANUAL_DOWN;
                     break;
                 }
-
-            case STATE_ARM.STATE_ARM_LOW:
+// djkdskkd
+            case STATE_ARM_LOW:
                 if (gamepad1.a) {
                     InitARM = STATE_ARM.STATE_ARM_MED;
                     break;
                 }
-            case STATE_ARM.STATE_ARM_MED:
+
+                else if (gamepad1.b) {
+                    InitARM = STATE_ARM.STATE_ARM_HIGH;
+                    break;
+                }
+
+                else if (0 < gamepad1.right_trigger) {
+                    InitARM = STATE_ARM.STATE_ARM_MANUAL_UP;
+                    break;
+                }
+
+                else if (0 < gamepad1.left_trigger) {
+                    InitARM = STATE_ARM.STATE_ARM_MANUAL_DOWN;
+                    break;
+                }
+                // mdkkdk
+            case STATE_ARM_MED:
                 if (gamepad1.y) {
                     InitARM = STATE_ARM.STATE_ARM_LOW;
                     break;
                 }
 
+                else if (gamepad1.b) {
+                    InitARM = STATE_ARM.STATE_ARM_HIGH;
+                    break;
+                }
+
+                else if (0 < gamepad1.right_trigger) {
+                    InitARM = STATE_ARM.STATE_ARM_MANUAL_UP;
+                    break;
+                }
+
+                if (0 < gamepad1.left_trigger) {
+                    InitARM = STATE_ARM.STATE_ARM_MANUAL_DOWN;
+                    break;
+                }
+                //sjdjfsjzdf
         }
     }
 }

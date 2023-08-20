@@ -101,17 +101,6 @@ public class StateMachinesTeleopLM2 extends LinearOpMode {
                 }
         }
         switch (InitARM) {
-            case STATE_ARM_HIGH:
-                if (0 < gamepad1.right_trigger) {
-                    InitARM = STATE_ARM.STATE_ARM_MANUAL_UP;
-                    break;
-                }
-
-                if (0 < gamepad1.left_trigger) {
-                    InitARM = STATE_ARM.STATE_ARM_MANUAL_DOWN;
-                    break;
-                }
-// djkdskkd
             case STATE_ARM_LOW:
                 if (gamepad1.a) {
                     InitARM = STATE_ARM.STATE_ARM_MED;
@@ -149,11 +138,27 @@ public class StateMachinesTeleopLM2 extends LinearOpMode {
                     break;
                 }
 
-                if (0 < gamepad1.left_trigger) {
+                else if (0 < gamepad1.left_trigger) {
                     InitARM = STATE_ARM.STATE_ARM_MANUAL_DOWN;
                     break;
                 }
-                //sjdjfsjzdf
+            case STATE_ARM_HIGH:
+                if (gamepad1.y) {
+                    InitARM = STATE_ARM.STATE_ARM_LOW;
+                    break;
+                }
+                if (gamepad1.a) {
+                    InitARM = STATE_ARM.STATE_ARM_MED;
+                    break;
+                }
+                if (0 < gamepad1.right_trigger) {
+                    InitARM = STATE_ARM.STATE_ARM_MANUAL_UP;
+                    break;
+                }
+                else if (0 < gamepad1.left_trigger) {
+                    InitARM = STATE_ARM.STATE_ARM_MANUAL_DOWN;
+                    break;
+                }
         }
     }
 }

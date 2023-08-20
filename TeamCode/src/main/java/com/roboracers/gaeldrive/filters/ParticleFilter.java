@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * A filter that uses Monte Carlo methods to find approximate solutions
- *  to filtering problems in a non-linear state space.
+ * to filtering problems in a non-linear state space.
  */
 public class ParticleFilter {
 
@@ -22,11 +22,6 @@ public class ParticleFilter {
      * Hashmap that stores all the particles in Integer/Particle pairs.
      */
      HashMap<Integer, Particle> Particles = new HashMap<>();
-
-    /**
-     * Distribution used in the resampling of particles. TODO: Make degreesOfFreed changeable.
-     */
-    private ChiSquaredDistribution distribution = new ChiSquaredDistribution(2);
 
     /**
      * Add a particle to the internal Hashmap.
@@ -88,6 +83,8 @@ public class ParticleFilter {
             // For every sensor model that we are considering
             for (SensorModel model: models) {
 
+                ChiSquaredDistribution distribution = new ChiSquaredDistribution(model.getDOF());
+
                 // Get both the actual and simulated reading
                 RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
                 RealVector actualSensorValue = model.getActualReading();
@@ -120,8 +117,22 @@ public class ParticleFilter {
         }
     }
 
-    public static void resampleParticles() {
+    /**
+     * Resampling method that uses multinomial resampling
+     */
+    public void resampleParticles() {
+        double sumWeights = 0;
+        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
+            sumWeights += entry.getValue().getWeight();
+        }
+        double probFactor = 1/sumWeights;
 
+        // Normalize the weights off all particles
+        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
+            Particle particle = entry.getValue();
+            particle.setWeight(particle.getWeight()*probFactor);
+            entry.setValue(particle);
+        }
     }
 
     /**

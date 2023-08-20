@@ -14,6 +14,8 @@ public abstract class DistanceSensorModel implements SensorModel {
 
     // Config variables
     public double weight;
+    public int DOF = 2;
+
 
     // These values may not be the same as the manufacturer specified minimum and max distances. Tune them to your liking.
     public double minDistance;
@@ -27,6 +29,14 @@ public abstract class DistanceSensorModel implements SensorModel {
     @Override
     public double getWeightModifier() {
         return weight;
+    }
+
+    /**
+     * @return Degrees of freedom of the sensor model
+     */
+    @Override
+    public int getDOF() {
+        return DOF;
     }
 
     /**

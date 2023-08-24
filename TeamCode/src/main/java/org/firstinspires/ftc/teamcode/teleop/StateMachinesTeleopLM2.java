@@ -147,16 +147,48 @@ public class StateMachinesTeleopLM2 extends LinearOpMode {
                     InitARM = STATE_ARM.STATE_ARM_LOW;
                     break;
                 }
-                if (gamepad1.a) {
+                else if (gamepad1.a) {
                     InitARM = STATE_ARM.STATE_ARM_MED;
                     break;
                 }
-                if (0 < gamepad1.right_trigger) {
+                else if (0 < gamepad1.right_trigger) {
                     InitARM = STATE_ARM.STATE_ARM_MANUAL_UP;
                     break;
                 }
                 else if (0 < gamepad1.left_trigger) {
                     InitARM = STATE_ARM.STATE_ARM_MANUAL_DOWN;
+                    break;
+                }
+            case STATE_ARM_MANUAL_UP:
+                if (gamepad1.y) {
+                    InitARM = STATE_ARM.STATE_ARM_LOW;
+                }
+                else if (gamepad1.a) {
+                    InitARM = STATE_ARM.STATE_ARM_MED;
+                    break;
+                }
+                else if (gamepad1.b) {
+                    InitARM = STATE_ARM.STATE_ARM_HIGH;
+                    break;
+                }
+                else if (0 < gamepad1.left_trigger) {
+                    InitARM = STATE_ARM.STATE_ARM_MANUAL_DOWN;
+                    break;
+                }
+            case STATE_ARM_MANUAL_DOWN:
+                if (gamepad1.y) {
+                    InitARM = STATE_ARM.STATE_ARM_LOW;
+                }
+                else if (gamepad1.a) {
+                    InitARM = STATE_ARM.STATE_ARM_MED;
+                    break;
+                }
+                else if (gamepad1.b) {
+                    InitARM = STATE_ARM.STATE_ARM_HIGH;
+                    break;
+                }
+                else if (0 < gamepad1.right_trigger) {
+                    InitARM = STATE_ARM.STATE_ARM_MANUAL_UP;
                     break;
                 }
         }

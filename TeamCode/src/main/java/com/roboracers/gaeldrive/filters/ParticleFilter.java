@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
 import com.roboracers.gaeldrive.particles.Particle;
 
 import com.roboracers.gaeldrive.sensors.SensorModel;
+import com.roboracers.gaeldrive.tests.TestConstants;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +17,15 @@ import java.util.Map;
  * A filter that uses Monte Carlo methods to find approximate solutions
  * to filtering problems in a non-linear state space.
  */
-public class ParticleFilter {
+public abstract class ParticleFilter {
 
     /**
      * Hashmap that stores all the particles in Integer/Particle pairs.
      */
-     HashMap<Integer, Particle> Particles = new HashMap<>();
+    HashMap<Integer, Particle> Particles = new HashMap<>();
+
+    ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
+    ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
 
     /**
      * Add a particle to the internal Hashmap.
@@ -83,21 +87,26 @@ public class ParticleFilter {
             // For every sensor model that we are considering
             for (SensorModel model: models) {
 
-                ChiSquaredDistribution distribution = new ChiSquaredDistribution(model.getDOF());
-
                 // Get both the actual and simulated reading
                 RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
                 RealVector actualSensorValue = model.getActualReading();
 
-                if (LocalizationConstants.TESTING) {
+                if (TestConstants.TESTING) {
                     System.out.println("Real Sensor Value: "  + actualSensorValue);
                     System.out.println("Simulated (Random) Sensor Value: " + simulatedSensorValue);
                 }
 
                 // Get the delta between our simulated and actual sensor values
                 RealVector readingDelta = actualSensorValue.subtract(simulatedSensorValue);
+
                 // Plug the normalized (Euclidean Distance) of the delta into our Chi2 distribution.
-                double probSensorGivenState = distribution.density(readingDelta.getNorm());
+                int DOF = model.getDOF();
+                double probSensorGivenState = 0;
+                if (DOF == 2){
+                    probSensorGivenState = distribution2DOF.density(readingDelta.getNorm());
+                } else if ( DOF == 3 ) {
+                    probSensorGivenState = distribution3DOF.density(readingDelta.getNorm());
+                }
 
                 // Add the probability multiplied by the weight of the model.
                 cumalativeWeight += probSensorGivenState * model.getWeightModifier();
@@ -109,7 +118,7 @@ public class ParticleFilter {
             // Calculate the average weights of all the sensors and assign it to the particle
             particle.setWeight(cumalativeWeight/cumalativeWeightModifer);
 
-            if (LocalizationConstants.TESTING) {
+            if (TestConstants.TESTING) {
                 System.out.println("Likeness: " + particle.getWeight() + ", ID: " + particle.getId());
             }
             // Add the particle with the updated weight back into our particle set.

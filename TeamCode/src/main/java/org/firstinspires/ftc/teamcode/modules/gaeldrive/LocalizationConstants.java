@@ -12,7 +12,7 @@ public class LocalizationConstants {
      * Number of particles in the particle filter. More particles means higher accuracy,
      * but worse performance. Tune to a value you feel right with.
      */
-    public static int PARTICLE_COUNT = 20;
+    public static int PARTICLE_COUNT = 2000;
 
     /**
      * The default start pose of the robot. Feel free to change this or just call
@@ -23,12 +23,12 @@ public class LocalizationConstants {
     /**
      * The positional deviation in which the particles are spawned in relation to their X and Y coordinates.
      */
-    public static double POSITIONAL_COVARIANCES = 0.1;
+    public static double POSITIONAL_COVARIANCES = 72;
 
     /**
      * The rotational deviation in which the particles are spawned in relation to heading.
      */
-    public static double ROTATIONAL_COVARIANCES = Math.toRadians(0.01);
+    public static double ROTATIONAL_COVARIANCES = Math.toRadians(180);
 
     /**
      * After how many update cycles the particle set is resampled. Lower values mean more performance,

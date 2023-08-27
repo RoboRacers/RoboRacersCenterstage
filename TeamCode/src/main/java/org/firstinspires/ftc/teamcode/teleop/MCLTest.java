@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizer;
 import com.roboracers.gaeldrive.particles.Particle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,42 +25,25 @@ public class MCLTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         RobotCore robot = new RobotCore(hardwareMap);
-        MonteCarloLocalizer mcl = new MonteCarloLocalizer(hardwareMap);
 
         dashboard = FtcDashboard.getInstance();
 
         long loop;
         long loopTime = 0;
 
-        List<Pose2d> poses;
-        HashMap<Integer, Particle> map;
 
         while (opModeInInit()) {
 
         }
 
         while (!isStopRequested()) {
-            mcl.update();
 
             robot.drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y*driveSensitivity,-gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
             robot.drive.update();
 
-            poses = mcl.getParticlePoses();
-            map = mcl.getParticleMap();
-
-
-
-
-
-
-            TelemetryPacket packet = new TelemetryPacket();
-            for (Pose2d pose: poses) {
-                packet.fieldOverlay().strokeCircle(pose.getX(), pose.getY(), 0.5);
-            }
-            dashboard.sendTelemetryPacket(packet);
-
             loop = System.nanoTime();
             telemetry.addData("hz", 1000000000/(loop-loopTime));
+            telemetry.addData("Position", robot.drive.getPoseEstimate());
             telemetry.update();
             loopTime = loop;
 

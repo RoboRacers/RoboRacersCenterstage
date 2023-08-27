@@ -12,6 +12,7 @@ import com.roboracers.gaeldrive.particles.Particle;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.StandardSensorStack;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class MonteCarloLocalizer implements Localizer {
         return particleFilter2d.getParticlePoses();
     }
 
-    public HashMap<Integer, Particle> getParticleMap() {
+    public ArrayList<Particle> getParticleMap() {
         return particleFilter2d.getParticles();
     }
 

@@ -69,10 +69,10 @@ public class ParticleFilter2d extends ParticleFilter {
 
     public List<Pose2d> getParticlePoses (){
         List<Pose2d> poses = new ArrayList<>();
-        HashMap<Integer, Particle> particles = getParticles();
+        ArrayList<Particle> particles = getParticles();
 
-        for (Map.Entry<Integer,Particle> particle2dEntry : particles.entrySet()) {
-            poses.add(PoseUtils.vectorToPose(particle2dEntry.getValue().getState()));
+        for (Particle particle : particles) {
+            poses.add(PoseUtils.vectorToPose(particle.getState()));
         }
 
         return poses;

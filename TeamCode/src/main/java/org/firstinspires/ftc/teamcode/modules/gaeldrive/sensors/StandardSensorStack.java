@@ -24,9 +24,12 @@ public class StandardSensorStack extends SensorStack {
         motionModel = new TrackingWheelMotionModel(LocalizationConstants.START_POSE, new StandardTrackingWheelLocalizer(hardwareMap));
 
         // Config our Ultrasonic Distance Sensor
-        AnalogDistanceSensorModel distanceSensorModel = SensorUtils.createMB1240Sensor(hardwareMap.get(AnalogInput.class,"ultrasonic1"), 1, new Pose2d(0,0, 0));
-        sensorModels.add(distanceSensorModel);
-
+        AnalogDistanceSensorModel ultrasonicRight = SensorUtils.createMB1240Sensor(hardwareMap.get(AnalogInput.class,"ultrasonicRight"), 1, new Pose2d(-7,0, -90));
+        sensorModels.add(ultrasonicRight);
+        AnalogDistanceSensorModel ultrasonicLeft = SensorUtils.createMB1240Sensor(hardwareMap.get(AnalogInput.class,"ultrasonicLeft"), 1, new Pose2d(7,0, 90));
+        sensorModels.add(ultrasonicLeft);
+        AnalogDistanceSensorModel ultrasonicBack = SensorUtils.createMB1240Sensor(hardwareMap.get(AnalogInput.class,"ultrasonicBack"), 1, new Pose2d(-7,0, 180));
+        sensorModels.add(ultrasonicBack);
     }
 
 }

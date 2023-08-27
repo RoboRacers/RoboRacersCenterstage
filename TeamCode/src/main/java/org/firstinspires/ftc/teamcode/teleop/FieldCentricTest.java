@@ -11,6 +11,7 @@ import org.apache.commons.math3.util.FastMath;
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.localization.MonteCarloLocalizer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class FieldCentricTest extends LinearOpMode {
         long loopTime = 0;
 
         List<Pose2d> poses;
-        HashMap<Integer, Particle> map;
+        ArrayList<Particle> map;
 
         while (opModeInInit()) {
 

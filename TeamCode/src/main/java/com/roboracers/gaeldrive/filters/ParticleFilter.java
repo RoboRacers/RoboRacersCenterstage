@@ -1,17 +1,15 @@
 package com.roboracers.gaeldrive.filters;
 
 
-import org.apache.commons.math3.distribution.ChiSquaredDistribution;
-import org.apache.commons.math3.linear.RealVector;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
 import com.roboracers.gaeldrive.particles.Particle;
-
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.tests.TestConstants;
 
-import java.util.HashMap;
+import org.apache.commons.math3.distribution.ChiSquaredDistribution;
+import org.apache.commons.math3.linear.RealVector;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A filter that uses Monte Carlo methods to find approximate solutions
@@ -22,7 +20,7 @@ public abstract class ParticleFilter {
     /**
      * Hashmap that stores all the particles in Integer/Particle pairs.
      */
-    HashMap<Integer, Particle> Particles = new HashMap<>();
+    ArrayList<Particle> Particles = new ArrayList<>();
 
     ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
     ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
@@ -32,7 +30,7 @@ public abstract class ParticleFilter {
      * @param particle
      */
     public void add(Particle particle) {
-        Particles.put(particle.getId(), particle);
+        Particles.add(particle);
     }
 
     /**
@@ -46,7 +44,7 @@ public abstract class ParticleFilter {
      * Return the Hashmap that stores the particles.
      * @return Hashmap of particles
      */
-    public HashMap<Integer, Particle> getParticles() {
+    public ArrayList<Particle> getParticles() {
         return this.Particles;
     }
 
@@ -57,13 +55,11 @@ public abstract class ParticleFilter {
      */
     public void translateParticles (RealVector translationVector) {
         // For every particle in our set of Particles
-        for (Map.Entry<Integer,Particle> particle2dEntry : Particles.entrySet()) {
-            // Get the Particle
-            Particle translatedParticle = particle2dEntry.getValue();
+        for (Particle particle: Particles) {
             // Add our translational vector
-            translatedParticle.setState(translatedParticle.getState().add(translationVector));
+            particle.setState(particle.getState().add(translationVector));
             // Set the value as our updated particle
-            particle2dEntry.setValue(translatedParticle);
+            add(particle);
         }
     }
 
@@ -77,9 +73,8 @@ public abstract class ParticleFilter {
 
 
         // For every particle in our state space
-        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
-            // Get the particle from the entry
-            Particle particle = entry.getValue();
+        int index = 0;
+        for (Particle particle: Particles) {
 
             double cumalativeWeight = 0;
             double cumalativeWeightModifer = 0;
@@ -122,7 +117,8 @@ public abstract class ParticleFilter {
                 System.out.println("Likeness: " + particle.getWeight() + ", ID: " + particle.getId());
             }
             // Add the particle with the updated weight back into our particle set.
-            add(particle);
+            Particles.add(index, particle);
+            index ++;
         }
     }
 
@@ -131,17 +127,20 @@ public abstract class ParticleFilter {
      */
     public void resampleParticles() {
         double sumWeights = 0;
-        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
-            sumWeights += entry.getValue().getWeight();
+        for (Particle particle: Particles) {
+            sumWeights += particle.getWeight();
         }
         double probFactor = 1/sumWeights;
 
         // Normalize the weights off all particles
-        for (Map.Entry<Integer, Particle> entry: Particles.entrySet()) {
-            Particle particle = entry.getValue();
+        int index = 0;
+        for (Particle particle: Particles) {
             particle.setWeight(particle.getWeight()*probFactor);
-            entry.setValue(particle);
+            Particles.add(index, particle);
+            index ++;
         }
+
+
     }
 
     /**
@@ -151,19 +150,16 @@ public abstract class ParticleFilter {
     public Particle getBestParticle () {
 
         double highestWeight = 0;
-        Integer bestParticleKey = 0;
+        Particle bestParticle = new Particle();
 
         // Loop through all weights and get highest weight
-        for (Map.Entry<Integer, Particle> particle2dEntry : Particles.entrySet()) {
-            double particleWeight = particle2dEntry.getValue().getWeight();
+        for (Particle particle : Particles) {
+            double particleWeight = particle.getWeight();
             if (particleWeight > highestWeight) {
-                bestParticleKey = particle2dEntry.getKey();
+                bestParticle = particle;
                 highestWeight = particleWeight;
             }
-
         }
-
-        return Particles.get(bestParticleKey);
-
+        return bestParticle;
     }
 }

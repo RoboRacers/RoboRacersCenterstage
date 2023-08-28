@@ -54,12 +54,15 @@ public abstract class ParticleFilter {
      * @param translationVector The translation vector that the other particles will be translated by.
      */
     public void translateParticles (RealVector translationVector) {
+
+        int index = 0;
         // For every particle in our set of Particles
         for (Particle particle: Particles) {
             // Add our translational vector
             particle.setState(particle.getState().add(translationVector));
             // Set the value as our updated particle
-            add(particle);
+            Particles.set(index, particle);
+            index ++;
         }
     }
 
@@ -86,25 +89,10 @@ public abstract class ParticleFilter {
                 RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
                 RealVector actualSensorValue = model.getActualReading();
 
-                if (TestConstants.TESTING) {
-                    System.out.println("Real Sensor Value: "  + actualSensorValue);
-                    System.out.println("Simulated (Random) Sensor Value: " + simulatedSensorValue);
-                }
-
-                // Get the delta between our simulated and actual sensor values
-                RealVector readingDelta = actualSensorValue.subtract(simulatedSensorValue);
-
-                // Plug the normalized (Euclidean Distance) of the delta into our Chi2 distribution.
-                int DOF = model.getDOF();
-                double probSensorGivenState = 0;
-                if (DOF == 2){
-                    probSensorGivenState = distribution2DOF.density(readingDelta.getNorm());
-                } else if ( DOF == 3 ) {
-                    probSensorGivenState = distribution3DOF.density(readingDelta.getNorm());
-                }
+                double probability = readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
 
                 // Add the probability multiplied by the weight of the model.
-                cumalativeWeight += probSensorGivenState * model.getWeightModifier();
+                cumalativeWeight += probability * model.getWeightModifier();
                 // Add the weight of this sensor model to the overall weight modifier
                 cumalativeWeightModifer += model.getWeightModifier();
 
@@ -113,11 +101,47 @@ public abstract class ParticleFilter {
             // Calculate the average weights of all the sensors and assign it to the particle
             particle.setWeight(cumalativeWeight/cumalativeWeightModifer);
 
-            if (TestConstants.TESTING) {
-                System.out.println("Likeness: " + particle.getWeight() + ", ID: " + particle.getId());
-            }
             // Add the particle with the updated weight back into our particle set.
-            Particles.add(index, particle);
+            Particles.set(index, particle);
+            index ++;
+        }
+    }
+
+    /**
+     *
+     * @param models List of models to be used.
+     */
+    public void weighParticlesBayesian(List<SensorModel> models) {
+        //TODO: Implement Fully Bayesian Weighting
+
+        // For every particle in our state space
+        int index = 0;
+        for (Particle particle: Particles) {
+
+            double cumalativeWeight = 0;
+            double cumalativeWeightModifer = 0;
+
+            // For every sensor model that we are considering
+            for (SensorModel model: models) {
+
+                // Get both the actual and simulated reading
+                RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
+                RealVector actualSensorValue = model.getActualReading();
+
+                double probability = readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
+
+                // Add the probability multiplied by the weight of the model.
+                cumalativeWeight += probability * model.getWeightModifier();
+                // Add the weight of this sensor model to the overall weight modifier
+                cumalativeWeightModifer += model.getWeightModifier();
+
+            }
+
+            // Calculate the average weights of all the sensors and assign it to the particle
+            particle.setWeight((cumalativeWeight/cumalativeWeightModifer)*particle.getWeight());
+
+            // Add the particle with the updated weight back into our particle set.
+            Particles.set(index, particle);
             index ++;
         }
     }
@@ -136,7 +160,7 @@ public abstract class ParticleFilter {
         int index = 0;
         for (Particle particle: Particles) {
             particle.setWeight(particle.getWeight()*probFactor);
-            Particles.add(index, particle);
+            Particles.set(index, particle);
             index ++;
         }
 
@@ -161,5 +185,19 @@ public abstract class ParticleFilter {
             }
         }
         return bestParticle;
+    }
+
+    private double readingDeltaProbability(RealVector v1, RealVector v2, int DOF) {
+
+        RealVector readingDelta = v1.subtract(v2);
+
+        double probSensorGivenState = 0;
+        if (DOF == 2){
+            probSensorGivenState = distribution2DOF.density(readingDelta.getNorm());
+        } else if ( DOF == 3 ) {
+            probSensorGivenState = distribution3DOF.density(readingDelta.getNorm());
+        }
+
+        return probSensorGivenState;
     }
 }

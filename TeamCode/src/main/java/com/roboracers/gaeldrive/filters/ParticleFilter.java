@@ -10,6 +10,7 @@ import org.apache.commons.math3.linear.RealVector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * A filter that uses Monte Carlo methods to find approximate solutions
@@ -21,6 +22,7 @@ public abstract class ParticleFilter {
      * Hashmap that stores all the particles in Integer/Particle pairs.
      */
     ArrayList<Particle> Particles = new ArrayList<>();
+    private Random random = new Random();
 
     ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
     ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
@@ -74,13 +76,12 @@ public abstract class ParticleFilter {
      */
     public void weighParticles(List<SensorModel> models) {
 
-
         // For every particle in our state space
         int index = 0;
         for (Particle particle: Particles) {
 
-            double cumalativeWeight = 0;
-            double cumalativeWeightModifer = 0;
+            double cumulativeWeight = 0;
+            double cumulativeWeightModifier = 0;
 
             // For every sensor model that we are considering
             for (SensorModel model: models) {
@@ -92,14 +93,14 @@ public abstract class ParticleFilter {
                 double probability = readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
 
                 // Add the probability multiplied by the weight of the model.
-                cumalativeWeight += probability * model.getWeightModifier();
+                cumulativeWeight += probability * model.getWeightModifier();
                 // Add the weight of this sensor model to the overall weight modifier
-                cumalativeWeightModifer += model.getWeightModifier();
+                cumulativeWeightModifier += model.getWeightModifier();
 
             }
 
             // Calculate the average weights of all the sensors and assign it to the particle
-            particle.setWeight(cumalativeWeight/cumalativeWeightModifer);
+            particle.setWeight(cumulativeWeight/cumulativeWeightModifier);
 
             // Add the particle with the updated weight back into our particle set.
             Particles.set(index, particle);
@@ -146,26 +147,32 @@ public abstract class ParticleFilter {
         }
     }
 
-    /**
-     * Resampling method that uses multinomial resampling
-     */
     public void resampleParticles() {
-        double sumWeights = 0;
-        for (Particle particle: Particles) {
-            sumWeights += particle.getWeight();
-        }
-        double probFactor = 1/sumWeights;
+        int numParticles = Particles.size();
+        ArrayList<Particle> newParticles = new ArrayList<>(numParticles);
 
-        // Normalize the weights off all particles
+        double totalWeight = 0.0;
+        for (Particle particle : Particles) {
+            totalWeight += particle.getWeight(); // Replace with your weight retrieval logic
+        }
+
+        double stepSize = totalWeight / numParticles;
+        double position = random.nextDouble() * stepSize;
+
         int index = 0;
-        for (Particle particle: Particles) {
-            particle.setWeight(particle.getWeight()*probFactor);
-            Particles.set(index, particle);
-            index ++;
+        double cumulativeWeight = Particles.get(0).getWeight();
+        for (int i = 0; i < numParticles; i++) {
+            while (position > cumulativeWeight && index < numParticles - 1) {
+                index++;
+                cumulativeWeight += Particles.get(index).getWeight();
+            }
+            newParticles.add(Particles.get(index)); // Replace with your cloning logic
+            position += stepSize;
         }
 
-
+        Particles = newParticles;
     }
+
 
     /**
      * Gets the particle with the highest weight.

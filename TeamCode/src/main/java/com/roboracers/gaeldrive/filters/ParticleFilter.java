@@ -11,6 +11,7 @@ import org.apache.commons.math3.linear.RealVector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A filter that uses Monte Carlo methods to find approximate solutions
@@ -147,6 +148,9 @@ public abstract class ParticleFilter {
         }
     }
 
+    /**
+     * Systematic resampling for the particle filter.
+     */
     public void resampleParticles() {
         int numParticles = Particles.size();
         ArrayList<Particle> newParticles = new ArrayList<>(numParticles);
@@ -166,7 +170,10 @@ public abstract class ParticleFilter {
                 index++;
                 cumulativeWeight += Particles.get(index).getWeight();
             }
-            newParticles.add(Particles.get(index)); // Replace with your cloning logic
+
+            Particle particle = Particles.get(index);
+            particle.setWeight(1.0);
+            newParticles.add(particle); // Replace with your cloning logic
             position += stepSize;
         }
 
@@ -206,5 +213,10 @@ public abstract class ParticleFilter {
         }
 
         return probSensorGivenState;
+    }
+
+    public Particle getRandomParticle() {
+        int range = Particles.size();
+        return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
     }
 }

@@ -28,18 +28,17 @@ public class FieldDistance {
     static  {
         // Geometry Added Here
 
-
-        /*
         FieldGeometry.add(new Vector2d[] {new Vector2d(-72, 72), new Vector2d(72, 72)});
         FieldGeometry.add(new Vector2d[] {new Vector2d(72, 72), new Vector2d(72, -72)});
         FieldGeometry.add(new Vector2d[] {new Vector2d(72, -72), new Vector2d(-72, -72)});
         FieldGeometry.add(new Vector2d[] {new Vector2d(-72, -72), new Vector2d(-72, 72)});
-         */
 
+        /*
         addGeometery(new Vector2d[] {new Vector2d(-72, 72), new Vector2d(72, 72)});
         addGeometery(new Vector2d[] {new Vector2d(72, 72), new Vector2d(72, -12)});
         addGeometery(new Vector2d[] {new Vector2d(72, -12), new Vector2d(-72, -12)});
         addGeometery(new Vector2d[] {new Vector2d(-72, -12), new Vector2d(-72, 72)});
+         */
     }
 
     /** Add your own custom geometry to the field.

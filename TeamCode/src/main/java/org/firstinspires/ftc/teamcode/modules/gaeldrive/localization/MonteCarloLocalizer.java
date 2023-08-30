@@ -32,7 +32,7 @@ public class MonteCarloLocalizer implements Localizer {
     public MonteCarloLocalizer(HardwareMap hardwareMap){
 
         StandardSensorStack.init(hardwareMap);
-        particleFilter2d = new ParticleFilter2d(LocalizationConstants.POSITIONAL_COVARIANCES, LocalizationConstants.ROTATIONAL_COVARIANCES);
+        particleFilter2d = new ParticleFilter2d();
         particleFilter2d.initializeParticles(this.particleCount, this.poseEstimate);
     }
 

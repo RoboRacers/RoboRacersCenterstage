@@ -18,38 +18,62 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class ParticleFilter2d extends ParticleFilter {
 
-    double positionalCovariances;
-    double rotationalCovariances;
+    private double xMin = 0.01;
+    private double xMax = 0.01;
+    private double yMin = 0.01;
+    private double yMax = 0.01;
+    private double headingMin = 0.001;
+    private double headingMax = 0.001;
 
-    public ParticleFilter2d(double positionalCovariances, double rotationalCovariances) {
-        this.positionalCovariances = positionalCovariances;
-        this.rotationalCovariances = rotationalCovariances;
+    /**
+     * Quick initialization of a Particle Filter with default covariances
+     */
+    public ParticleFilter2d() {
+
     }
 
     /**
-     * Initialize the particle set
-     * @param numParticles The number of particles in the particle set
-     * @param startingLocation The origin of the particles
+     * Thorough initialization of a Particle Filter with custom covariances
+     * @param xMin Minimum x deviation
+     * @param xMax Maximum x deviation
+     * @param yMin Minimum y deviation
+     * @param yMax Maximum y deviation
+     * @param headingMin Minimum heading deviation
+     * @param headingMax Maximum heading deviation
      */
-    public void initializeParticles(int numParticles, Pose2d startingLocation) {
+    public ParticleFilter2d(double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax) {
+        this.xMin = xMin;
+        this.xMax = xMax;
+        this.yMin = yMin;
+        this.yMax = yMax;
+        this.headingMin = headingMin;
+        this.headingMax = headingMax;
+    }
 
-        // Deviation Threshold for spawning new particles
-        double min = -positionalCovariances;
-        double max = positionalCovariances;
-        double heading_min = -rotationalCovariances;
-        double heading_max = rotationalCovariances;
+    /**
+     * Initialize the Particle set
+     * @param numParticles Number of particles
+     * @param startingLocation origin of the particles
+     * @param xMin Minimum x deviation
+     * @param xMax Maximum x deviation
+     * @param yMin Minimum y deviation
+     * @param yMax Maximum y deviation
+     * @param headingMin Minimum heading deviation
+     * @param headingMax Maximum heading deviation
+     */
+    public void initializeParticles(int numParticles, Pose2d startingLocation, double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax) {
 
         for(int i=0; i < numParticles; i++ ) {
             // Generate random deviances TODO: Make a more mathematical resampling system
-            double deviation1 = ThreadLocalRandom.current().nextDouble(min, max);
-            double deviation2 = ThreadLocalRandom.current().nextDouble(min, max);
-            double deviation3 = ThreadLocalRandom.current().nextDouble(heading_min, heading_max);
+            double xDeviation = ThreadLocalRandom.current().nextDouble(xMin, xMax);
+            double yDeviation = ThreadLocalRandom.current().nextDouble(yMin, yMax);
+            double headingDeviation = ThreadLocalRandom.current().nextDouble(headingMin, headingMax);
 
 
             // Create the new pose
-            Pose2d addedPose = new Pose2d(  startingLocation.getX() + deviation1,
-                                            startingLocation.getY() + deviation2,
-                                            startingLocation.getHeading() + deviation3);
+            Pose2d addedPose = new Pose2d(  startingLocation.getX() + xDeviation,
+                                            startingLocation.getY() + yDeviation,
+                                            startingLocation.getHeading() + headingDeviation);
 
             // Add the given particle back into the particle set
             add(new Particle2d(addedPose, 0, i));
@@ -57,12 +81,52 @@ public class ParticleFilter2d extends ParticleFilter {
 
     }
 
-    public void setCovariances (double positionalCovariances, double rotationalCovariances) {
-        this.positionalCovariances = positionalCovariances;
-        this.rotationalCovariances = rotationalCovariances;
+    /**
+     * Initialize the particle set
+     * @param numParticles The number of particles
+     * @param startingLocation The origin of the particles
+     */
+    public void initializeParticles(int numParticles, Pose2d startingLocation) {
+
+        for(int i=0; i < numParticles; i++ ) {
+            // Generate random deviances TODO: Make a more mathematical resampling system
+            double xDeviation = ThreadLocalRandom.current().nextDouble(xMin, xMax);
+            double yDeviation = ThreadLocalRandom.current().nextDouble(yMin, yMax);
+            double headingDeviation = ThreadLocalRandom.current().nextDouble(headingMin, headingMax);
+
+            // Create the new pose
+            Pose2d addedPose = new Pose2d(  startingLocation.getX() + xDeviation,
+                    startingLocation.getY() + yDeviation,
+                    startingLocation.getHeading() + headingDeviation);
+
+            // Add the given particle back into the particle set
+            add(new Particle2d(addedPose, 0, i));
+        }
+
     }
 
+    /**
+     * Set particle initialization covariances
+     * @param xMin Minimum x deviation
+     * @param xMax Maximum x deviation
+     * @param yMin Minimum y deviation
+     * @param yMax Maximum y deviation
+     * @param headingMin Minimum heading deviation
+     * @param headingMax Maximum heading deviation
+     */
+    public void setCovariances (double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax) {
+        this.xMin = xMin;
+        this.xMax = xMax;
+        this.yMin = yMin;
+        this.yMax = yMax;
+        this.headingMin = headingMin;
+        this.headingMax = headingMax;
+    }
 
+    /**
+     * Gets the best pose of the best particle in our particle set
+     * @return Best pose
+     */
     public Pose2d getBestPose () {
         return PoseUtils.vectorToPose(getBestParticle().getState());
     }

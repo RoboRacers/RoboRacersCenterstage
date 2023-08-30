@@ -13,7 +13,7 @@ public class WeightingUnitTest {
     static long loop;
     static long loopTime = 0;
 
-    static ParticleFilter2d filter = new ParticleFilter2d(72, Math.toRadians(0.0001));
+    static ParticleFilter2d filter = new ParticleFilter2d();
     static List<SensorModel> models = new ArrayList<>();
     public static void main(String[] args) {
 

@@ -62,4 +62,13 @@ public class Particle {
     public int getDimensions() {
         return this.state.getDimension();
     }
+
+    @Override
+    public String toString() {
+        return "Particle{" +
+                "state=" + state +
+                ", weight=" + weight +
+                ", id=" + id +
+                '}';
+    }
 }

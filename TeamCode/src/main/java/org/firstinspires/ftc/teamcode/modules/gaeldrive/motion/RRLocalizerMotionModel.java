@@ -6,12 +6,13 @@ import com.roboracers.gaeldrive.motion.MotionModel;
 
 import org.apache.commons.math3.linear.RealVector;
 import com.roboracers.gaeldrive.utils.PoseUtils;
+import com.roboracers.gaeldrive.utils.StatsUtils;
 
 /**
  * Motion model that uses a Roadrunner Localizer to generate a translation delta.
  * @see MotionModel
  */
-public class TrackingWheelMotionModel implements MotionModel {
+public class RRLocalizerMotionModel implements MotionModel {
 
     Localizer localizer;
 
@@ -21,7 +22,7 @@ public class TrackingWheelMotionModel implements MotionModel {
     RealVector currentState;
 
 
-    public TrackingWheelMotionModel(Pose2d startPose, Localizer localizer) {
+    public RRLocalizerMotionModel(Pose2d startPose, Localizer localizer) {
         currentState = PoseUtils.poseToVector(startPose);
         this.localizer = localizer;
     }
@@ -41,7 +42,7 @@ public class TrackingWheelMotionModel implements MotionModel {
         currentState = PoseUtils.poseToVector(trackingWheelPose);
         RealVector translation = currentState.subtract(prevState);
 
-        return translation;
+        return StatsUtils.addGaussianNoise2D(translation, 0.05, 0.005);
     }
 
     @Override

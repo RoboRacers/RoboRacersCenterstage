@@ -29,7 +29,8 @@ public class ParticleFilter2d extends ParticleFilter {
      * Quick initialization of a Particle Filter with default covariances
      */
     public ParticleFilter2d() {
-
+        super.Dimensions = 2;
+        this.Particles
     }
 
     /**

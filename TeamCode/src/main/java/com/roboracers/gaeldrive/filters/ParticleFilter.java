@@ -4,6 +4,7 @@ package com.roboracers.gaeldrive.filters;
 import com.roboracers.gaeldrive.particles.Particle;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.tests.TestConstants;
+import com.roboracers.gaeldrive.utils.StatsUtils;
 
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.linear.RealVector;
@@ -23,7 +24,9 @@ public abstract class ParticleFilter {
      * Hashmap that stores all the particles in Integer/Particle pairs.
      */
     ArrayList<Particle> Particles = new ArrayList<>();
+
     private Random random = new Random();
+    int Dimensions;
 
     ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
     ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
@@ -218,5 +221,13 @@ public abstract class ParticleFilter {
     public Particle getRandomParticle() {
         int range = Particles.size();
         return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
+    }
+
+    private Particle sampleFromParticle(Particle initialParticle) {
+        return new Particle(
+                StatsUtils.addGaussianNoise2D(initialParticle.getState(), 0.5, 0.005),
+                1,
+                1
+        );
     }
 }

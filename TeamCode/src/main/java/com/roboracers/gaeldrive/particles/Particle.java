@@ -20,7 +20,22 @@ public class Particle {
      */
     Integer id;
 
+    public Particle(RealVector state, double weight, Integer id) {
+        this.state = state;
+        this.weight = weight;
+        this.id = id;
+    }
 
+    /**
+     * Null initializer
+     */
+    public Particle() {
+    }
+
+    /**
+     * Set the state of the particle
+     * @param newState
+     */
     public void setState(RealVector newState) {
         state = newState;
     }

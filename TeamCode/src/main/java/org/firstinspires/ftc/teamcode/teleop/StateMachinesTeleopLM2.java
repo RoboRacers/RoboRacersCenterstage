@@ -8,10 +8,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 
 @TeleOp(name = "Teleop For League Tournament", group = "16481-Power-Play")
 public class StateMachinesTeleopLM2 extends LinearOpMode {
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 
     /*
  //Turning power play teleOp into state machines
@@ -75,6 +79,7 @@ public class StateMachinesTeleopLM2 extends LinearOpMode {
     public STATE_CLAW InitCLAW = STATE_CLAW.STATE_CLAW_OPEN;
 
     public STATE_ARM InitARM = STATE_ARM.STATE_ARM_LOW;
+    /*
 
      while runOpMode {
         switch (STATE_CLAW) {
@@ -129,4 +134,6 @@ public class StateMachinesTeleopLM2 extends LinearOpMode {
 
         }
     }
+
+     */
 }

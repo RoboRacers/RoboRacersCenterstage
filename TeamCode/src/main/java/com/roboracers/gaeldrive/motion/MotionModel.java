@@ -1,9 +1,9 @@
 package com.roboracers.gaeldrive.motion;
 
-import org.apache.commons.math3.linear.RealVector;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.utils.Updatable;
+
+import org.apache.commons.math3.linear.RealVector;
 
 /**
  * A model to predict the movement of a robot over a given timeframe.

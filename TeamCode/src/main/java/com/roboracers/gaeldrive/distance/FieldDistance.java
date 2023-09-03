@@ -8,8 +8,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.roboracers.gaeldrive.utils.VectorUtils;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

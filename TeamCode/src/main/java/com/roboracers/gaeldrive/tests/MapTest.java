@@ -2,7 +2,6 @@ package com.roboracers.gaeldrive.tests;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.distance.FieldDistance;
-import com.roboracers.gaeldrive.filters.ParticleFilter2d;
 
 public class MapTest {
     static long loop;

@@ -1,7 +1,6 @@
 package com.roboracers.gaeldrive.tests;
 
 import com.roboracers.gaeldrive.utils.StatsUtils;
-import com.roboracers.gaeldrive.utils.VectorUtils;
 
 import java.util.Random;
 

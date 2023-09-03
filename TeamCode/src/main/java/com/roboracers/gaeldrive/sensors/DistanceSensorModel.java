@@ -1,7 +1,5 @@
 package com.roboracers.gaeldrive.sensors;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.roboracers.gaeldrive.distance.FieldDistance;
 import com.roboracers.gaeldrive.utils.PoseUtils;
 

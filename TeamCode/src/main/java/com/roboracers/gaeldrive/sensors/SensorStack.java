@@ -1,7 +1,6 @@
 package com.roboracers.gaeldrive.sensors;
 
 import com.roboracers.gaeldrive.motion.MotionModel;
-import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.utils.Updatable;
 
 import java.util.ArrayList;

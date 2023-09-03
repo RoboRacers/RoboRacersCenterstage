@@ -1,7 +1,8 @@
 package com.roboracers.gaeldrive.sensors;
 
-import org.apache.commons.math3.linear.RealVector;
 import com.roboracers.gaeldrive.utils.Updatable;
+
+import org.apache.commons.math3.linear.RealVector;
 
 public interface SensorModel extends Updatable {
 

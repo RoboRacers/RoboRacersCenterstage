@@ -1,10 +1,6 @@
 package com.roboracers.gaeldrive.tests;
 
-import static com.roboracers.gaeldrive.distance.FieldDistance.addGeometery;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.roboracers.gaeldrive.distance.FieldDistance;
 import com.roboracers.gaeldrive.filters.ParticleFilter2d;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.sensors.TestDistanceSensorModel;

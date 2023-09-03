@@ -1,7 +1,6 @@
 package com.roboracers.gaeldrive.filters;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-
 import com.roboracers.gaeldrive.particles.Particle;
 import com.roboracers.gaeldrive.particles.Particle2d;
 import com.roboracers.gaeldrive.utils.PoseUtils;

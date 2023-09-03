@@ -16,11 +16,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class ParticleFilter2d extends ParticleFilter {
 
-    private double xMin = 0.01;
+    private double xMin = -0.01;
     private double xMax = 0.01;
-    private double yMin = 0.01;
+    private double yMin = -0.01;
     private double yMax = 0.01;
-    private double headingMin = 0.001;
+    private double headingMin = -0.001;
     private double headingMax = 0.001;
 
     /**

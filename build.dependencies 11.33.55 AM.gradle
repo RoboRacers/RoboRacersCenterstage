@@ -1,7 +1,12 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
+
+    maven { url = 'https://maven.brott.dev/' }
+    maven { url 'https://jitpack.io' }
+
 }
+
 
 dependencies {
     implementation 'org.firstinspires.ftc:Inspection:8.2.0'
@@ -17,5 +22,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'org.firstinspires.ftc:gameAssets-PowerPlay:1.0.0'
     implementation 'org.firstinspires.ftc:Vision:8.2.0'
-}
 
+    implementation 'com.acmerobotics.dashboard:dashboard:0.4.5'
+}

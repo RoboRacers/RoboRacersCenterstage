@@ -1,5 +1,6 @@
 package com.roboracers.gaeldrive.utils;
 
+import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.linear.RealVector;
 
 import java.util.Random;
@@ -10,6 +11,9 @@ public class StatsUtils {
 
     static private double STD_DEVIATION = 1;
     static private double MEAN = 0;
+
+    static ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
+    static ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
 
     public static RealVector addGaussianNoise(RealVector state) {
         int len = state.getDimension();
@@ -57,5 +61,37 @@ public class StatsUtils {
     public static void setMEAN(double newMEAN) {
         MEAN = newMEAN;
     }
+
+    public static double readingDeltaProbability(RealVector v1, RealVector v2, int DOF) {
+
+        RealVector readingDelta = v1.subtract(v2);
+
+        double probSensorGivenState = 0;
+        if (DOF == 2){
+            probSensorGivenState = distribution2DOF.density(readingDelta.getNorm());
+        } else if ( DOF == 3 ) {
+            probSensorGivenState = distribution3DOF.density(readingDelta.getNorm());
+        }
+
+        return probSensorGivenState;
+    }
+
+    public static double quickGaussian(long randomBits) {
+        long evenChunks = randomBits & EVEN_CHUNKS;
+        long oddChunks = (randomBits & ODD_CHUNKS) >>> 5;
+        long sum = chunkSum(evenChunks + oddChunks)  - 186; // Mean = 31*12 / 2
+        return sum / 31.0;
+    }
+
+    private static long chunkSum(long bits) {
+        long sum = bits + (bits >>> 40);
+        sum += sum >>> 20;
+        sum += sum >>> 10;
+        sum &= (1<<10)-1;
+        return sum;
+    }
+
+    static final long EVEN_CHUNKS = 0x7c1f07c1f07c1fL;
+    static final long ODD_CHUNKS  = EVEN_CHUNKS << 5;
 
 }

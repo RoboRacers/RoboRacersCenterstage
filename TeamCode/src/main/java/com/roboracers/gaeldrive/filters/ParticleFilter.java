@@ -1,6 +1,7 @@
 package com.roboracers.gaeldrive.filters;
 
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.particles.Particle;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.tests.TestConstants;
@@ -94,7 +95,7 @@ public abstract class ParticleFilter {
                 RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
                 RealVector actualSensorValue = model.getActualReading();
 
-                double probability = readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
+                double probability = StatsUtils.readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
 
                 // Add the probability multiplied by the weight of the model.
                 cumulativeWeight += probability * model.getWeightModifier();
@@ -133,7 +134,7 @@ public abstract class ParticleFilter {
                 RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
                 RealVector actualSensorValue = model.getActualReading();
 
-                double probability = readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
+                double probability = StatsUtils.readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
 
                 // Add the probability multiplied by the weight of the model.
                 cumalativeWeight += probability * model.getWeightModifier();
@@ -176,7 +177,12 @@ public abstract class ParticleFilter {
 
             Particle particle = Particles.get(index);
             particle.setWeight(1.0);
-            newParticles.add(particle); // Replace with your cloning logic
+            if (TestConstants.ADD_NOISE) {
+                newParticles.add(sampleFromParticle(particle));
+            } else {
+                newParticles.add(particle);
+            }
+
             position += stepSize;
         }
 
@@ -204,30 +210,24 @@ public abstract class ParticleFilter {
         return bestParticle;
     }
 
-    private double readingDeltaProbability(RealVector v1, RealVector v2, int DOF) {
-
-        RealVector readingDelta = v1.subtract(v2);
-
-        double probSensorGivenState = 0;
-        if (DOF == 2){
-            probSensorGivenState = distribution2DOF.density(readingDelta.getNorm());
-        } else if ( DOF == 3 ) {
-            probSensorGivenState = distribution3DOF.density(readingDelta.getNorm());
-        }
-
-        return probSensorGivenState;
-    }
-
+    /**
+     * Get a random particle from the particle set. Used for debugging.
+     * @return
+     */
     public Particle getRandomParticle() {
         int range = Particles.size();
         return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
     }
 
-    private Particle sampleFromParticle(Particle initialParticle) {
-        return new Particle(
-                StatsUtils.addGaussianNoise2D(initialParticle.getState(), 0.5, 0.005),
-                1,
-                1
-        );
-    }
+
+    public abstract void initializeParticles(int numParticles, Pose2d startingLocation, double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax);
+
+    public abstract void initializeParticles(int numParticles, Pose2d startingLocation);
+
+    /**
+     * Resampling from a single particle. Take the original particle and add gaussian noise to it.
+     * @param initialParticle The starting particle
+     * @return The resampled particle
+     */
+    protected abstract Particle sampleFromParticle(Particle initialParticle);
 }

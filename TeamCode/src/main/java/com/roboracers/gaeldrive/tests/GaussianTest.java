@@ -3,18 +3,27 @@ package com.roboracers.gaeldrive.tests;
 import com.roboracers.gaeldrive.utils.StatsUtils;
 import com.roboracers.gaeldrive.utils.VectorUtils;
 
+import java.util.Random;
+
 public class GaussianTest {
 
     static long loop = 0;
     static long loopTime = 0;
+    static boolean quick = false;
+    static Random random = new Random();
 
     public static void main(String[] args) {
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 100; i++) {
             loop = System.nanoTime();
-            StatsUtils.addGaussianNoise2D(VectorUtils.create3DVector(0,0,0), 0.01, 0.001);
+            if (quick) {
+                System.out.println(StatsUtils.quickGaussian(random.nextLong()));
+            } else {
+                System.out.println(random.nextGaussian());
+            }
+
             loopTime = System.nanoTime();
 
         }
-        System.out.println("Time for function call: " + (loopTime-loop) + " ms");
+        System.out.println("Time for function call: " + (loopTime-loop) + " ns");
     }
 }

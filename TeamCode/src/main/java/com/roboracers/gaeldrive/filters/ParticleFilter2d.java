@@ -5,11 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.particles.Particle;
 import com.roboracers.gaeldrive.particles.Particle2d;
 import com.roboracers.gaeldrive.utils.PoseUtils;
+import com.roboracers.gaeldrive.utils.StatsUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -30,7 +29,6 @@ public class ParticleFilter2d extends ParticleFilter {
      */
     public ParticleFilter2d() {
         super.Dimensions = 2;
-        this.Particles
     }
 
     /**
@@ -62,6 +60,7 @@ public class ParticleFilter2d extends ParticleFilter {
      * @param headingMin Minimum heading deviation
      * @param headingMax Maximum heading deviation
      */
+    @Override
     public void initializeParticles(int numParticles, Pose2d startingLocation, double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax) {
 
         for(int i=0; i < numParticles; i++ ) {
@@ -87,6 +86,7 @@ public class ParticleFilter2d extends ParticleFilter {
      * @param numParticles The number of particles
      * @param startingLocation The origin of the particles
      */
+    @Override
     public void initializeParticles(int numParticles, Pose2d startingLocation) {
 
         for(int i=0; i < numParticles; i++ ) {
@@ -143,5 +143,13 @@ public class ParticleFilter2d extends ParticleFilter {
         return poses;
     }
 
+    @Override
+    protected Particle sampleFromParticle(Particle initialParticle) {
+        return new Particle(
+                StatsUtils.addGaussianNoise2D(initialParticle.getState(), 0.5, 0.005),
+                1,
+                1
+        );
+    }
 
 }

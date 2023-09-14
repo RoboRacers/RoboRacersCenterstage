@@ -27,7 +27,7 @@ public class Trajectories {
         telemetry = initTelemetry;
     }
 
-    /**
+    /*
      * All TrajectorySequenceGroups declared from here on out.
      */
 

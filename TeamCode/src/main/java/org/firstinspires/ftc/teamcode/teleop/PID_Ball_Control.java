@@ -15,6 +15,12 @@ public class PID_Ball_Control extends LinearOpMode{
     //also variables
     private DistanceSensor distance_sensor_range;
     private Servo balance_servo;
+
+    double kp = 0;
+    double ki = 0;
+    double kd = 0;
+
+
     @Override
     public void runOpMode(){
         //stuff goes here hehehehehehe

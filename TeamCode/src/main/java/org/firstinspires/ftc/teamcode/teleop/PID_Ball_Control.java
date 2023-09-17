@@ -19,11 +19,12 @@ public class PID_Ball_Control extends LinearOpMode{
     double kp = 0;
     double ki = 0;
     double kd = 0;
-    double error;
-    
+    double error; //you can declare the vaoidable here but assigning it has to happen in a classs/functioon
 
     @Override
     public void runOpMode(){
+        error = 8;
+
         //stuff goes here hehehehehehe
 
         

@@ -16,7 +16,9 @@ public class PID_Ball_Control extends LinearOpMode{
     private DistanceSensor distance_sensor_range;
     private Servo balance_servo;
 
-    double kp = 0, ki = 0, kd = 0;
+    double kp = 0;
+    double ki = 0;
+    double kd = 0;
     double error;
     
 

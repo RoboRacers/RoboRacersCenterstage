@@ -18,7 +18,7 @@ public class PID_Ball_Control extends LinearOpMode{
 
     double kp = 0, ki = 0, kd = 0;
     double error;
-
+    
 
     @Override
     public void runOpMode(){

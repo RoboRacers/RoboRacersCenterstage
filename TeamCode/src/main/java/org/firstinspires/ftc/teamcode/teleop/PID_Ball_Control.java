@@ -23,15 +23,19 @@ public class PID_Ball_Control extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException{
+        //runs once after init
         error = 8;
-        while (opModeInInit()) { //When start isn't pressed and stop isn't either
+        while (opModeInInit()) { //runs continusly after the once part
+            //stuff goes here hehehehehehe
+        }
+        //runs when start is pressed
+        //runs once between loops
+
+        while (!isStopRequested()) { //runs contiuosly after start is pressed until stop
+            //also stuff goes here hehehehehehe
         }
 
-        while (!isStopRequested()) { // when start is pressed
 
-        }
-
-        //stuff goes here hehehehehehe
 
         
     }

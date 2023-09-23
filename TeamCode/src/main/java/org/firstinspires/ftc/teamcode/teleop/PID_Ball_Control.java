@@ -22,8 +22,14 @@ public class PID_Ball_Control extends LinearOpMode{
     double error; //you can declare the vaoidable here but assigning it has to happen in a classs/functioon
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() throws InterruptedException{
         error = 8;
+        while (opModeInInit()) { //When start isn't pressed and stop isn't either
+        }
+
+        while (!isStopRequested()) { // when start is pressed
+
+        }
 
         //stuff goes here hehehehehehe
 

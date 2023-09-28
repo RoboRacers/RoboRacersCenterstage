@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 
 @TeleOp(name = "PID_Ball_Control", group = "16481-Centerstage")
-public class PID_Ball_Control extends LinearOpMode{
+public class PID_Ball_Control extends LinearOpMode {
     //define sensors and servo here
     //also variables
 
@@ -26,22 +26,24 @@ public class PID_Ball_Control extends LinearOpMode{
     double kd = 0;
     double error; //you can declare the vaoidable here but assigning it has to happen in a classs/functioon
     private double lasterror = 0;
+    double reference;
+    double state;
 
     ElapsedTime timer = new ElapsedTime();
 
     @Override
-    public void runOpMode() throws InterruptedException{
+    public void runOpMode() throws InterruptedException {
         //runs once after init
         error = 8;
 
         balance_servo = hardwareMap.get(Servo.class, "balanceServo");
-
 
         while (opModeInInit()) { //runs continusly after the once part
             //stuff goes here hehehehehehe
         }
         //runs when start is pressed
         //runs once between loops
+    }
 
         public double PIDControl(double reference,double state) {
             double error = reference - state;
@@ -64,4 +66,4 @@ public class PID_Ball_Control extends LinearOpMode{
     }
 
 
-}
+

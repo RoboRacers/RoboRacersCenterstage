@@ -7,24 +7,35 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 
 @TeleOp(name = "PID_Ball_Control", group = "16481-Centerstage")
 public class PID_Ball_Control extends LinearOpMode{
     //define sensors and servo here
     //also variables
-    private DistanceSensor distance_sensor_range;
-    private Servo balance_servo;
 
+    private DistanceSensor distance_sensor_range;
+
+    Servo balance_servo;
+
+    double integralSum = 0;
     double kp = 0;
     double ki = 0;
     double kd = 0;
     double error; //you can declare the vaoidable here but assigning it has to happen in a classs/functioon
 
+    ElapsedTime timer = new ElapsedTime();
+
     @Override
     public void runOpMode() throws InterruptedException{
         //runs once after init
         error = 8;
+
+        balance_servo = hardwareMap.get(Servo.class, "balanceServo");
+
+
         while (opModeInInit()) { //runs continusly after the once part
             //stuff goes here hehehehehehe
         }

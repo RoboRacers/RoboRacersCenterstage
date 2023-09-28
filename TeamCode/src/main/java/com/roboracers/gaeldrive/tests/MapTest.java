@@ -3,9 +3,15 @@ package com.roboracers.gaeldrive.tests;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.distance.FieldDistance;
 
-public class MapTest {
+public class MapTest extends TestTemplate {
     static long loop;
     static long loopTime = 0;
+
+    @Override
+    public void test() {
+
+    }
+
     public static void main(String[] args) {
         loop = System.nanoTime();
         double distance = FieldDistance.calculateSimulatedDistance(new Pose2d(0,0,Math.toRadians(180)));

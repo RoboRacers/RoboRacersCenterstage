@@ -143,7 +143,7 @@ public class ParticleFilter2d extends ParticleFilter {
     }
 
     @Override
-    protected Particle sampleFromParticle(Particle initialParticle) {
+    public Particle sampleFromParticle(Particle initialParticle) {
         return new Particle(
                 StatsUtils.addGaussianNoise2D(initialParticle.getState(), 0.5, 0.005),
                 1,

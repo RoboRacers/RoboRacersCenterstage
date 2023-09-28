@@ -229,5 +229,5 @@ public abstract class ParticleFilter {
      * @param initialParticle The starting particle
      * @return The resampled particle
      */
-    protected abstract Particle sampleFromParticle(Particle initialParticle);
+    public abstract Particle sampleFromParticle(Particle initialParticle);
 }

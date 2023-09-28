@@ -56,9 +56,9 @@ public class PID_Ball_Control extends LinearOpMode {
             double output = (error * kp) + (derivative * kd) + (integralSum * ki);
         }
 
-        while (!isStopRequested()) { //runs contiuosly after start is pressed until stop
+        //while (!isStopRequested()) { //runs contiuosly after start is pressed until stop
             //also stuff goes here hehehehehehe
-        }
+        //}
 
 
 

@@ -25,6 +25,7 @@ public class PID_Ball_Control extends LinearOpMode{
     double ki = 0;
     double kd = 0;
     double error; //you can declare the vaoidable here but assigning it has to happen in a classs/functioon
+    private double lasterror = 0;
 
     ElapsedTime timer = new ElapsedTime();
 
@@ -41,6 +42,17 @@ public class PID_Ball_Control extends LinearOpMode{
         }
         //runs when start is pressed
         //runs once between loops
+
+        public double PIDControl(double reference,double state) {
+            double error = reference - state;
+            integralSum += error * timer.seconds();
+            double derivative = (error- lasterror) / timer.seconds();
+            lasterror = error;
+
+            timer.reset();
+
+            double output = (error * kp) + (derivative * kd) + (integralSum * ki);
+        }
 
         while (!isStopRequested()) { //runs contiuosly after start is pressed until stop
             //also stuff goes here hehehehehehe

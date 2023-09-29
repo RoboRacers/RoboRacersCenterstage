@@ -29,9 +29,6 @@ public abstract class ParticleFilter {
     private Random random = new Random();
     int Dimensions;
 
-    ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
-    ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
-
     /**
      * Add a particle to the internal Hashmap.
      * @param particle
@@ -169,7 +166,9 @@ public abstract class ParticleFilter {
 
         int index = 0;
         double cumulativeWeight = Particles.get(0).getWeight();
+
         for (int i = 0; i < numParticles; i++) {
+
             while (position > cumulativeWeight && index < numParticles - 1) {
                 index++;
                 cumulativeWeight += Particles.get(index).getWeight();
@@ -177,16 +176,27 @@ public abstract class ParticleFilter {
 
             Particle particle = Particles.get(index);
             particle.setWeight(1.0);
-            if (TestConstants.ADD_NOISE) {
-                newParticles.add(sampleFromParticle(particle));
-            } else {
-                newParticles.add(particle);
-            }
-
+            particle = sampleFromParticle(particle);
+            newParticles.add(particle);
             position += stepSize;
+
+            System.out.println("***** New Particles ****");
+            for (int j = 0; j < newParticles.size(); j++) {
+                System.out.println(
+                        newParticles.get(j)
+                );
+            }
+            System.out.println("Particle added" + particle);
         }
+        System.out.println("Before Resampling");
 
         Particles = newParticles;
+        System.out.println("After Resampling");
+        for (int i = 0; i < Particles.size(); i++) {
+            System.out.println(
+                    this.getParticle(i)
+            );
+        }
     }
 
 
@@ -219,15 +229,14 @@ public abstract class ParticleFilter {
         return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
     }
 
-
-    public abstract void initializeParticles(int numParticles, Pose2d startingLocation, double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax);
-
-    public abstract void initializeParticles(int numParticles, Pose2d startingLocation);
-
     /**
      * Resampling from a single particle. Take the original particle and add gaussian noise to it.
      * @param initialParticle The starting particle
      * @return The resampled particle
      */
     public abstract Particle sampleFromParticle(Particle initialParticle);
+
+    public Particle getParticle(int index) {
+        return Particles.get(index);
+    }
 }

@@ -60,5 +60,42 @@ public class AutoMith {
                 currentState = state.LOOP;
                 break;
         }
+        public void action(state) {
+            switch (state) {
+                case state.DRIVING_TOWARDS_A_SPIKE_MARKER:
+                    //We must put the drive function to drive toward the spike marker with the team prop
+                    break;
+                case state.ROBOT_REACHED_THE_SPIKE_MARKER:
+                    //We must put the drive function that tells us when we reach the spike marker
+
+                    break;
+                case state.DRIVING_TOWARDS_THE_BACK_BACKDROP:
+                    //We must put the drive function that drives toward the back drop
+                    break;
+
+                case state.REACHED_THE_BACKDROP:
+                    //We must put the drive function that tells us when we reach the back drop
+                    break;
+                case state.DRIVING_TOWARDS_THE_STACK_ONE:
+                    //We must put the drive function to go to stack 1
+                    break;
+                case state.REACHED_STACK_ONE:
+                    //We must put the drive function to tell us that we reached stack 1
+                    break;
+
+                case state.DRIVING_TOWARDS_STACK_TWO:
+                    //We must put the drive function to drive to stack 2
+                    break;
+                case state.REACHED_STACK_TWO:
+                    //We must put the drive function to tell us once we reach stack 2
+                    break;
+                case state.DRIVE_TOWARDS_BACKDROP:
+                    //We must put the drive function to drive to the backdrop
+                    break;
+
+                case state.LOOP:
+                    //We must put the drive function to loop the code for the stacks
+                    break;
+            }
     }
 }

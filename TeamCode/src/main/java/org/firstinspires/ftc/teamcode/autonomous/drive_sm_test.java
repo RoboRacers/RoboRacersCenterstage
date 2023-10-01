@@ -50,52 +50,52 @@ public class drive_sm_test extends LinearOpMode {
         while (opModeIsActive()) {
             if (gamepad1.a) {
                 mysm.transition(driveSM.EVENT.DETECTED_THE_TEAM_PROP);
-                telemetry.addData("a pressed", "Initialized");
+                telemetry.addData("a pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.b) {
                 mysm.transition(driveSM.EVENT.LOCATION_XYZ);
-                telemetry.addData("b pressed", "Initialized");
+                telemetry.addData("b pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.x) {
                 mysm.transition(driveSM.EVENT.DROPPED_PURPLE_PIXEL);
-                telemetry.addData("x pressed", "Initialized");
+                telemetry.addData("x pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.y) {
                 mysm.transition(driveSM.EVENT.LOCATION);
-                telemetry.addData("y pressed", "Initialized");
+                telemetry.addData("y pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.dpad_down) {
                 mysm.transition(driveSM.EVENT.DROP_YELLOW_PIXEL);
-                telemetry.addData("dpad down pressed", "Initialized");
+                telemetry.addData("dpad down pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.dpad_up) {
                 mysm.transition(driveSM.EVENT.LOCATION_STACK_ONE);
-                telemetry.addData("dpad up pressed", "Initialized");
+                telemetry.addData("dpad up pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.dpad_left) {
                 mysm.transition(driveSM.EVENT.PIXEL_IS_IN_CLAW);
-                telemetry.addData("dpad left pressed", "Initialized");
+                telemetry.addData("dpad left pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.dpad_right) {
                 mysm.transition(driveSM.EVENT.LOCATION_STACK_TWO);
-                telemetry.addData("dpad right pressed", "Initialized");
+                telemetry.addData("dpad right pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.right_bumper) {
                 mysm.transition(driveSM.EVENT.TWO_PIXELS_IN_CLAW);
-                telemetry.addData("right bumper pressed", "Initialized");
+                telemetry.addData("right bumper pressed", mysm.getState());
                 telemetry.update();
             }
             else if (gamepad1.left_bumper) {
                 mysm.transition(driveSM.EVENT.LOOP);
-                telemetry.addData("left bumper pressed", "Initialized");
+                telemetry.addData("left bumper pressed", mysm.getState());
                 telemetry.update();
             }
         }

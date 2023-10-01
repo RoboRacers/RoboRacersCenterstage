@@ -28,7 +28,12 @@ public class driveSM {
         LOOP,
     }
 
+
     STATE currentState;
+
+    public STATE getState(){
+        return currentState;
+    }
     public void transition( EVENT event) {
         switch (event) {
             case DETECTED_THE_TEAM_PROP:
@@ -62,6 +67,8 @@ public class driveSM {
                 currentState = STATE.LOOP;
                 break;
         }
+
+
         /*
         public void action(state) {
             switch (state) {

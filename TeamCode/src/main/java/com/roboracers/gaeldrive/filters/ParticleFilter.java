@@ -3,6 +3,7 @@ package com.roboracers.gaeldrive.filters;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.particles.Particle;
+import com.roboracers.gaeldrive.particles.Particle2d;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.tests.TestConstants;
 import com.roboracers.gaeldrive.utils.StatsUtils;
@@ -19,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * A filter that uses Monte Carlo methods to find approximate solutions
  * to filtering problems in a non-linear state space.
  */
-public abstract class ParticleFilter {
+public abstract class ParticleFilter<Dimensions> {
 
     /**
      * Hashmap that stores all the particles in Integer/Particle pairs.
@@ -53,6 +54,26 @@ public abstract class ParticleFilter {
      */
     public ArrayList<Particle> getParticles() {
         return this.Particles;
+    }
+
+    public void initializeParticles(int numParticles, RealVector startingLocation, double[Dimensions]) {
+
+        for(int i=0; i < numParticles; i++ ) {
+            // Generate random deviances
+            double xDeviation = ThreadLocalRandom.current().nextDouble(xMin, xMax);
+            double yDeviation = ThreadLocalRandom.current().nextDouble(yMin, yMax);
+            double headingDeviation = ThreadLocalRandom.current().nextDouble(headingMin, headingMax);
+
+
+            // Create the new pose
+            Pose2d addedPose = new Pose2d(  startingLocation.getX() + xDeviation,
+                    startingLocation.getY() + yDeviation,
+                    startingLocation.getHeading() + headingDeviation);
+
+            // Add the given particle back into the particle set
+            add(new Particle2d(addedPose, 0, i));
+        }
+
     }
 
 
@@ -124,8 +145,8 @@ public abstract class ParticleFilter {
         int index = 0;
         for (Particle particle: Particles) {
 
-            double cumalativeWeight = 0;
-            double cumalativeWeightModifer = 0;
+            double cumulativeWeight = 0;
+            double cumulativeWeightModifier = 0;
 
             // For every sensor model that we are considering
             for (SensorModel model: models) {
@@ -137,14 +158,14 @@ public abstract class ParticleFilter {
                 double probability = StatsUtils.readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
 
                 // Add the probability multiplied by the weight of the model.
-                cumalativeWeight += probability * model.getWeightModifier();
+                cumulativeWeight += probability * model.getWeightModifier();
                 // Add the weight of this sensor model to the overall weight modifier
-                cumalativeWeightModifer += model.getWeightModifier();
+                cumulativeWeightModifier += model.getWeightModifier();
 
             }
 
             // Calculate the average weights of all the sensors and assign it to the particle
-            particle.setWeight((cumalativeWeight/cumalativeWeightModifer)*particle.getWeight());
+            particle.setWeight((cumulativeWeight/cumulativeWeightModifier)*particle.getWeight());
 
             // Add the particle with the updated weight back into our particle set.
             Particles.set(index, particle);
@@ -177,6 +198,7 @@ public abstract class ParticleFilter {
 
             Particle particle = Particles.get(index);
             particle.setWeight(1.0);
+
             if (TestConstants.ADD_NOISE) {
                 newParticles.add(sampleFromParticle(particle));
             } else {
@@ -216,13 +238,9 @@ public abstract class ParticleFilter {
      */
     public Particle getRandomParticle() {
         int range = Particles.size();
-        return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
+        return Particles.get(1);
+        // return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
     }
-
-
-    public abstract void initializeParticles(int numParticles, Pose2d startingLocation, double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax);
-
-    public abstract void initializeParticles(int numParticles, Pose2d startingLocation);
 
     /**
      * Resampling from a single particle. Take the original particle and add gaussian noise to it.

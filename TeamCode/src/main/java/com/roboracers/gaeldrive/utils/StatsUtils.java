@@ -75,23 +75,4 @@ public class StatsUtils {
 
         return probSensorGivenState;
     }
-
-    public static double quickGaussian(long randomBits) {
-        long evenChunks = randomBits & EVEN_CHUNKS;
-        long oddChunks = (randomBits & ODD_CHUNKS) >>> 5;
-        long sum = chunkSum(evenChunks + oddChunks)  - 186; // Mean = 31*12 / 2
-        return sum / 31.0;
-    }
-
-    private static long chunkSum(long bits) {
-        long sum = bits + (bits >>> 40);
-        sum += sum >>> 20;
-        sum += sum >>> 10;
-        sum &= (1<<10)-1;
-        return sum;
-    }
-
-    static final long EVEN_CHUNKS = 0x7c1f07c1f07c1fL;
-    static final long ODD_CHUNKS  = EVEN_CHUNKS << 5;
-
 }

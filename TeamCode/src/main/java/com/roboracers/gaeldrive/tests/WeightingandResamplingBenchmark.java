@@ -10,7 +10,7 @@ import com.roboracers.gaeldrive.utils.Updatable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeightingandResamplingUnitTest {
+public class WeightingandResamplingBenchmark {
     static long loop;
     static long loopTime = 0;
 
@@ -20,7 +20,7 @@ public class WeightingandResamplingUnitTest {
     public static void main(String[] args) {
 
         System.out.println("* * * * * * * * * * * *");
-        System.out.println("Unit Test Started!");
+        System.out.println("Benchmark Started!");
 
         Pose2d pose1 =  new Pose2d(0,0, 0);
         Pose2d pose2 = new Pose2d(0,0,Math.toRadians(-90));
@@ -34,17 +34,18 @@ public class WeightingandResamplingUnitTest {
             model.update();
         }
 
-        System.out.println("Actual Sensor Reading: " + models.get(0).getActualReading() + ", Relative Sensor Location " + pose1);
-        System.out.println("Actual Sensor Reading: " + models.get(1).getActualReading() + ", Relative Sensor Location: " + pose2);
-        System.out.println("Actual Sensor Reading: " + models.get(2).getActualReading() + ", Relative Sensor Location: " + pose3);
+        // Start Resampling
+        loop = System.nanoTime();
+        filter.initializeParticles(100, new Pose2d(0, 0,Math.toRadians(45)));
+        loopTime = System.nanoTime();
 
-        filter.initializeParticles(20000, new Pose2d(0, 0,Math.toRadians(45)));
-        // Start weighting
+        System.out.println("Time for initialization function call: " + (loopTime-loop)/1000000 + "ms");
+
+        // Start Weighting
+        loop = System.nanoTime();
         filter.weighParticles(models);
         loopTime = System.nanoTime();
 
-        System.out.println("Best Particle Pose: " + filter.getBestPose());
-        System.out.println("Best Particle Weight: " + filter.getBestParticle().getWeight());
         System.out.println("Time for weighting function call: " + (loopTime-loop)/1000000 + "ms");
 
         // Start Resampling
@@ -52,21 +53,9 @@ public class WeightingandResamplingUnitTest {
         filter.resampleParticles();
         loopTime = System.nanoTime();
 
-        System.out.println("Random Resampled Particle: " + PoseUtils.vectorToPose(filter.getRandomParticle().getState()));
         System.out.println("Time for resampling function call: " + (loopTime-loop)/1000000 + "ms");
 
-        // Run 100 cycles of resampling and weighing
-        filter.weighParticles(models);
-        for (int i = 0; i < 100; i++) {
-            filter.resampleParticles();
-            filter.weighParticles(models);
-        }
-
-        System.out.println("Best Particle after cycles: " + filter.getBestPose());
-
-        System.out.println("Random Resampled Particle: " + PoseUtils.vectorToPose(filter.getRandomParticle().getState()));
-
-        System.out.println("Unit Test Ended!");
+        System.out.println("Benchmark Ended!");
         System.out.println("* * * * * * * * * * * *");
     }
 }

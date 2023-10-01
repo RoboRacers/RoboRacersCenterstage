@@ -59,11 +59,10 @@ public class ParticleFilter2d extends ParticleFilter {
      * @param headingMin Minimum heading deviation
      * @param headingMax Maximum heading deviation
      */
-    @Override
     public void initializeParticles(int numParticles, Pose2d startingLocation, double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax) {
 
         for(int i=0; i < numParticles; i++ ) {
-            // Generate random deviances TODO: Make a more mathematical resampling system
+            // Generate random deviances
             double xDeviation = ThreadLocalRandom.current().nextDouble(xMin, xMax);
             double yDeviation = ThreadLocalRandom.current().nextDouble(yMin, yMax);
             double headingDeviation = ThreadLocalRandom.current().nextDouble(headingMin, headingMax);
@@ -85,7 +84,6 @@ public class ParticleFilter2d extends ParticleFilter {
      * @param numParticles The number of particles
      * @param startingLocation The origin of the particles
      */
-    @Override
     public void initializeParticles(int numParticles, Pose2d startingLocation) {
 
         for(int i=0; i < numParticles; i++ ) {
@@ -145,7 +143,7 @@ public class ParticleFilter2d extends ParticleFilter {
     @Override
     public Particle sampleFromParticle(Particle initialParticle) {
         return new Particle(
-                StatsUtils.addGaussianNoise2D(initialParticle.getState(), 0.5, 0.005),
+                StatsUtils.addGaussianNoise2D(initialParticle.getState(), 0.001, 0.005),
                 1,
                 1
         );

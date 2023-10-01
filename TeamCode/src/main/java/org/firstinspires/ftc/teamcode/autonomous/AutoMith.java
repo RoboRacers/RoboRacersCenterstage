@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 public class AutoMith {
 
-    private enum state{
+    public enum STATE{
         DRIVING_TOWARDS_A_SPIKE_MARKER,
         ROBOT_REACHED_THE_SPIKE_MARKER,
         DRIVING_TOWARDS_THE_BACK_BACKDROP,
@@ -15,7 +15,7 @@ public class AutoMith {
         LOOP,
     }
 
-    private enum event{
+    public enum EVENT{
         DETECTED_THE_TEAM_PROP,
         LOCATION_XYZ,
         DROPPED_PURPLE_PIXEL,
@@ -27,39 +27,42 @@ public class AutoMith {
         TWO_PIXELS_IN_CLAW,
         LOOP,
     }
-    public void transition(event) {
+
+    STATE currentState;
+    public void transition( EVENT event) {
         switch (event) {
-            case event.DETECTED_THE_TEAM_PROP:
-                currentState = state.DRIVING_TOWARDS_A_SPIKE_MARKER;
+            case DETECTED_THE_TEAM_PROP:
+                currentState = STATE.DRIVING_TOWARDS_A_SPIKE_MARKER;
                 break;
-            case event.LOCATION_XYZ:
-                currentState = state.ROBOT_REACHED_THE_SPIKE_MARKER;
+            case LOCATION_XYZ:
+                currentState = STATE.ROBOT_REACHED_THE_SPIKE_MARKER;
                 break;
-            case event.DROPPED_PURPLE_PIXEL:
-                currentState = state.DRIVING_TOWARDS_THE_BACK_BACKDROP;
+            case DROPPED_PURPLE_PIXEL:
+                currentState = STATE.DRIVING_TOWARDS_THE_BACK_BACKDROP;
                 break;
-            case event.LOCATION:
-                currentState = state.REACHED_THE_BACKDROP;
+            case LOCATION:
+                currentState = STATE.REACHED_THE_BACKDROP;
                 break;
-            case event.DROP_YELLOW_PIXEL:
-                currentState = state.DRIVING_TOWARDS_THE_STACK_ONE;
+            case DROP_YELLOW_PIXEL:
+                currentState = STATE.DRIVING_TOWARDS_THE_STACK_ONE;
                 break;
-            case event.LOCATION_STACK_ONE:
-                currentState = state.REACHED_STACK_ONE;
+            case LOCATION_STACK_ONE:
+                currentState = STATE.REACHED_STACK_ONE;
                 break;
-            case event.PIXEL_IS_IN_CLAW:
-                currentState = state.DRIVING_TOWARDS_STACK_TWO;
+            case PIXEL_IS_IN_CLAW:
+                currentState = STATE.DRIVING_TOWARDS_STACK_TWO;
                 break;
-            case event.LOCATION_STACK_TWO:
-                currentState = state.REACHED_STACK_TWO;
+            case LOCATION_STACK_TWO:
+                currentState = STATE.REACHED_STACK_TWO;
                 break;
-            case event.TWO_PIXELS_IN_CLAW:
-                currentState = state.DRIVE_TOWARDS_BACKDROP;
+            case TWO_PIXELS_IN_CLAW:
+                currentState = STATE.DRIVE_TOWARDS_BACKDROP;
                 break;
-            case event.LOOP:
-                currentState = state.LOOP;
+            case LOOP:
+                currentState = STATE.LOOP;
                 break;
         }
+        /*
         public void action(state) {
             switch (state) {
                 case state.DRIVING_TOWARDS_A_SPIKE_MARKER:
@@ -97,5 +100,6 @@ public class AutoMith {
                     //We must put the drive function to loop the code for the stacks
                     break;
             }
+         */
     }
 }

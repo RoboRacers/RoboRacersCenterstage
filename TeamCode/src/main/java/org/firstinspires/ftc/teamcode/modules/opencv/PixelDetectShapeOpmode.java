@@ -7,7 +7,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp(name="Pixel Detect OpMode", group="Linear Opmode")
-public class PixelDetectTest extends LinearOpMode {
+public class PixelDetectShapeOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() {

@@ -10,7 +10,7 @@ import com.roboracers.gaeldrive.utils.Updatable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeightingandResamplingUnitTest {
+public class ResamplingUnitTest {
     static long loop;
     static long loopTime = 0;
 
@@ -40,31 +40,19 @@ public class WeightingandResamplingUnitTest {
         System.out.println("Actual Sensor Reading: " + models.get(1).getActualReading() + ", Relative Sensor Location: " + pose2);
         System.out.println("Actual Sensor Reading: " + models.get(2).getActualReading() + ", Relative Sensor Location: " + pose3);
 
-        filter.initializeParticles(2000, new Pose2d(0, 0,Math.toRadians(45)));
+        filter.initializeParticles(20, new Pose2d(0, 0,Math.toRadians(45)));
         filter.weighParticles(models);
-        loopTime = System.nanoTime();
 
-        System.out.println("Best Particle Pose: " + filter.getBestPose());
-        System.out.println("Best Particle Weight: " + filter.getBestParticle().getWeight());
-        System.out.println("Time for weighting function call: " + (loopTime-loop)/1000000 + "ms");
 
         // Start Resampling
-        for (int i = 0; i < 19; i++) {
-            System.out.println(
-                    filter.getParticle(i)
-            );
-        }
         filter.resampleParticles();
-        for (int i = 0; i < 19; i++) {
-            System.out.println(
-                    filter.getParticle(i)
-            );
-        }
+
         loopTime = System.nanoTime();
 
         System.out.println("Random Resampled Particle: " + PoseUtils.vectorToPose(filter.getRandomParticle().getState()));
         System.out.println("Time for resampling function call: " + (loopTime-loop)/1000000 + "ms");
 
+        filter.weighParticles(models);
         /*
         for (int i = 0; i < 100; i++) {
             filter.resampleParticles();
@@ -72,22 +60,13 @@ public class WeightingandResamplingUnitTest {
         }
 
          */
-        for (int i = 0; i < 19; i++) {
-            System.out.println(
-                    filter.getParticle(i)
-            );
-        }
-        filter.resampleParticles();
+
 
         System.out.println("Best Particle after cycles: " + filter.getBestPose());
 
         System.out.println("Random Resampled Particle: " + PoseUtils.vectorToPose(filter.getRandomParticle().getState()));
 
-        for (int i = 0; i < 19; i++) {
-            System.out.println(
-                    filter.getParticle(i)
-            );
-        }
+
         System.out.println("Unit Test Ended!");
         System.out.println("* * * * * * * * * * * *");
     }

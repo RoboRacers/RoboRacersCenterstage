@@ -55,7 +55,7 @@ public class FieldDistance {
 
         List<Double> distances = new ArrayList<>();
 
-        for(Vector2d[] line : FieldGeometry) { //TODO: Point of improvement - currently checks every line, more time copmplexity
+        for(Vector2d[] line : FieldGeometry) { //TODO: Point of improvement - currently checks every line, more time complexity
             double distance = getRayToLineSegmentIntersection(origin, line[0], line[1]);
             if (distance != -1 ) {
                 distances.add(distance);

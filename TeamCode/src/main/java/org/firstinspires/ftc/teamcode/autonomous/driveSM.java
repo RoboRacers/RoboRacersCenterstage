@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-public class AutoMith {
+public class driveSM {
 
     public enum STATE{
         DRIVING_TOWARDS_A_SPIKE_MARKER,

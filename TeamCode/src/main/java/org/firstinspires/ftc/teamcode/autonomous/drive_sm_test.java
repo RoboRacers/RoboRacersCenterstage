@@ -27,14 +27,9 @@ package org.firstinspires.ftc.teamcode.autonomous;/* Copyright (c) 2017 FIRST. A
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.autonomous.AutoMith;
 
 @TeleOp(name="SM test", group="SM OpMode")
 public class drive_sm_test extends LinearOpMode {
@@ -42,9 +37,9 @@ public class drive_sm_test extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        AutoMith mysm = new AutoMith(mysm.);
+        driveSM mysm = new driveSM(mysm.);
 
-        mysm.transition(AutoMith.EVENT.DETECTED_THE_TEAM_PROP);
+        mysm.transition(driveSM.EVENT.DETECTED_THE_TEAM_PROP);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -55,9 +50,23 @@ public class drive_sm_test extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if(gamepad1.a)
+            if(gamepad1.a) {
 
-            double turn  =  gamepad1.right_stick_x;
+            } else if(gamepad1.b) {
+
+            } else if(gamepad1.c) {
+
+            } else if(gamepad1.d) {
+
+            } else if(gamepad1.b) {
+
+            } else if(gamepad1.b) {
+
+            } else if(gamepad1.b) {
+
+            } else if(gamepad1.b) {
+
+            }
         }
     }
 }

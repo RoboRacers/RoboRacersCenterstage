@@ -15,10 +15,14 @@ public class StatsUtils {
     static ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
     static ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
 
-    public static RealVector addGaussianNoise(RealVector state) {
+    public static RealVector addGaussianNoise(RealVector state, double[] deviances) throws MismatchedLengthException {
+        if (deviances.length != state.getDimension()) {
+            throw new MismatchedLengthException("Mismatched Length for resampling deviances");
+        }
+
         int len = state.getDimension();
         for (int i = 0; i < len; i++) {
-            state.setEntry(len-1, state.getEntry(len-1) + generateGaussian());
+            state.setEntry(i, state.getEntry(i) + generateGaussian(deviances[i]));
         }
         return state;
     }
@@ -53,6 +57,12 @@ public class StatsUtils {
     public static double generateGaussian(double STD_DEVIATION, double MEAN) {
         return random.nextGaussian() * STD_DEVIATION + MEAN;
     }
+
+    public static double generateGaussian(double STD_DEVIATION) {
+        return random.nextGaussian() * STD_DEVIATION + MEAN;
+    }
+
+    /* Set defaults */
 
     public static void setStdDeviation(double newSTD_DEVIATION) {
         STD_DEVIATION = newSTD_DEVIATION;

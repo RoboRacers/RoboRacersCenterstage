@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.filters.ParticleFilter2d;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.sensors.TestDistanceSensorModel;
+import com.roboracers.gaeldrive.utils.MismatchedLengthException;
 import com.roboracers.gaeldrive.utils.PoseUtils;
 import com.roboracers.gaeldrive.utils.Updatable;
 
@@ -17,7 +18,10 @@ public class ResamplingUnitTest {
     static ParticleFilter2d filter = new ParticleFilter2d(-72,72,-72,72,-0.001,0.001);
     static List<SensorModel> models = new ArrayList<>();
 
-    public static void main(String[] args) {
+    static double[] resamplingDeviances = {0.5,0.5,0.01};
+
+
+    public static void main(String[] args) throws Exception {
 
         System.out.println("* * * * * * * * * * * *");
         System.out.println("Unit Test Started!");
@@ -45,7 +49,7 @@ public class ResamplingUnitTest {
 
 
         // Start Resampling
-        filter.resampleParticles();
+        filter.resampleParticles(resamplingDeviances);
 
         loopTime = System.nanoTime();
 

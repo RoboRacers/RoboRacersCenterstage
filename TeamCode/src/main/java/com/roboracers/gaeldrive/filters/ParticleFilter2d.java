@@ -140,13 +140,4 @@ public class ParticleFilter2d extends ParticleFilter {
         return poses;
     }
 
-    @Override
-    public Particle sampleFromParticle(Particle initialParticle) {
-        return new Particle(
-                StatsUtils.addGaussianNoise2D(initialParticle.getState(), 0.001, 0.005),
-                1,
-                1
-        );
-    }
-
 }

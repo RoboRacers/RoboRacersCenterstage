@@ -6,9 +6,11 @@ import com.roboracers.gaeldrive.particles.Particle;
 import com.roboracers.gaeldrive.particles.Particle2d;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.tests.TestConstants;
+import com.roboracers.gaeldrive.utils.MismatchedLengthException;
 import com.roboracers.gaeldrive.utils.StatsUtils;
 
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
+import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * A filter that uses Monte Carlo methods to find approximate solutions
  * to filtering problems in a non-linear state space.
  */
-public abstract class ParticleFilter<Dimensions> {
+public class ParticleFilter {
 
     /**
      * Hashmap that stores all the particles in Integer/Particle pairs.
@@ -30,8 +32,7 @@ public abstract class ParticleFilter<Dimensions> {
     private Random random = new Random();
     int Dimensions;
 
-    ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
-    ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
+
 
     /**
      * Add a particle to the internal Hashmap.
@@ -56,22 +57,20 @@ public abstract class ParticleFilter<Dimensions> {
         return this.Particles;
     }
 
-    public void initializeParticles(int numParticles, RealVector startingLocation, double[Dimensions]) {
+    public void initializeParticles(int numParticles, RealVector startingLocation, double[] constraints) {
 
         for(int i=0; i < numParticles; i++ ) {
-            // Generate random deviances
-            double xDeviation = ThreadLocalRandom.current().nextDouble(xMin, xMax);
-            double yDeviation = ThreadLocalRandom.current().nextDouble(yMin, yMax);
-            double headingDeviation = ThreadLocalRandom.current().nextDouble(headingMin, headingMax);
+            ArrayRealVector deviances = new ArrayRealVector(Dimensions);
 
-
-            // Create the new pose
-            Pose2d addedPose = new Pose2d(  startingLocation.getX() + xDeviation,
-                    startingLocation.getY() + yDeviation,
-                    startingLocation.getHeading() + headingDeviation);
+            for (int j = 0; j < Dimensions; j++) {
+                deviances.setEntry(
+                        j,
+                        ThreadLocalRandom.current().nextDouble(constraints[j*2], constraints[j*2+1])
+                        );
+            }
 
             // Add the given particle back into the particle set
-            add(new Particle2d(addedPose, 0, i));
+            add(new Particle(startingLocation.add(deviances), 1, i));
         }
 
     }
@@ -176,7 +175,7 @@ public abstract class ParticleFilter<Dimensions> {
     /**
      * Systematic resampling for the particle filter.
      */
-    public void resampleParticles() {
+    public void resampleParticles(double[] resamplingDeviances) throws Exception {
         int numParticles = Particles.size();
         ArrayList<Particle> newParticles = new ArrayList<>(numParticles);
 
@@ -199,11 +198,17 @@ public abstract class ParticleFilter<Dimensions> {
             Particle particle = Particles.get(index);
             particle.setWeight(1.0);
 
-            if (TestConstants.ADD_NOISE) {
-                newParticles.add(sampleFromParticle(particle));
-            } else {
-                newParticles.add(particle);
-            }
+            newParticles.add(
+                    new Particle(
+                            StatsUtils.addGaussianNoise(
+                                    particle.getState(),
+                                    resamplingDeviances
+                            ),
+                            particle.getWeight(),
+                            particle.getId()
+                    )
+
+            );
 
             position += stepSize;
         }
@@ -242,10 +247,7 @@ public abstract class ParticleFilter<Dimensions> {
         // return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
     }
 
-    /**
-     * Resampling from a single particle. Take the original particle and add gaussian noise to it.
-     * @param initialParticle The starting particle
-     * @return The resampled particle
-     */
-    public abstract Particle sampleFromParticle(Particle initialParticle);
+    public Particle getParticle(int i) {
+        return Particles.get(i);
+    }
 }

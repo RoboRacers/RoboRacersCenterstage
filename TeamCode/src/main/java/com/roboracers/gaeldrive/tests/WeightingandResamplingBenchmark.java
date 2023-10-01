@@ -17,7 +17,7 @@ public class WeightingandResamplingBenchmark {
     static ParticleFilter2d filter = new ParticleFilter2d(-72,72,-72,72,-0.001,0.001);
     static List<SensorModel> models = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         System.out.println("* * * * * * * * * * * *");
         System.out.println("Benchmark Started!");
@@ -50,7 +50,7 @@ public class WeightingandResamplingBenchmark {
 
         // Start Resampling
         loop = System.nanoTime();
-        filter.resampleParticles();
+        filter.resampleParticles(new double[] {0.5,0.5,0.01});
         loopTime = System.nanoTime();
 
         System.out.println("Time for resampling function call: " + (loopTime-loop)/1000000 + "ms");

@@ -7,6 +7,8 @@ import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
+
+import com.roboracers.gaeldrive.filters.ParticleFilter;
 import com.roboracers.gaeldrive.filters.ParticleFilter2d;
 import com.roboracers.gaeldrive.particles.Particle;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.StandardSensorStack;
@@ -34,6 +36,7 @@ public class MonteCarloLocalizer implements Localizer {
         StandardSensorStack.init(hardwareMap);
         particleFilter2d = new ParticleFilter2d();
         particleFilter2d.initializeParticles(this.particleCount, this.poseEstimate);
+
     }
 
     @Override

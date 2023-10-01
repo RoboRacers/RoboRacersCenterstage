@@ -17,7 +17,7 @@ public class WeightingandResamplingUnitTest {
     static ParticleFilter2d filter = new ParticleFilter2d(-72,72,-72,72,-0.001,0.001);
     static List<SensorModel> models = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         System.out.println("* * * * * * * * * * * *");
         System.out.println("Unit Test Started!");
@@ -54,7 +54,7 @@ public class WeightingandResamplingUnitTest {
                     filter.getParticle(i)
             );
         }
-        filter.resampleParticles();
+        filter.resampleParticles(new double[] {0.5,0.5,0.01});
         for (int i = 0; i < 19; i++) {
             System.out.println(
                     filter.getParticle(i)
@@ -77,7 +77,7 @@ public class WeightingandResamplingUnitTest {
                     filter.getParticle(i)
             );
         }
-        filter.resampleParticles();
+        filter.resampleParticles(new double[] {0.5,0.5,0.01});
 
         System.out.println("Best Particle after cycles: " + filter.getBestPose());
 

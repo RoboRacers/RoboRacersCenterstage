@@ -12,49 +12,6 @@ import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 @TeleOp(name = "Teleop For League Tournament", group = "16481-Power-Play")
 public class StateMachines extends LinearOpMode {
 
-    /*
- //Turning power play teleOp into state machines
-     public enum STATE_CLAW {
-        STATE_CLAW_OPEN,
-        STATE_CLAW_CLOSE
-    }
-    public enum STATE_ARM {
-        STATE_ARM_LOW,
-        STATE_ARM_MED,
-        STATE_ARM_HIGH,
-        STATE_ARM_MANUAL_UP,
-        STATE_ARM_MANUAL_DOWN
-    }
-
-    public enum STATE_ARM {
-        STATE_ARM_LOW,
-        STATE_ARM_MED,
-        STATE_ARM_HIGH,
-        STATE_ARM_MANUAL_UP,
-        STATE_ARM_MANUAL_DOWN
-    }
-
-    //Setting Current state for each section to desired starting state
-    public AutoopStateMachines.STATE_CLAW InitCLAW = AutoopStateMachines.STATE_CLAW.STATE_CLAW_OPEN;
-
-     while runOpMode{
-        switch (InitCLAW) {
-            case (if gamepad2.x):
-                InitCLAW = AutoopStateMachines.STATE_CLAW.STATE_CLAW_CLOSE;
-                break;
-        }
-            switch (STATE_CLAW.STATE_CLAW_OPEN) {
-                case (if gamepad2.x):
-                    InitCLAW = AutoopStateMachines.STATE_CLAW.STATE_CLAW_CLOSE;
-                    break;
-            }
-        switch (STATE_CLAW.STATE_CLAW_CLOSE) {
-            case (if gamepad2.y):
-                InitCLAW = AutoopStateMachines.STATE_CLAW.STATE_CLAW_OPEN;
-                break;
-            }
-        }
-     */
 
     //Turning power play teleOp into state machines
     public enum STATE_CLAW {
@@ -83,23 +40,51 @@ public class StateMachines extends LinearOpMode {
     final int liftLow = 0;
     final int liftHigherThanLow = -750;
     final int liftMid = -1075;
-    final int liftHigh = -1357;
+    final int liftHigh = -1350;
+
+    double driveSensitivity = .5;
+    double turnSensitivity = .75;
+    double liftSpeed = .5;
+
+    int motorEncoderAvg;
+
+    final double closed = 0.25;
+    final double open = 0;
+
+    Servo claw;
 
     @Override
     public void runOpMode(){
 
+        claw = hardwareMap.get(Servo.class, "claw");
+
+
         switch (InitCLAW) {
             case STATE_CLAW_CLOSE:
+                claw.setPosition(closed);
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
+                telemetry.addData("Claw Closed", "");
                 if (gamepad2.y) {
                     InitCLAW = STATE_CLAW.STATE_CLAW_OPEN;
                     break;
                 }
+
             case STATE_CLAW_OPEN:
+                claw.setPosition(open);
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
+                telemetry.addData("Claw Opened", "");
                 if (gamepad2.x) {
                     InitCLAW = STATE_CLAW.STATE_CLAW_CLOSE;
                     break;
                 }
+
+            default:
+                InitCLAW = STATE_CLAW.STATE_CLAW_OPEN;
         }
+
+
         switch (InitARM) {
             case STATE_ARM_LOW:
                 if (gamepad1.a) {
@@ -191,6 +176,11 @@ public class StateMachines extends LinearOpMode {
                     InitARM = STATE_ARM.STATE_ARM_MANUAL_UP;
                     break;
                 }
+            default:
+                InitARM = STATE_ARM.STATE_ARM_LOW;
         }
+
+        telemetry.update();
+
     }
 }

@@ -84,9 +84,10 @@ public class StateMachines extends LinearOpMode {
                 InitCLAW = STATE_CLAW.STATE_CLAW_OPEN;
         }
 
-
+/*
         switch (InitARM) {
             case STATE_ARM_LOW:
+                arm.setPosition(liftLow);
                 if (gamepad1.a) {
                     InitARM = STATE_ARM.STATE_ARM_MED;
                     break;
@@ -181,6 +182,6 @@ public class StateMachines extends LinearOpMode {
         }
 
         telemetry.update();
-
+*/
     }
 }

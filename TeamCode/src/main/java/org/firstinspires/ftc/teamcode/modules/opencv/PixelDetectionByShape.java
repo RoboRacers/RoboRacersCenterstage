@@ -53,20 +53,33 @@ public class PixelDetectionByShape {
         @Override
         public Mat processFrame(Mat frame) {
             Mat gray = new Mat();
+
+            //Converting image to Grayscale
             Imgproc.cvtColor(frame, gray, Imgproc.COLOR_BGR2GRAY);
 
+
+            //Blurring Graysacled image
             Imgproc.medianBlur(gray, gray, 5);
 
+
+            //Applying Gaussian threshold
             Imgproc.adaptiveThreshold(gray, gray, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 11, 2);
 
             Mat edges = new Mat();
+
+
+            //Applying Canny edge detection
             Imgproc.Canny(gray, edges, 300, 900);
 
+
+            //Finding the contours
             List<MatOfPoint> contours = new ArrayList<>();
             Imgproc.findContours(edges, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
             List<MatOfPoint> hexContours = new ArrayList<>();
 
+
+            //Looping through each contour to detect Hexagon shape
             for(MatOfPoint aContour:contours) {
                 //draw
                 Scalar scalar = new Scalar(0,128,150,255);
@@ -86,7 +99,6 @@ public class PixelDetectionByShape {
             }
 
             //find max area contour from hexContours
-
             double maxVal = 0;
             int maxValIdx = 0;
             for (int contourIdx = 0; contourIdx < hexContours.size(); contourIdx++)
@@ -103,6 +115,7 @@ public class PixelDetectionByShape {
             Imgproc.drawContours(frame, hexContours, maxValIdx, new Scalar(0,255,0), 5);
 
 
+            //Finding the center of the max hexagon
             Moments M = Imgproc.moments(hexContours.get(maxValIdx));
             if (M.get_m00() != 0) {
                 centerX = M.get_m10() / M.get_m00();

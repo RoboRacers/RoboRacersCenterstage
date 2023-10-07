@@ -31,6 +31,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.RobotCore;
+import org.firstinspires.ftc.teamcode.modules.statemachines.DepositSM;
+
 @TeleOp(name="SM test", group="SM OpMode")
 public class drive_sm_test extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
@@ -38,6 +41,8 @@ public class drive_sm_test extends LinearOpMode {
     @Override
     public void runOpMode() {
         driveSM mysm = new driveSM();
+        RobotCore robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -48,13 +53,11 @@ public class drive_sm_test extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if (gamepad1.a) {
-                mysm.transition(driveSM.EVENT.DETECTED_THE_TEAM_PROP);
-                telemetry.addData("a pressed", mysm.getState());
-                telemetry.update();
-            }
+            if (gamepad1.a)  mysm.transition(driveSM.EVENT.DETECTED_THE_TEAM_PROP);
+
             else if (gamepad1.b) {
                 mysm.transition(driveSM.EVENT.LOCATION_XYZ);
+                robot.deposit.statemachine.transition(DepositSM.EVENT.DETECTED_BACKDROP_DROP_PIXEL);
                 telemetry.addData("b pressed", mysm.getState());
                 telemetry.update();
             }

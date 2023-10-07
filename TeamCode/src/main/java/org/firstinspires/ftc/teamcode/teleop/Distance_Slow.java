@@ -19,7 +19,7 @@ public class Distance_Slow extends LinearOpMode {
     double driveSensitivity;
     double turnSensitivity;
     Pose2d roPos;
-    double speed;
+
 
 
 
@@ -29,7 +29,6 @@ public class Distance_Slow extends LinearOpMode {
         robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
         driveSensitivity = 0.5;
         turnSensitivity = 0.5;
-        speed = 1;
 
 
 
@@ -46,6 +45,7 @@ public class Distance_Slow extends LinearOpMode {
         //also stuff goes here hehehehehehe
 
             robot.drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y*driveSensitivity, -gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
+
             roPos = robot.drive.getPoseEstimate(); //Get Position
 
 

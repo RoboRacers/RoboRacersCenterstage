@@ -30,8 +30,6 @@ public class Distance_Slow extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
-        speedchange = 0.05;
-        minspeed = 0.1;
         maxspeed = 0.5;
         driveSensitivity = maxspeed;
         turnSensitivity = maxspeed;
@@ -53,6 +51,9 @@ public class Distance_Slow extends LinearOpMode {
 
             roPos = robot.drive.getPoseEstimate(); //Get Position
 
+
+            //scrapped; make the speed decrease based on the distance from backdrop
+            /*
             //code gradually decreases the speed
             if (roPos == roPos){ //this will change into if in range...somehow
                 if (driveSensitivity > minspeed){ // if speed is greater than the miniumum
@@ -71,6 +72,7 @@ public class Distance_Slow extends LinearOpMode {
                     turnSensitivity = maxspeed;
                 }
             }
+             */
 
 
 

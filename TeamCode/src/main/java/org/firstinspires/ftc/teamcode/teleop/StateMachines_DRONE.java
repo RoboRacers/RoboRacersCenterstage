@@ -1,18 +1,13 @@
 package org.firstinspires.ftc.teamcode.teleop;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
-import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 
 @TeleOp(name = "Teleop For League Tournament", group = "16481-Power-Play")
-public class StateMachines extends LinearOpMode {
+public class StateMachines_DRONE extends LinearOpMode {
 
 
     //Turning power play teleOp into state machines
@@ -37,25 +32,6 @@ public class StateMachines extends LinearOpMode {
     public STATE_OUTTAKE InitOUTTAKE = STATE_OUTTAKE.STATE_OUTTAKE_CONDENSED;
     public STATE_DRONE InitDRONE = STATE_DRONE.STATE_DRONE_LOADED;
 
-
-    int previousTargetEncoderValue;
-    int targetEncoderValue;
-    int previousCommonModifier;
-    int commonModifier = 0;
-    int baseEncoderValue;
-    final int liftLow = 0;
-    final int liftHigherThanLow = -750;
-    final int liftMid = -1075;
-    final int liftHigh = -1350;
-
-    double driveSensitivity = .5;
-    double turnSensitivity = .75;
-    double liftSpeed = .5;
-
-    int motorEncoderAvg;
-
-    final double closed = 0.25;
-    final double open = 0;
 
     Servo claw;
     DcMotor intake;

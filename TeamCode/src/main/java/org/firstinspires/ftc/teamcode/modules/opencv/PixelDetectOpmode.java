@@ -7,7 +7,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp(name="Pixel Detect OpMode", group="Linear Opmode")
-public class PixelDetectTest extends LinearOpMode {
+public class PixelDetectOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -19,7 +19,7 @@ public class PixelDetectTest extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.
                 get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        PixelDetectByShape myPixelDetection = new PixelDetectByShape(camera, telemetry);
+        PixelDetection myPixelDetection = new PixelDetection(camera, telemetry);
 
         double pixelCenterX = 0.0;
         double pixelCenterY = 0.0;
@@ -34,16 +34,16 @@ public class PixelDetectTest extends LinearOpMode {
             int DisplayCenterX = 320;
             int DisplayCenterY = 240;
 
-            String directionX = "left";
-            String directionY = "up";
+            String directionX = "NAX";
+            String directionY = "NAY";
 
-            if (0 < pixelCenterX && pixelCenterX < DisplayCenterX) {
+            if (pixelCenterX > 0 && pixelCenterX < DisplayCenterX) {
                 directionX = "left";
             } else  {
                 directionX = "right";
             }
 
-            if (0 < pixelCenterY && pixelCenterY < DisplayCenterY) {
+            if (pixelCenterY > 0 && pixelCenterY < DisplayCenterY) {
                 directionY = "up";
             } else  {
                 directionY = "down";

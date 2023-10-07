@@ -2,12 +2,13 @@ package org.firstinspires.ftc.teamcode.modules.opencv;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp(name="Pixel Detect OpMode", group="Linear Opmode")
-public class PixelDetectShapeOpmode extends LinearOpMode {
+public class PixelDetectByShapeOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -19,7 +20,7 @@ public class PixelDetectShapeOpmode extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.
                 get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        PixelDetectByShape myPixelDetection = new PixelDetectByShape(camera, telemetry);
+        PixelDetection myPixelDetection = new PixelDetection(camera, telemetry);
 
         double pixelCenterX = 0.0;
         double pixelCenterY = 0.0;

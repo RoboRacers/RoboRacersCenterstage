@@ -18,6 +18,10 @@ public class Distance_Slow extends LinearOpMode {
     RobotCore robot;
     double driveSensitivity;
     double turnSensitivity;
+    Pose2d roPos;
+    double speed;
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -25,6 +29,10 @@ public class Distance_Slow extends LinearOpMode {
         robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
         driveSensitivity = 0.5;
         turnSensitivity = 0.5;
+        speed = 1;
+
+
+
         //runs once after init
 
         while (opModeInInit()) { //runs continusly after the once part
@@ -37,8 +45,9 @@ public class Distance_Slow extends LinearOpMode {
         while (!isStopRequested()) { //runs contiuosly after start is pressed until stop
         //also stuff goes here hehehehehehe
 
-            robot.drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y*driveSensitivity, -gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
-             
+            robot.drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y*driveSensitivity, -gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
+            roPos = robot.drive.getPoseEstimate(); //Get Position
+
 
 
 

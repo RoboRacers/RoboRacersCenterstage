@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 
 @TeleOp(name = "PID_Ball_Control", group = "16481-Centerstage")
@@ -16,7 +17,7 @@ public class PID_Ball_Control extends LinearOpMode {
     //define sensors and servo here
     //also variables
 
-    private DistanceSensor distance_sensor_range;
+    DistanceSensor distanceSensorRange;
 
     Servo balance_servo;
 
@@ -36,6 +37,7 @@ public class PID_Ball_Control extends LinearOpMode {
         //runs once after init
         error = 8;
 
+        distanceSensorRange = hardwareMap.get(DistanceSensor.class, "rangeSensor");
         balance_servo = hardwareMap.get(Servo.class, "balanceServo");
 
         while (opModeInInit()) { //runs continusly after the once part
@@ -44,6 +46,11 @@ public class PID_Ball_Control extends LinearOpMode {
         //runs when start is pressed
         //runs once between loops
     }
+
+        public void setDistanceSensorRange(){
+        double value = distanceSensorRange.getDistance(DistanceUnit.CM);
+    }
+
 
         public double PIDControl(double reference,double state) {
             double error = reference - state;

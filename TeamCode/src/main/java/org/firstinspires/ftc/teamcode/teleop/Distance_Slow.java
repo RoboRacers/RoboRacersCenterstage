@@ -79,4 +79,23 @@ public class Distance_Slow extends LinearOpMode {
 
         }
     }
+
+    public boolean inrange(Pose2d paraPos){
+        Pose2d backdropPos;
+        double distance;
+        double xdis;
+        double ydis;
+
+        //defining
+        backdropPos = new Pose2d(0,0);
+
+
+
+
+
+
+        return true;//fix sometime
+    }
+
+
 }

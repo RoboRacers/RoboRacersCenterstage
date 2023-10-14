@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.checkerframework.checker.index.qual.NonNegative;
 import org.firstinspires.ftc.teamcode.RobotCore;
 
 @TeleOp(name = "Distance_Slow", group = "16481-Centerstage")
@@ -19,9 +20,9 @@ public class Distance_Slow extends LinearOpMode {
     double driveSensitivity;
     double turnSensitivity;
     Pose2d roPos;
-    double speedchange;
     double minspeed;
     double maxspeed;
+    boolean change;
 
     public enum STATE_LOCAT{
         STATE_LOCAT_SAFEZONE,
@@ -36,9 +37,11 @@ public class Distance_Slow extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
+        minspeed = 0.1;
         maxspeed = 0.5;
         driveSensitivity = maxspeed;
         turnSensitivity = maxspeed;
+        change = false;
 
         //runs once after init
 
@@ -55,7 +58,23 @@ public class Distance_Slow extends LinearOpMode {
             robot.drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y*driveSensitivity, -gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
 
             roPos = robot.drive.getPoseEstimate(); //Get Position
+            change = inrange(roPos);
 
+
+            switch (InitLOCAT){
+                case STATE_LOCAT_SAFEZONE:
+                    if(change){
+                        InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
+                    }else{
+                        InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
+                    }
+                case STATE_LOCAT_DANGER:
+                    if(change != false){
+                        InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
+                    }else{
+                        InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
+                    }
+            }
 
 
             //scrapped; change to making the speed decrease based on the distance from backdrop
@@ -80,15 +99,11 @@ public class Distance_Slow extends LinearOpMode {
             }
              */
 
-
-
-
         }
     }
 
     public boolean inrange(Pose2d paraPos){
         double backdropPos;
-        double distance;
         double ydis;
 
         //defining

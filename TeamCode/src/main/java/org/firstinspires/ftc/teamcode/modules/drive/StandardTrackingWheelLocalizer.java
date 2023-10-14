@@ -16,7 +16,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.6889764;
     public static double GEAR_RATIO = 1;
-    public static double LATERAL_DISTANCE = 25.6;
+    public static double LATERAL_DISTANCE = 21.9;
     public static double FORWARD_OFFSET = -6;
     public static double X_MULTIPLIER = 1.0256410256;
     public static double Y_MULTIPLIER = 1.0322580645;

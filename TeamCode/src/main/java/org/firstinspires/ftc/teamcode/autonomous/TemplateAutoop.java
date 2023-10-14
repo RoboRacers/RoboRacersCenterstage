@@ -20,10 +20,7 @@ public class TemplateAutoop extends LinearOpMode {
 
         RobotCore robot = new RobotCore(hardwareMap);
 
-        Trajectories.init(robot, telemetry);
 
-        // Init
-        Trajectories.templateTraj.init();
 
         while(!isStopRequested() && !opModeIsActive()) {
 
@@ -34,7 +31,8 @@ public class TemplateAutoop extends LinearOpMode {
         if (isStopRequested()) return;
 
         while(opModeIsActive() && !finished){
-            Trajectories.templateTraj.run();
+
+            
             finished = true;
         }
 

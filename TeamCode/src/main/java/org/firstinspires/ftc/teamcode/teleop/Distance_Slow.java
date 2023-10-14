@@ -57,7 +57,8 @@ public class Distance_Slow extends LinearOpMode {
             roPos = robot.drive.getPoseEstimate(); //Get Position
 
 
-            //scrapped; make the speed decrease based on the distance from backdrop
+
+            //scrapped; change to making the speed decrease based on the distance from backdrop
             /*
             //code gradually decreases the speed
             if (roPos == roPos){ //this will change into if in range...somehow
@@ -86,20 +87,20 @@ public class Distance_Slow extends LinearOpMode {
     }
 
     public boolean inrange(Pose2d paraPos){
-        Pose2d backdropPos;
+        double backdropPos;
         double distance;
-        double xdis;
         double ydis;
 
         //defining
-        backdropPos = new Pose2d(0,0);
+        backdropPos = -36;
+        ydis = paraPos.getY();
 
-
-
-
-
-
-        return true;//fix sometime
+        if(ydis < backdropPos){
+            telemetry.addData("SLOW ZONE :D", "");
+            return true;
+        }else{
+            return false;
+        }
     }
 
 

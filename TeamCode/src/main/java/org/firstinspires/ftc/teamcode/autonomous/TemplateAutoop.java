@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -42,3 +43,4 @@ public class TemplateAutoop extends LinearOpMode {
     }
 
 }
+*/

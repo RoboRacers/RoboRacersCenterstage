@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode.autonomous;
 
 
@@ -44,7 +45,7 @@ public class Trajectories {
             traj1 = robot.drive.trajectoryBuilder(StartPose)
                     .splineTo(new Vector2d(20,20), Math.toRadians(90))
                     .addDisplacementMarker(() -> {
-                        robot.setArmPos(600, 0.5);
+                        //robot.setArmPos(600, 0.5);
                     })
                     .build();
         }

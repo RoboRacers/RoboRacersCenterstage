@@ -65,6 +65,7 @@ public class Distance_Slow extends LinearOpMode {
                 case STATE_LOCAT_SAFEZONE:
                     driveSensitivity = maxspeed;
                     turnSensitivity = maxspeed;
+                    telemetry.addData("Max Speed", "");
                     if(change){
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
                     }else{
@@ -73,6 +74,7 @@ public class Distance_Slow extends LinearOpMode {
                 case STATE_LOCAT_DANGER:
                     driveSensitivity = minspeed;
                     turnSensitivity = maxspeed;
+                    telemetry.addData("Min Speed" , "");
                     if(change != false){
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
                     }else{
@@ -102,7 +104,7 @@ public class Distance_Slow extends LinearOpMode {
                 }
             }
              */
-
+            telemetry.update();
         }
     }
 
@@ -115,12 +117,10 @@ public class Distance_Slow extends LinearOpMode {
         ydis = paraPos.getY();
 
         if(ydis < backdropPos){
-            telemetry.addData("SLOW ZONE :D", "");
             return true;
         }else{
             return false;
         }
     }
-
 
 }

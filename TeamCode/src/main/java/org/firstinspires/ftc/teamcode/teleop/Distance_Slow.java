@@ -23,7 +23,13 @@ public class Distance_Slow extends LinearOpMode {
     double minspeed;
     double maxspeed;
 
-
+    public enum STATE_LOCAT{
+        STATE_LOCAT_SAFEZONE,
+        STATE_LOCAT_DANGER
+    }
+    STATE_LOCAT currentState;
+    public STATE_LOCAT getState() {return currentState;}
+    public STATE_LOCAT InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
 
 
     @Override
@@ -33,7 +39,6 @@ public class Distance_Slow extends LinearOpMode {
         maxspeed = 0.5;
         driveSensitivity = maxspeed;
         turnSensitivity = maxspeed;
-
 
         //runs once after init
 

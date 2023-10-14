@@ -56,7 +56,7 @@ public class Distance_Slow extends LinearOpMode {
         while (!isStopRequested()) { //runs contiuosly after start is pressed until stop
         //also stuff goes here hehehehehehe
 
-            robot.drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y*driveSensitivity, -gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
+
 
             roPos = robot.drive.getPoseEstimate(); //Get Position
             change = inrange(roPos);
@@ -82,6 +82,8 @@ public class Distance_Slow extends LinearOpMode {
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
                     }
             }
+
+            robot.drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y*driveSensitivity, -gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
 
 
             //scrapped; change to making the speed decrease based on the distance from backdrop

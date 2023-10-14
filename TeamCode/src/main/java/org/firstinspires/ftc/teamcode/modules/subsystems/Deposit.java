@@ -7,15 +7,13 @@ import org.firstinspires.ftc.teamcode.modules.statemachines.DepositSM;
 
 public class Deposit extends Subsystem {
 
+    public DepositSM statemachine;
 
     public DcMotor leftMotor;
     public DcMotor rightMotor;
 
     double leftMotorPos;
     double rightMotorPos;
-
-    public DepositSM statemachine;
-
 
     public Deposit(HardwareMap hardwareMap) {
 

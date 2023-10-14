@@ -4,16 +4,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
+import org.firstinspires.ftc.teamcode.modules.statemachines.StateMachine;
 
 public class Intake extends Subsystem {
 
+    public IntakeSM statemachine;
 
     public DcMotor intakeMotor;
 
     double currentSpeed;
-
-    public IntakeSM statemachine;
-
 
     public Intake(HardwareMap hardwareMap) {
 
@@ -22,16 +21,14 @@ public class Intake extends Subsystem {
         statemachine = new IntakeSM(this);
     }
 
-    public void setLiftPosition(int pos) {
-        leftMotor.setTargetPosition(pos);
-        leftMotor.setTargetPosition(pos);
+    public void setIntakeSpeed(double speed) {
+        intakeMotor.setPower(currentSpeed);
     }
 
     @Override
     public void update() {
-        leftMotorPos = leftMotor.getCurrentPosition();
-        rightMotorPos = rightMotor.getCurrentPosition();
-
         statemachine.update();
     }
+
+
 }

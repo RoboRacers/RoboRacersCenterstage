@@ -18,7 +18,7 @@ public class TemplateAutoop extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        RobotCore robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
+        RobotCore robot = new RobotCore(hardwareMap);
 
         Trajectories.init(robot, telemetry);
 

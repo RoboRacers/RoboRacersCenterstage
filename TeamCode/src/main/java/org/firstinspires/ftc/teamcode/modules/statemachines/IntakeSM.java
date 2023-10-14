@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.modules.statemachines;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Deposit;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 
-public class IntakeSM {
+public class IntakeSM implements StateMachine {
 
     Intake intake;
+
+    STATE currentState;
 
     public enum STATE {
         FOLDED_IN,
@@ -18,8 +20,6 @@ public class IntakeSM {
         DETECTED_BACKDROP_DROP_PIXEL,
     }
 
-    STATE currentState;
-
     public IntakeSM(Intake intake) {
         this.intake = intake;
     }
@@ -31,7 +31,6 @@ public class IntakeSM {
     public void transition(IntakeSM.EVENT event) {
         switch (event) {
             case GAME_START:
-
                 currentState = IntakeSM.STATE.FOLDED_IN;
                 break;
             case DETECTED_PIXEL_TO_GRAB:

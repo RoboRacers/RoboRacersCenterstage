@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.modules.statemachines;
 
 import org.firstinspires.ftc.teamcode.modules.subsystems.Deposit;
 
-public class DepositSM {
+public class DepositSM implements StateMachine {
 
     Deposit deposit;
+
+    STATE currentState;
 
     public enum STATE {
         FOLDED_IN,
@@ -17,8 +19,6 @@ public class DepositSM {
         DETECTED_BACKDROP_DROP_PIXEL,
     }
 
-    STATE currentState;
-
     public DepositSM(Deposit deposit) {
         this.deposit = deposit;
     }
@@ -30,7 +30,7 @@ public class DepositSM {
     public void transition(DepositSM.EVENT event) {
         switch (event) {
             case GAME_START:
-
+                deposit.setLiftPosition(0);
                 currentState = DepositSM.STATE.FOLDED_IN;
                 break;
             case DETECTED_PIXEL_TO_GRAB:

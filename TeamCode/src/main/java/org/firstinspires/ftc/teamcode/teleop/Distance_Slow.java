@@ -63,12 +63,16 @@ public class Distance_Slow extends LinearOpMode {
 
             switch (InitLOCAT){
                 case STATE_LOCAT_SAFEZONE:
+                    driveSensitivity = maxspeed;
+                    turnSensitivity = maxspeed;
                     if(change){
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
                     }else{
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
                     }
                 case STATE_LOCAT_DANGER:
+                    driveSensitivity = minspeed;
+                    turnSensitivity = maxspeed;
                     if(change != false){
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
                     }else{

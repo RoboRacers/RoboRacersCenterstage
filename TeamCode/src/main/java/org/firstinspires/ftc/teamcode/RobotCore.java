@@ -19,7 +19,9 @@ import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 
 public class RobotCore {
 
-    // Declare the motors and servos
+    /*
+     * Declare the different subsystems of the robot here.
+     */
     public SampleMecanumDrive drive;
 
     public Deposit deposit;
@@ -30,7 +32,10 @@ public class RobotCore {
 
     public HardwareMap hardwareMap;
 
-    // Constructor, run during initialization
+    /**
+     * Constructor for the RobotCore class. Runs the setup for all subsystems.
+     * @param hardwareMap
+     */
     public RobotCore(HardwareMap hardwareMap){
 
         this.hardwareMap = hardwareMap;

@@ -28,6 +28,7 @@ public class Distance_Slow extends LinearOpMode {
         STATE_LOCAT_SAFEZONE,
         STATE_LOCAT_DANGER
     }
+
     STATE_LOCAT currentState;
     public STATE_LOCAT getState() {return currentState;}
     public STATE_LOCAT InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;

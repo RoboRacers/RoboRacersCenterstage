@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 
-@TeleOp(name = "Teleop For League Tournament", group = "16481-Power-Play")
+@TeleOp(name = "Teleop For League Tournament input", group = "16481-Power-Play")
 public class StateMachines_INTAKE extends LinearOpMode {
 
 

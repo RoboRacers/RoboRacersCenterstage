@@ -44,6 +44,10 @@ public class StateMachines_FINAL extends LinearOpMode {
     public STATE_DRONE InitDRONE = STATE_DRONE.DRONE_LOADED;
     public STATE_EVENT InitEVENT = STATE_EVENT.GAME_START;
 
+    STATE_EVENT currentState;
+    public StateMachines_FINAL.STATE_EVENT getState(){
+    return currentState;
+    }
 
     int previousTargetEncoderValue;
     int targetEncoderValue;
@@ -69,6 +73,13 @@ public class StateMachines_FINAL extends LinearOpMode {
 
     RobotCore robot;
 
+    public void transition(StateMachines_FINAL.STATE_EVENT event){
+        swtich (event) {
+            case GAME_START:
+                currentState = StateMachines_FINAL.
+        }
+    }
+
     @Override
     public void runOpMode(){
 
@@ -78,6 +89,10 @@ public class StateMachines_FINAL extends LinearOpMode {
         robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
 
         while (opModeIsActive()) {
+            if (gamepad1.a) {
+
+            }
+
             switch (InitINTAKE) {
                 case STATE_INTAKE_OFF:
                     telemetry.addData("Intake is OFF", "");

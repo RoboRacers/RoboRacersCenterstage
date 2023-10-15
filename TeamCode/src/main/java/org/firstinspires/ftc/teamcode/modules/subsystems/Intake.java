@@ -11,8 +11,6 @@ public class Intake extends Subsystem {
 
     public IntakeSM statemachine;
 
-    public DcMotor intakeMotor;
-
     public Servo claw;
     public Servo claw_flip;
     public Servo claw_extend_one;
@@ -28,20 +26,16 @@ public class Intake extends Subsystem {
         claw_extend_one = hardwareMap.get(Servo.class, "claw_extend_one");
         claw_extend_two = hardwareMap.get(Servo.class, "claw_extend_two");
 
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-
-
         statemachine = new IntakeSM(this);
     }
 
-    public void setIntakeSpeed(double speed) {
-        intakeMotor.setPower(currentSpeed);
-    }
+    public void setClawPos(int pos1) {claw.setPosition(pos1);}
+    public void setClawFlipPos(int pos2) {claw.setPosition(pos2);}
+    public void setClawExtendOnePos(int pos3) {claw.setPosition(pos3);}
+    public void setClawExtendTwoPos(int pos4) {claw.setPosition(pos4);}
 
     @Override
     public void update() {
         statemachine.update();
     }
-
-
 }

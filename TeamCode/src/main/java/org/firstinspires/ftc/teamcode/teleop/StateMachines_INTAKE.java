@@ -18,7 +18,7 @@ public class StateMachines_INTAKE extends LinearOpMode {
 
     STATE_INTAKE currentState;
 
-    public STATE_INTAKE getState() {
+    public StateMachines_INTAKE.STATE_INTAKE getState() {
         return currentState;
     }
 

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.modules.statemachines;
 
-import org.firstinspires.ftc.teamcode.modules.subsystems.Deposit;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 
-public class DepositSM implements StateMachine {
+public class SlidesSM implements StateMachine {
 
-    Deposit deposit;
+    Slides slides;
 
     STATE currentState;
 
@@ -19,25 +19,25 @@ public class DepositSM implements StateMachine {
         DETECTED_BACKDROP_DROP_PIXEL,
     }
 
-    public DepositSM(Deposit deposit) {
-        this.deposit = deposit;
+    public SlidesSM(Slides slides) {
+        this.slides = slides;
     }
 
-    public DepositSM.STATE getState() {
+    public SlidesSM.STATE getState() {
         return currentState;
     }
 
-    public void transition(DepositSM.EVENT event) {
+    public void transition(SlidesSM.EVENT event) {
         switch (event) {
             case GAME_START:
-                deposit.setLiftPosition(0);
-                currentState = DepositSM.STATE.FOLDED_IN;
+                slides.setLiftPosition(0);
+                currentState = SlidesSM.STATE.FOLDED_IN;
                 break;
             case DETECTED_PIXEL_TO_GRAB:
-                currentState = DepositSM.STATE.REACHED_OUT;
+                currentState = SlidesSM.STATE.REACHED_OUT;
                 break;
             case DETECTED_BACKDROP_DROP_PIXEL:
-                currentState = DepositSM.STATE.REACHED_OUT;
+                currentState = SlidesSM.STATE.REACHED_OUT;
                 break;
         }
     }

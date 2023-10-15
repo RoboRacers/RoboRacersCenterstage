@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules.statemachines;
 
-import org.firstinspires.ftc.teamcode.modules.subsystems.Deposit;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 
 public class IntakeSM implements StateMachine {

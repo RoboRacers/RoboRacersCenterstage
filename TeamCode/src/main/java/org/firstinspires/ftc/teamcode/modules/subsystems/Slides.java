@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.modules.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.modules.statemachines.DepositSM;
+import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 
-public class Deposit extends Subsystem {
+public class Slides extends Subsystem {
 
-    public DepositSM statemachine;
+    public SlidesSM statemachine;
 
     public DcMotor leftMotor;
     public DcMotor rightMotor;
@@ -15,12 +15,12 @@ public class Deposit extends Subsystem {
     double leftMotorPos;
     double rightMotorPos;
 
-    public Deposit(HardwareMap hardwareMap) {
+    public Slides(HardwareMap hardwareMap) {
 
         leftMotor = hardwareMap.get(DcMotor.class, "leftLift");
         rightMotor = hardwareMap.get(DcMotor.class, "rightLight");
 
-        statemachine = new DepositSM(this);
+        statemachine = new SlidesSM(this);
     }
 
     public void setLiftPosition(int pos) {

@@ -12,6 +12,7 @@ public class Launcher extends Subsystem  {
     Servo actuationServo;
 
     public Launcher(HardwareMap hardwareMap) {
+        actuationServo = hardwareMap.get(Servo.class, "actuationServo");
         statemachine = new LauncherSM(this);
     }
 

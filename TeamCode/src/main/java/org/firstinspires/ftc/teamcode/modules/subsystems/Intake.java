@@ -30,6 +30,7 @@ public class Intake extends Subsystem {
 
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
 
+
         statemachine = new IntakeSM(this);
     }
 

@@ -30,9 +30,10 @@ public class Intake extends Subsystem {
     }
 
     public void setClawPos(int pos1) {claw.setPosition(pos1);}
-    public void setClawFlipPos(int pos2) {claw.setPosition(pos2);}
-    public void setClawExtendOnePos(int pos3) {claw.setPosition(pos3);}
-    public void setClawExtendTwoPos(int pos4) {claw.setPosition(pos4);}
+    public void setClawFlipPos(int pos2) {claw_flip.setPosition(pos2);}
+    public void setClawExtendOnePos(int pos3) {claw_extend_one.setPosition(pos3);}
+    public void setClawExtendTwoPos(int pos4) {claw_extend_two.setPosition(pos4);}
+    public void setClawExtendTwoDirection(Servo.Direction direction){claw_extend_two.setDirection(direction);}
 
     @Override
     public void update() {

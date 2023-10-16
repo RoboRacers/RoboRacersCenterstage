@@ -41,9 +41,10 @@ public class LauncherSM implements StateMachine {
     public void update() {
         switch (currentState) {
             case DRONE_LAUNCHED:
-                launcher.actuationServo.setPower(500); // not done and not right thing;
+                launcher.setServoSpeed(500); // not done and not right thing;
                 break;
             case DRONE_LAUNCHER_LOADED:
+                launcher.setServoSpeed(0);
                 break;
         }
     }

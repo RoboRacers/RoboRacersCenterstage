@@ -12,6 +12,8 @@ public class IntakeSM implements StateMachine {
     public enum STATE {
         FOLDED_IN,
         REACHED_OUT,
+        CLAW_OPEN,
+        CLAW_CLOSE
     }
 
     public enum EVENT {
@@ -41,12 +43,13 @@ public class IntakeSM implements StateMachine {
                 break;
         }
     }
-
+/* WHERE DO WE ADD THE EVENT SO THAT WHEN WE CLICK A BUTTON IT SWTICHES EVENTS? IN LAUNCHER.JAVA OR Launcher.SM.java??????*/
     public void update() {
         switch (currentState) {
             case REACHED_OUT:
                 break;
             case FOLDED_IN:
+
                 break;
         }
     }

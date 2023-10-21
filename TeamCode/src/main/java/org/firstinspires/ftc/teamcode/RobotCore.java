@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.modules.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Deposit;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
@@ -20,7 +21,7 @@ public class RobotCore {
     /*
      * Declare the different subsystems of the robot here.
      */
-    public SampleMecanumDrive drive;
+    public MecanumDrive drive;
 
     public Deposit deposit;
 
@@ -39,9 +40,7 @@ public class RobotCore {
         this.hardwareMap = hardwareMap;
 
         /* Initialize Subsystems */
-        drive = new SampleMecanumDrive(hardwareMap);
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
 
         deposit = new Deposit(hardwareMap);
 

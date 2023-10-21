@@ -1,6 +1,4 @@
 package org.firstinspires.ftc.teamcode.test;
-import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.KalmanFilter;
-import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -28,9 +26,6 @@ public class Rev2mSensorTest extends LinearOpMode {
 
         rev2mDistanceSensor = hardwareMap.get(Rev2mDistanceSensor.class, "rev2m1");
 
-        KalmanFilter kalmanFilter = new KalmanFilter(0.7, 2,3 );
-        LowPassFilter lowPassFilter = new LowPassFilter(0.5);
-
 
         while (opModeInInit()) {
         }
@@ -43,14 +38,10 @@ public class Rev2mSensorTest extends LinearOpMode {
 
 
             range = rev2mDistanceSensor.getDistance(DistanceUnit.INCH);
-            kalmanRange = kalmanFilter.estimate(range);
-            lowPassRange = lowPassFilter.estimate(range);
 
             // Telemetry
             telemetry.addData("Rev2m Testing", "");
             telemetry.addData("Raw Sensor Range (Inches)", range);
-            telemetry.addData("Kalman Sensor Range (Inches)", kalmanRange);
-            telemetry.addData("Low Pass Sensor Range (Inches)", lowPassRange);
             telemetry.update();
 
         }

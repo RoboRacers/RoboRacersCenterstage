@@ -30,29 +30,27 @@ intake.statemachine.transition(IntakeSM.EVENT.GAME_START);
         while (opModeIsActive()){
             if (gamepad2.dpad_up){
                 launcher.statemachine.transition(LauncherSM.EVENT.DRONE_LAUNCH_BUTTON_PRESSED);
+                telemetry.addData("Drone is being launched", "");
             }
 
             else if (gamepad2.a){
-
+                intake.statemachine.transition(IntakeSM.EVENT.EXTEND_TO_PIXEL);
+                telemetry.addData("Intake Extended", "");
             }
-            else if (gamepad2.a){
-
+            else if (gamepad2.b){
+                intake.statemachine.transition(IntakeSM.EVENT.RETRACT_WITH_PIXEL);
+                telemetry.addData("Intake Retracted", "");
             }
-            else if (gamepad2.a){
-
+            else if (gamepad2.right_bumper){
+                intake.statemachine.transition(IntakeSM.EVENT.GRABBING_PIXEL);
+                telemetry.addData("Claw Closed", "");
             }
-            else if (gamepad2.a){
-
+            else if (gamepad2.left_bumper){
+                intake.statemachine.transition(IntakeSM.EVENT.OPEN_CLAW);
+                telemetry.addData("Claw Opened", "");
             }
-            else if (gamepad2.a){
-
-            }
-            else if (gamepad2.a){
-
-            }
-
         }
-
+telemetry.update();
     }
 }
             // Telemetry

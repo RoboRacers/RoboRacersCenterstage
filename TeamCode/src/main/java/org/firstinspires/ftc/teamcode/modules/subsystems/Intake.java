@@ -35,14 +35,20 @@ public class Intake extends Subsystem {
         statemachine = new IntakeSM(this);
     }
 
-    public void setClawPos(int pos1) {claw.setPosition(pos1);}
-    public void setClawFlipPos(int pos2) {claw_flip.setPosition(pos2);}
-    public void setClawExtendOnePos(int pos3) {claw_extend_one.setPosition(pos3);}
-    //public void setClawExtendTwoPos(int pos4) {claw_extend_two.setPosition(pos4);}
+    public void setClawPos(double pos1) {claw.setPosition(pos1);}
+
+    public void setIntakePos(double pos2, double pos3, double speed1, int motorPos, double speed2, int motorPos2, DcMotorSimple.Direction direction) {
+        claw_flip.setPosition(pos2);
+        claw_extend_one.setPosition(pos3);
+        leftMotor.setPower(speed1);
+        rightMotor.setTargetPosition(motorPos);
+        rightMotor.setPower(speed2);
+        leftMotor.setTargetPosition(motorPos2);
+        leftMotor.setDirection(direction);
+    }
+
+     //public void setClawExtendTwoPos(int pos4) {claw_extend_two.setPosition(pos4);}
     //public void setClawExtendTwoDirection(Servo.Direction direction){claw_extend_two.setDirection(direction);}
-    public void setLeftMotorSpeed(double speed1) {leftMotor.setPower(speed1);}
-    public void setRightMotorSpeed(double speed2) {rightMotor.setPower(speed2);}
-    public void setLeftMotorDirection(DcMotorSimple.Direction direction) {leftMotor.setDirection(direction);}
 
     @Override
     public void update() {

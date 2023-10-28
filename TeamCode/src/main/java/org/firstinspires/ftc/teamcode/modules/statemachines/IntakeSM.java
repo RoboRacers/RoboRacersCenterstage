@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules.statemachines;
 
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.modules.subsystems.Deposit;
@@ -63,22 +64,16 @@ double retract = 0;
     public void update() {
         switch (currentState) {
             case REACHED_OUT:
-intake.claw_flip.setPosition(out);
-intake.claw_extend_one.setPosition(extend);
-//intake.claw_extend_two.setPosition(extend);
-             //   intake.claw_extend_two.setDirection(Servo.Direction.REVERSE);
-                break;
+                intake.setIntakePos(out, extend, 500, 5, 500, 5, DcMotorSimple.Direction.REVERSE);
+               break;
             case FOLDED_IN:
-                intake.claw_flip.setPosition(in);
-                intake.claw_extend_one.setPosition(retract);
-                //intake.claw_extend_two.setPosition(retract);
-                //intake.claw_extend_two.setDirection(Servo.Direction.REVERSE);
+                intake.setIntakePos(in, retract, 500, 0, 500, 0, DcMotorSimple.Direction.REVERSE);
                 break;
             case CLAW_OPEN:
-                intake.claw.setPosition(open);
+                intake.setClawPos(open);
                 break;
             case CLAW_CLOSE:
-                intake.claw.setPosition(closed);
+                intake.setClawPos(closed);
                 break;
         }
     }

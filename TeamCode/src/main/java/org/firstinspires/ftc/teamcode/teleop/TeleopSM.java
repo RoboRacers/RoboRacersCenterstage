@@ -21,32 +21,37 @@ public class TeleopSM extends LinearOpMode {
 Launcher launcher;
 Intake intake;
 
+
+
     @Override
     public void runOpMode(){
+
+        RobotCore robot = new RobotCore(hardwareMap);
+
         while (opModeInInit()){
 launcher.statemachine.transition(LauncherSM.EVENT.GAME_START);
 intake.statemachine.transition(IntakeSM.EVENT.GAME_START);
         }
         while (opModeIsActive()){
             if (gamepad2.dpad_up){
-                launcher.statemachine.transition(LauncherSM.EVENT.DRONE_LAUNCH_BUTTON_PRESSED);
+                robot.launcher.statemachine.transition(LauncherSM.EVENT.DRONE_LAUNCH_BUTTON_PRESSED);
                 telemetry.addData("Drone is being launched", "");
             }
 
             else if (gamepad2.a){
-                intake.statemachine.transition(IntakeSM.EVENT.EXTEND_TO_PIXEL);
+                robot.intake.statemachine.transition(IntakeSM.EVENT.EXTEND_TO_PIXEL);
                 telemetry.addData("Intake Extended", "");
             }
             else if (gamepad2.b){
-                intake.statemachine.transition(IntakeSM.EVENT.RETRACT_WITH_PIXEL);
+                robot.intake.statemachine.transition(IntakeSM.EVENT.RETRACT_WITH_PIXEL);
                 telemetry.addData("Intake Retracted", "");
             }
             else if (gamepad2.right_bumper){
-                intake.statemachine.transition(IntakeSM.EVENT.GRABBING_PIXEL);
+                robot.intake.statemachine.transition(IntakeSM.EVENT.GRABBING_PIXEL);
                 telemetry.addData("Claw Closed", "");
             }
             else if (gamepad2.left_bumper){
-                intake.statemachine.transition(IntakeSM.EVENT.OPEN_CLAW);
+                robot.intake.statemachine.transition(IntakeSM.EVENT.OPEN_CLAW);
                 telemetry.addData("Claw Opened", "");
             }
         }

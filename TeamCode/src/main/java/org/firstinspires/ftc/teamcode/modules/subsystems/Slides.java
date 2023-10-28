@@ -16,6 +16,8 @@ public class Slides extends Subsystem {
     double leftMotorPos;
     double rightMotorPos;
 
+    double averagePos;
+
     //PID STUFF
     double integralSum = 0;
     double kp = 0;
@@ -53,6 +55,19 @@ public class Slides extends Subsystem {
 
         double output = (error * kp) + (derivative * kd) + (integralSum * ki);
         return output;
+    }
+
+    public double motorPos(){
+        leftMotorPos = leftMotor.getCurrentPosition();
+        rightMotorPos = rightMotor.getCurrentPosition();
+        averagePos = (leftMotorPos + rightMotorPos)/2;
+        return averagePos;
+    }
+
+    public void PIDLift(int location){
+        while((int)(motorPos()) != location){
+            setLiftPosition((int)(PIDControl(location, motorPos())));
+        }
     }
 
     @Override

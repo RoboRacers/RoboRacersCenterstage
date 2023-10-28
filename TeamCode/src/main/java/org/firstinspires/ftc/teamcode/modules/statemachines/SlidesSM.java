@@ -45,8 +45,10 @@ public class SlidesSM implements StateMachine {
     public void update() {
         switch (currentState) {
             case FOLDED_IN:
+                slides.PIDLift(0);
                 break;
             case REACHED_OUT:
+                slides.PIDLift(0);//replace 0 with maxium value
                 break;
         }
     }

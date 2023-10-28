@@ -16,6 +16,8 @@ public class Slides extends Subsystem {
     double leftMotorPos;
     double rightMotorPos;
 
+    double location;
+
     double averagePos;
 
     //PID STUFF
@@ -23,10 +25,7 @@ public class Slides extends Subsystem {
     double kp = 0;
     double ki = 0;
     double kd = 0;
-    double error;
     private double lasterror = 0;
-    double reference; //the point you want to go to
-    double state;
 
     ElapsedTime timer = new ElapsedTime();
 
@@ -65,18 +64,16 @@ public class Slides extends Subsystem {
     }
 
     public void PIDLift(int location){
-        while((int)(motorPos()) != location){
-            setLiftPosition((int)(PIDControl(location, motorPos())));
-        }
+        this.location = location;
     }
 
     @Override
     public void update() {
-        leftMotorPos = leftMotor.getCurrentPosition();
-        rightMotorPos = rightMotor.getCurrentPosition();
-
-        
-
         statemachine.update();
+
+        if ((int)(motorPos()) != location){
+            setLiftPosition((int)(PIDControl(location, motorPos())));
+        }
+
     }
 }

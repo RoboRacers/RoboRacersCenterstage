@@ -20,8 +20,7 @@ public class Distance_Slow extends LinearOpMode {
     double driveSensitivity;
     double turnSensitivity;
     Pose2d roPos;
-    double minspeed;
-    double maxspeed;
+    double speed;
     boolean change;
 
     public enum STATE_LOCAT{
@@ -43,10 +42,9 @@ public class Distance_Slow extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
-        minspeed = 0.1;
-        maxspeed = 0.5;
-        driveSensitivity = maxspeed;
-        turnSensitivity = maxspeed;
+        speed = 0.5;
+        driveSensitivity = speed;
+        turnSensitivity = speed;
         change = false;
 
         //runs once after init
@@ -64,31 +62,30 @@ public class Distance_Slow extends LinearOpMode {
 
 
             roPos = robot.drive.getPoseEstimate(); //Get Position
-            change = inrange(roPos);
 
 
             switch (InitLOCAT){
                 case STATE_LOCAT_SAFEZONE:
-                    driveSensitivity = maxspeed;
-                    turnSensitivity = maxspeed;
+                    driveSensitivity = speed;
+                    turnSensitivity = speed;
                     telemetry.addData("Max Speed", "");
                     if(change){
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
-                        speedchange(minspeed);
+                        speedchange(speed);
                     }else{
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
-                        speedchange(maxspeed);
+                        speedchange(speed);
                     }
                 case STATE_LOCAT_DANGER:
-                    driveSensitivity = minspeed;
-                    turnSensitivity = maxspeed;
+                    driveSensitivity = speed;
+                    turnSensitivity = speed;
                     telemetry.addData("Min Speed" , "");
                     if(change != false){
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
-                        speedchange(maxspeed);
+                        speedchange(speed);
                     }else{
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
-                        speedchange(minspeed);
+                        speedchange(speed);
                     }
             }
 
@@ -120,18 +117,18 @@ public class Distance_Slow extends LinearOpMode {
         }
     }
 
-    public boolean inrange(Pose2d paraPos){
+    public void inrange(Pose2d paraPos){
         double backdropPos;
-        double ydis;
+        double ycord;
+        double dist;
 
         //defining
-        backdropPos = -36;
-        ydis = paraPos.getY();
-
-        if(ydis < backdropPos){
-            return true;
-        }else{
-            return false;
+        backdropPos = 68;
+        ycord = paraPos.getX();
+        double minslow = 36;
+        dist = backdropPos-ycord;
+        if (dist < 32){
+            
         }
     }
 

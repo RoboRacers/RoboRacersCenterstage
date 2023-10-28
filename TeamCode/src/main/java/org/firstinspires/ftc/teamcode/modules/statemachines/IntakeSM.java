@@ -65,14 +65,14 @@ double retract = 0;
             case REACHED_OUT:
 intake.claw_flip.setPosition(out);
 intake.claw_extend_one.setPosition(extend);
-intake.claw_extend_two.setPosition(extend);
-                intake.claw_extend_two.setDirection(Servo.Direction.REVERSE);
+//intake.claw_extend_two.setPosition(extend);
+             //   intake.claw_extend_two.setDirection(Servo.Direction.REVERSE);
                 break;
             case FOLDED_IN:
                 intake.claw_flip.setPosition(in);
                 intake.claw_extend_one.setPosition(retract);
-                intake.claw_extend_two.setPosition(retract);
-                intake.claw_extend_two.setDirection(Servo.Direction.REVERSE);
+                //intake.claw_extend_two.setPosition(retract);
+                //intake.claw_extend_two.setDirection(Servo.Direction.REVERSE);
                 break;
             case CLAW_OPEN:
                 intake.claw.setPosition(open);

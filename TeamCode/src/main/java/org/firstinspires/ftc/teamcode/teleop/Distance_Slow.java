@@ -33,6 +33,11 @@ public class Distance_Slow extends LinearOpMode {
     public STATE_LOCAT getState() {return currentState;}
     public STATE_LOCAT InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
 
+    public void speedchange(double speedwant){
+        driveSensitivity = speedwant;
+        turnSensitivity = speedwant;
+    }
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -69,8 +74,10 @@ public class Distance_Slow extends LinearOpMode {
                     telemetry.addData("Max Speed", "");
                     if(change){
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
+                        speedchange(minspeed);
                     }else{
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
+                        speedchange(maxspeed);
                     }
                 case STATE_LOCAT_DANGER:
                     driveSensitivity = minspeed;
@@ -78,8 +85,10 @@ public class Distance_Slow extends LinearOpMode {
                     telemetry.addData("Min Speed" , "");
                     if(change != false){
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
+                        speedchange(maxspeed);
                     }else{
                         InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
+                        speedchange(minspeed);
                     }
             }
 

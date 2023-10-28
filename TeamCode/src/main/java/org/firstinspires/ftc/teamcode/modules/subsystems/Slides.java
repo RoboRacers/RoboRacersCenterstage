@@ -40,7 +40,7 @@ public class Slides extends Subsystem {
 
     public void setLiftPosition(int pos) {
         leftMotor.setTargetPosition(pos);
-        leftMotor.setTargetPosition(pos);
+        rightMotor.setTargetPosition(pos);
     }
 
     public double PIDControl(double reference,double state) {
@@ -59,6 +59,7 @@ public class Slides extends Subsystem {
     public void update() {
         leftMotorPos = leftMotor.getCurrentPosition();
         rightMotorPos = rightMotor.getCurrentPosition();
+
         
 
         statemachine.update();

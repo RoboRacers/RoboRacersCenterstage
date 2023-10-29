@@ -64,10 +64,12 @@ double retract = 0;
     public void update() {
         switch (currentState) {
             case REACHED_OUT:
-                intake.setIntakePos(out, extend, 500, 5, 500, 5, DcMotorSimple.Direction.REVERSE);
+                intake.setIntake(true);
+               // intake.setIntakePos(out, extend, 500, 5, 500, 5, DcMotorSimple.Direction.REVERSE);
                break;
             case FOLDED_IN:
-                intake.setIntakePos(in, retract, 500, 0, 500, 0, DcMotorSimple.Direction.REVERSE);
+                intake.setIntake(false);
+                //intake.setIntakePos(in, retract, 500, 0, 500, 0, DcMotorSimple.Direction.REVERSE);
                 break;
             case CLAW_OPEN:
                 intake.setClawPos(open);

@@ -9,7 +9,12 @@ import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 import org.firstinspires.ftc.teamcode.modules.statemachines.StateMachine;
 
 public class Intake extends Subsystem {
-
+    double closed = 0.25;
+    double open = 0;
+    double out = 0.5;
+    double in = 0;
+    double extend = 0.25;
+    double retract = 0;
     public IntakeSM statemachine;
 
     public Servo claw;
@@ -37,6 +42,7 @@ public class Intake extends Subsystem {
 
     public void setClawPos(double pos1) {claw.setPosition(pos1);}
 
+    /*
     public void setIntakePos(double pos2, double pos3, double speed1, int motorPos, double speed2, int motorPos2, DcMotorSimple.Direction direction) {
         claw_flip.setPosition(pos2);
         claw_extend_one.setPosition(pos3);
@@ -46,7 +52,28 @@ public class Intake extends Subsystem {
         leftMotor.setTargetPosition(motorPos2);
         leftMotor.setDirection(direction);
     }
+    */
 
+    public void setIntake(boolean intakeExtend){
+        if (intakeExtend=true){
+            claw_flip.setPosition(out);
+            claw_extend_one.setPosition(extend);
+            leftMotor.setPower(500);
+            rightMotor.setTargetPosition(5);
+            rightMotor.setPower(500);
+            leftMotor.setTargetPosition(5);
+            leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        if (intakeExtend=false){
+            claw_flip.setPosition(in);
+            claw_extend_one.setPosition(retract);
+            leftMotor.setPower(500);
+            rightMotor.setTargetPosition(0);
+            rightMotor.setPower(500);
+            leftMotor.setTargetPosition(0);
+            leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+    }
      //public void setClawExtendTwoPos(int pos4) {claw_extend_two.setPosition(pos4);}
     //public void setClawExtendTwoDirection(Servo.Direction direction){claw_extend_two.setDirection(direction);}
 

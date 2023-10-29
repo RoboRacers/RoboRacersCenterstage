@@ -67,15 +67,18 @@ public class TemplateAutoop extends LinearOpMode {
                         // Only that this action uses a Lambda expression to reduce complexity
                         (telemetryPacket) -> {
                             telemetry.addLine("Action!");
-                            return false; // Returning false causes the action to run again, returning false causes it to cease
+                            return false; // Returning true causes the action to run again, returning false causes it to cease
                         },
                         new ParallelAction( // several actions being run in parallel
-                                TrajectoryAction2,
-                                (telemetryPacket) -> {
+                                TrajectoryAction2, // Run second trajectory
+                                (telemetryPacket) -> { // Run some action
                                     motor1.setPower(1);
                                     return false;
                                 }
-                        )
+                        ),
+                        drive.actionBuilder(new Pose2d(15,10,Math.toRadians(125))) // Another way of running a trajectory (not recommended because trajectories take time to build and will slow down your code, always try to build them beforehand)
+                                .splineTo(new Vector2d(25, 15), 0)
+                                .build()
 
                 )
         );

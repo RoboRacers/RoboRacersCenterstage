@@ -56,7 +56,7 @@ public class TemplateAutoop extends LinearOpMode {
                 new SequentialAction(
                         TrajectoryAction1, // Example of a drive action
 
-                        // This actions and the following action do the same thing
+                        // This action and the following action do the same thing
                         new Action() {
                             @Override
                             public boolean run(@NonNull TelemetryPacket telemetryPacket) {

@@ -106,67 +106,7 @@ public final class MecanumDrive {
 
     public final VoltageSensor voltageSensor;
 
-    public final IMU imu = new IMU() {
-        @Override
-        public boolean initialize(Parameters parameters) {
-            return false;
-        }
-
-        @Override
-        public void resetYaw() {
-
-        }
-
-        @Override
-        public YawPitchRollAngles getRobotYawPitchRollAngles() {
-            return null;
-        }
-
-        @Override
-        public Orientation getRobotOrientation(AxesReference reference, AxesOrder order, AngleUnit angleUnit) {
-            return null;
-        }
-
-        @Override
-        public Quaternion getRobotOrientationAsQuaternion() {
-            return null;
-        }
-
-        @Override
-        public AngularVelocity getRobotAngularVelocity(AngleUnit angleUnit) {
-            return null;
-        }
-
-        @Override
-        public Manufacturer getManufacturer() {
-            return null;
-        }
-
-        @Override
-        public String getDeviceName() {
-            return null;
-        }
-
-        @Override
-        public String getConnectionInfo() {
-            return null;
-        }
-
-        @Override
-        public int getVersion() {
-            return 0;
-        }
-
-        @Override
-        public void resetDeviceConfigurationForOpMode() {
-
-        }
-
-        @Override
-        public void close() {
-
-        }
-    };
+    public final IMU imu;
 
     public final Localizer localizer;
     public Pose2d pose;
@@ -255,14 +195,13 @@ public final class MecanumDrive {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        /*
+
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
         imu.initialize(parameters);
-
-         */
+        
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 

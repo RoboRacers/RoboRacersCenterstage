@@ -86,4 +86,9 @@ public class Particle {
                 ", id=" + id +
                 '}';
     }
+
+    public Particle clone() {
+        return this;
+    }
 }
+

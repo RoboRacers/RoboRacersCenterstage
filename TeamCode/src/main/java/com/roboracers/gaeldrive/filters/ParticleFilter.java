@@ -1,6 +1,8 @@
 package com.roboracers.gaeldrive.filters;
 
 
+import android.provider.Settings;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.particles.Particle;
 import com.roboracers.gaeldrive.particles.Particle2d;
@@ -179,6 +181,11 @@ public class ParticleFilter {
         int numParticles = Particles.size();
         ArrayList<Particle> newParticles = new ArrayList<>(numParticles);
 
+        System.out.println("New particles (Should be empty:)");
+        for (Particle p: newParticles) {
+            System.out.println(p);
+        }
+
         double totalWeight = 0.0;
         for (Particle particle : Particles) {
             totalWeight += particle.getWeight(); // Replace with your weight retrieval logic
@@ -198,19 +205,37 @@ public class ParticleFilter {
             Particle particle = Particles.get(index);
             particle.setWeight(1.0);
 
-            newParticles.add(
-                    new Particle(
-                            StatsUtils.addGaussianNoise(
-                                    particle.getState(),
-                                    resamplingDeviances
-                            ),
-                            particle.getWeight(),
-                            particle.getId()
-                    )
+            RealVector state = particle.getState();
+            double weight = particle.getWeight();
+            int id = particle.getId();
 
+            Particle newParticle = new Particle(
+                                        StatsUtils.addGaussianNoise(
+                                                state,
+                                                resamplingDeviances
+                                        ),
+                                        weight,
+                                        id
+                                    );
+
+            System.out.println("New Particle #" + i + newParticle);
+            newParticles.add(newParticle.clone()
             );
+            System.out.println("New Particle #" + i + newParticles.get(i));
 
             position += stepSize;
+
+            if (i == numParticles -1) {
+                System.out.println("End of resmapling");
+                for (Particle p: newParticles) {
+                    System.out.println(p);
+                }
+            }
+        }
+
+        System.out.println("New particles After (Should be full)");
+        for (Particle p: newParticles) {
+            System.out.println(p);
         }
 
         Particles = newParticles;

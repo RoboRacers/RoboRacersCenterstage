@@ -2,6 +2,7 @@ package com.roboracers.gaeldrive.filters;
 
 
 import android.provider.Settings;
+import android.provider.Telephony;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.particles.Particle;
@@ -10,6 +11,7 @@ import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.tests.TestConstants;
 import com.roboracers.gaeldrive.utils.MismatchedLengthException;
 import com.roboracers.gaeldrive.utils.StatsUtils;
+import com.roboracers.gaeldrive.utils.VectorUtils;
 
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.linear.ArrayRealVector;
@@ -30,7 +32,6 @@ public class ParticleFilter {
      * Hashmap that stores all the particles in Integer/Particle pairs.
      */
     ArrayList<Particle> Particles = new ArrayList<>();
-
     private Random random = new Random();
     int Dimensions;
 
@@ -177,16 +178,14 @@ public class ParticleFilter {
     /**
      * Systematic resampling for the particle filter.
      */
-    public void resampleParticles(double[] resamplingDeviances) throws Exception {
+    public void awresampleParticles(double[] resamplingDeviances) throws Exception {
         int numParticles = Particles.size();
         ArrayList<Particle> newParticles = new ArrayList<>(numParticles);
+        newParticles.clear();
 
-        System.out.println("New particles (Should be empty:)");
-        for (Particle p: newParticles) {
-            System.out.println(p);
-        }
 
         double totalWeight = 0.0;
+
         for (Particle particle : Particles) {
             totalWeight += particle.getWeight(); // Replace with your weight retrieval logic
         }
@@ -196,6 +195,7 @@ public class ParticleFilter {
 
         int index = 0;
         double cumulativeWeight = Particles.get(0).getWeight();
+
         for (int i = 0; i < numParticles; i++) {
             while (position > cumulativeWeight && index < numParticles - 1) {
                 index++;
@@ -203,37 +203,28 @@ public class ParticleFilter {
             }
 
             Particle particle = Particles.get(index);
-            particle.setWeight(1.0);
 
-            RealVector state = particle.getState();
-            double weight = particle.getWeight();
-            int id = particle.getId();
+            Particle particle1 = new Particle();
 
-            Particle newParticle = new Particle(
-                                        StatsUtils.addGaussianNoise(
-                                                state,
-                                                resamplingDeviances
-                                        ),
-                                        weight,
-                                        id
-                                    );
-
-            System.out.println("New Particle #" + i + newParticle);
-            newParticles.add(newParticle.clone()
+            particle1.setState(
+                    StatsUtils.addGaussianNoise(
+                            particle.getState(),
+                            resamplingDeviances
+                    )
             );
-            System.out.println("New Particle #" + i + newParticles.get(i));
+            particle1.setWeight(1.0);
 
+
+
+            System.out.println("New Particle #" + i + particle1);
+            newParticles.add(particle1);
+            //System.out.println("New Particle #" + i + newParticles.get(i));
             position += stepSize;
 
-            if (i == numParticles -1) {
-                System.out.println("End of resmapling");
-                for (Particle p: newParticles) {
-                    System.out.println(p);
-                }
-            }
         }
 
         System.out.println("New particles After (Should be full)");
+
         for (Particle p: newParticles) {
             System.out.println(p);
         }

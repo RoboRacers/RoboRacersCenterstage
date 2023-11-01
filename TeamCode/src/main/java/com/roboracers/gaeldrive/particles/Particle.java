@@ -88,7 +88,11 @@ public class Particle {
     }
 
     public Particle clone() {
-        return this;
+        return new Particle(
+                this.getState(),
+                this.getWeight(),
+                this.getId()
+        );
     }
 }
 

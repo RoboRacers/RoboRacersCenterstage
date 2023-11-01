@@ -21,31 +21,15 @@ public class Distance_Slow extends LinearOpMode {
     double turnSensitivity;
     Pose2d roPos;
     double speed;
-    boolean change;
-
-    public enum STATE_LOCAT{
-        STATE_LOCAT_SAFEZONE,
-        STATE_LOCAT_DANGER
-    }
-
-    STATE_LOCAT currentState;
-    public STATE_LOCAT getState() {return currentState;}
-    public STATE_LOCAT InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
-
-    public void speedchange(double speedwant){
-        driveSensitivity = speedwant;
-        turnSensitivity = speedwant;
-    }
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         robot = new RobotCore(hardwareMap, gamepad1, gamepad2);
-        speed = 0.5;
+        speed = 0.8;
         driveSensitivity = speed;
         turnSensitivity = speed;
-        change = false;
 
         //runs once after init
 
@@ -62,35 +46,8 @@ public class Distance_Slow extends LinearOpMode {
 
 
             roPos = robot.drive.getPoseEstimate(); //Get Position
-
-
-            switch (InitLOCAT){
-                case STATE_LOCAT_SAFEZONE:
-                    driveSensitivity = speed;
-                    turnSensitivity = speed;
-                    telemetry.addData("Max Speed", "");
-                    if(change){
-                        InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
-                        speedchange(speed);
-                    }else{
-                        InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
-                        speedchange(speed);
-                    }
-                case STATE_LOCAT_DANGER:
-                    driveSensitivity = speed;
-                    turnSensitivity = speed;
-                    telemetry.addData("Min Speed" , "");
-                    if(change != false){
-                        InitLOCAT = STATE_LOCAT.STATE_LOCAT_SAFEZONE;
-                        speedchange(speed);
-                    }else{
-                        InitLOCAT = STATE_LOCAT.STATE_LOCAT_DANGER;
-                        speedchange(speed);
-                    }
-            }
-
+            inrange(roPos);
             robot.drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y*driveSensitivity, -gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
-
 
             //scrapped; change to making the speed decrease based on the distance from backdrop
             /*
@@ -117,6 +74,11 @@ public class Distance_Slow extends LinearOpMode {
         }
     }
 
+    public void speedchange(double speedwant){
+        driveSensitivity = speedwant;
+        turnSensitivity = speedwant;
+    }
+
     public void inrange(Pose2d paraPos){
         double backdropPos;
         double ycord;
@@ -127,9 +89,21 @@ public class Distance_Slow extends LinearOpMode {
         ycord = paraPos.getX();
         double minslow = 36;
         dist = backdropPos-ycord;
-        if (dist < 32){
-            
+        if (dist < 32 && dist > 24){
+            speedchange(0.6);
+
+        }else if(dist < 24 && dist > 16){
+            speedchange(0.4);
+
+        }else if(dist < 16 && dist > 8){
+            speedchange(0.2);
+
+        }else if (dist < 8){
+            speedchange(0);
+
+        }else{
+            speedchange(0.8);
+
         }
     }
-
 }

@@ -34,16 +34,12 @@ public class Distance_Slow extends LinearOpMode {
         //runs once after init
 
         while (opModeInInit()) { //runs continusly after the once part
-            //stuff goes here hehehehehehe
 
         }
         //runs when start is pressed
         //runs once between loops
 
         while (!isStopRequested()) { //runs contiuosly after start is pressed until stop
-        //also stuff goes here hehehehehehe
-
-
 
             roPos = robot.drive.getPoseEstimate(); //Get Position
             inrange(roPos);

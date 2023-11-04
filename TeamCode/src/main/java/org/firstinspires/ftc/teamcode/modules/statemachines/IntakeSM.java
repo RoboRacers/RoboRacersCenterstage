@@ -16,10 +16,14 @@ double in = 0;
 double extend = 0.25;
 double retract = 0;
     STATE currentState;
+    CLAWSTATE currentClawState;
 
     public enum STATE {
         FOLDED_IN,
         REACHED_OUT,
+    }
+
+    public enum CLAWSTATE {
         CLAW_OPEN,
         CLAW_CLOSE
     }
@@ -44,7 +48,9 @@ double retract = 0;
         switch (event) {
             case GAME_START:
                 //NOT WORKING YET
-                // currentState = IntakeSM.STATE.FOLDED_IN && IntakeSM.STATE.CLAW_OPEN;
+                //NOW ITS WORKING
+                currentState = IntakeSM.STATE.FOLDED_IN;
+                currentClawState = IntakeSM.CLAWSTATE.CLAW_OPEN;
                 break;
             case EXTEND_TO_PIXEL:
                 currentState = IntakeSM.STATE.REACHED_OUT;
@@ -53,15 +59,23 @@ double retract = 0;
                 currentState = STATE.FOLDED_IN;
                 break;
             case OPEN_CLAW:
-                currentState = STATE.CLAW_OPEN;
+                currentClawState = CLAWSTATE.CLAW_OPEN;
                 break;
             case GRABBING_PIXEL:
-                currentState = STATE.CLAW_CLOSE;
+                currentClawState = CLAWSTATE.CLAW_CLOSE;
                 break;
         }
     }
 /* WHERE DO WE ADD THE EVENT SO THAT WHEN WE CLICK A BUTTON IT SWTICHES EVENTS? IN LAUNCHER.JAVA OR Launcher.SM.java??????*/
     public void update() {
+        switch (currentClawState) {
+            case CLAW_OPEN:
+                intake.setClawPos(open);
+                break;
+            case CLAW_CLOSE:
+                intake.setClawPos(closed);
+                break;
+        }
         switch (currentState) {
             case REACHED_OUT:
                 intake.setIntake(true);
@@ -70,12 +84,6 @@ double retract = 0;
             case FOLDED_IN:
                 intake.setIntake(false);
                 //intake.setIntakePos(in, retract, 500, 0, 500, 0, DcMotorSimple.Direction.REVERSE);
-                break;
-            case CLAW_OPEN:
-                intake.setClawPos(open);
-                break;
-            case CLAW_CLOSE:
-                intake.setClawPos(closed);
                 break;
         }
     }

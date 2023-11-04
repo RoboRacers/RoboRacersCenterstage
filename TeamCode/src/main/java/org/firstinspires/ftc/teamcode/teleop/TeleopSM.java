@@ -30,8 +30,8 @@ Intake intake;
         robot = new RobotCore(hardwareMap);
 
         while (opModeInInit()){
-launcher.statemachine.transition(LauncherSM.EVENT.GAME_START);
-intake.statemachine.transition(IntakeSM.EVENT.GAME_START);
+            launcher.statemachine.transition(LauncherSM.EVENT.GAME_START);
+            intake.statemachine.transition(IntakeSM.EVENT.GAME_START);
         }
         while (opModeIsActive()){
             if (gamepad2.dpad_up){

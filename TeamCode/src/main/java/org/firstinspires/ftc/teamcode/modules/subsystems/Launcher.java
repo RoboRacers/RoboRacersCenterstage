@@ -22,6 +22,5 @@ public class Launcher extends Subsystem  {
     public void setServoSpeed(double speed){actuationServo.setPower(speed);}
 
     @Override
-    public void update() {statemachine.update();
-    }
+    public void update() {statemachine.update();}
 }

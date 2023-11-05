@@ -11,26 +11,26 @@ import org.firstinspires.ftc.teamcode.modules.statemachines.LauncherSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 
-@TeleOp(name = "Teleop For League Tournament", group = "16481-Power-Play")
+@TeleOp(name = "Launcher_TEST", group = "16481-Power-Play")
 public class TeleopTESTING extends LinearOpMode {
 
-Servo drone;
+//Servo drone;
 DcMotorEx slides;
 
     @Override
     public void runOpMode(){
 
-        drone = hardwareMap.get(Servo.class, "drone");
+       // drone = hardwareMap.get(Servo.class, "drone");
         slides = hardwareMap.get(DcMotorEx.class, "slides");
 
         while (opModeInInit()){
             }
 
         while (opModeIsActive()){
-            if (gamepad1.x) {
+            if (gamepad1.dpad_up) {
                 slides.setPower(0.2);
             }
-            if (gamepad1.y) {
+            if (gamepad1.dpad_down) {
                 slides.setPower(-0.2);
             }
             else {

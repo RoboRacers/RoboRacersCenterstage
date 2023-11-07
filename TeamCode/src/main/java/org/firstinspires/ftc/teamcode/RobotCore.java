@@ -43,11 +43,6 @@ public class RobotCore {
         /* Initialize Subsystems */
         drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
 
-        deposit = new Deposit(hardwareMap);
-
-        intake = new Intake(hardwareMap);
-
-        launcher = new Launcher(hardwareMap);
 
     }
 

@@ -35,8 +35,6 @@ public class ParticleFilter {
     private Random random = new Random();
     int Dimensions;
 
-
-
     /**
      * Add a particle to the internal Hashmap.
      * @param particle
@@ -178,7 +176,7 @@ public class ParticleFilter {
     /**
      * Systematic resampling for the particle filter.
      */
-    public void awresampleParticles(double[] resamplingDeviances) throws Exception {
+    public void resampleParticles(double[] resamplingDeviances) throws Exception {
         int numParticles = Particles.size();
         ArrayList<Particle> newParticles = new ArrayList<>(numParticles);
         newParticles.clear();

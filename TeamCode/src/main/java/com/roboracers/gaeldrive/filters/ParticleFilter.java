@@ -181,7 +181,6 @@ public class ParticleFilter {
         ArrayList<Particle> newParticles = new ArrayList<>(numParticles);
         newParticles.clear();
 
-
         double totalWeight = 0.0;
 
         for (Particle particle : Particles) {

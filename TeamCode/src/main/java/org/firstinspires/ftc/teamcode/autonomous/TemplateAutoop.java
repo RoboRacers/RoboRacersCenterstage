@@ -6,6 +6,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Arclength;
+import com.acmerobotics.roadrunner.DualNum;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -44,6 +46,7 @@ public class TemplateAutoop extends LinearOpMode {
                 .build();
 
 
+
         while(!isStopRequested() && !opModeIsActive()) {
 
         }
@@ -51,6 +54,12 @@ public class TemplateAutoop extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
+
+        drive.setBreakFollowing(
+                () -> {
+                    return true;
+                }
+        );
 
         Actions.runBlocking(
                 new SequentialAction(

@@ -44,11 +44,14 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.autonomous.CustomActions;
 
 import java.lang.Math;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 @Config
 public final class MecanumDrive {
@@ -109,7 +112,13 @@ public final class MecanumDrive {
     public final Localizer localizer;
     public Pose2d pose;
 
+    public CustomActions.Observer observer = () -> true;
+
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
+
+    public void setBreakFollowing(CustomActions.Observer o) {
+        observer = o;
+    }
 
     public class DriveLocalizer implements Localizer {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
@@ -251,6 +260,11 @@ public final class MecanumDrive {
         @Override
         public boolean run(@NonNull TelemetryPacket p) {
             double t;
+
+            if (!observer.checkForInterrupt()) {
+                return false;
+            }
+
             if (beginTs < 0) {
                 beginTs = Actions.now();
                 t = 0;

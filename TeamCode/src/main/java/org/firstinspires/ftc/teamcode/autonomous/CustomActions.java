@@ -5,6 +5,7 @@ import android.drm.DrmStore;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.ftc.Actions;
 
 public class CustomActions {
 
@@ -20,16 +21,19 @@ public class CustomActions {
 
         public void run() {
             try {
-                interrupted = observer.checkForInterrupt();
+                while (!this.isInterrupted()) {
+                    interrupted = observer.checkForInterrupt();
+                    sleep(10);
+                }
             } catch (Exception e) {
-
+                System.out.println("Exception caught: " + e);
             }
         }
     }
 
     public static class ActionThread extends Thread {
 
-        public boolean repeat;
+        public boolean finished = false;
 
         public Action action;
 
@@ -39,10 +43,14 @@ public class CustomActions {
 
         public void run() {
             try {
-                TelemetryPacket t = new TelemetryPacket();
-                repeat = action.run(t);
+                boolean run = true;
+                while (run && !this.isInterrupted()) {
+                    Actions.runBlocking();
+                    run = action.run(new TelemetryPacket());
+                }
+                finished = true;
             } catch (Exception e) {
-
+                System.out.println("Exception caught: " + e);
             }
         }
     }
@@ -65,17 +73,23 @@ public class CustomActions {
      * @param observer
      */
     public static void runBlocking(Action action, Observer observer) {
-        boolean b = true;
         ObserverThread observerThread = new ObserverThread(observer);
         ActionThread actionThread = new ActionThread(action);
 
-        observerThread.run();
-        while (b && !Thread.currentThread().isInterrupted()) {
-
-            TelemetryPacket p = new TelemetryPacket();
-            actionThread.run();
-
-            b =
+        observerThread.start();
+        actionThread.start();
+        while (!Thread.currentThread().isInterrupted()) {
+            if (observerThread.interrupted) {
+                // If the observer detects an interrupt, stop the current action and exit the loop
+                actionThread.interrupt();
+                observerThread.interrupt();
+                break;
+            } else if (actionThread.finished) {
+                // If the action thread is finished, end both threads
+                actionThread.interrupt();
+                observerThread.interrupt();
+                break;
+            }
         }
     }
 

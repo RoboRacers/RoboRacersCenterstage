@@ -112,13 +112,10 @@ public final class MecanumDrive {
     public final Localizer localizer;
     public Pose2d pose;
 
-    public CustomActions.Observer observer = () -> true;
+    public Observer observer = () -> true;
 
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
-    public void setBreakFollowing(CustomActions.Observer o) {
-        observer = o;
-    }
 
     public class DriveLocalizer implements Localizer {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
@@ -261,6 +258,7 @@ public final class MecanumDrive {
         public boolean run(@NonNull TelemetryPacket p) {
             double t;
 
+            // Check for interrupt before running
             if (!observer.checkForInterrupt()) {
                 return false;
             }
@@ -458,5 +456,21 @@ public final class MecanumDrive {
                 defaultVelConstraint, defaultAccelConstraint,
                 0.25, 0.1
         );
+    }
+
+    public void setBreakFollowing(Observer o) {
+        observer = o;
+    }
+
+    /**
+     * Observer class that checks for interruptions.
+     * Used in this version of .runBlocking
+     */
+    public interface Observer {
+        /**
+         * Returns true if no interrupt, returns false if interrupt.
+         * @return Interrupt
+         */
+        boolean checkForInterrupt();
     }
 }

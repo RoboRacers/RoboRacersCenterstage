@@ -57,7 +57,11 @@ public class TemplateAutoop extends LinearOpMode {
 
         drive.setBreakFollowing(
                 () -> {
-                    return true;
+                    if (true) {
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
         );
 

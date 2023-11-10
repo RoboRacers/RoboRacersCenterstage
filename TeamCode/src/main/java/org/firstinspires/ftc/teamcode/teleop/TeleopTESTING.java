@@ -31,6 +31,7 @@ DcMotorEx slides2;
 
 Servo s1;
 Servo s2;
+Servo c1;
 ElapsedTime timer = new ElapsedTime();
 
    @Override
@@ -44,6 +45,7 @@ ElapsedTime timer = new ElapsedTime();
         s1 = hardwareMap.get(Servo.class, "s1");
         s2 = hardwareMap.get(Servo.class, "s2");
         s2.setDirection(Servo.Direction.REVERSE);
+        c1 = hardwareMap.get(Servo.class, "c1");
 
         while (opModeInInit()){
             set1(0.25);
@@ -76,6 +78,16 @@ telemetry.update();
     public void set1(double pos1){
         s1.setPosition(pos1);
         s2.setPosition(pos1);
+    }
+    public void clawopen(boolean set){
+        double close = 0.0;
+        double open = 0.25;
+        if (set){
+            c1.setPosition(open);
+        }else{
+            c1.setPosition(close);
+        }
+
     }
 
 

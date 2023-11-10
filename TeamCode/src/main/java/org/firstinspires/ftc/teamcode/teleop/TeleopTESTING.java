@@ -27,20 +27,24 @@ public class TeleopTESTING extends LinearOpMode {
 //Servo drone;
 DcMotorEx slides;
 Servo s1;
+Servo s2;
 ElapsedTime timer = new ElapsedTime();
 
    @Override
     public void runOpMode(){
 
+
        // drone = hardwareMap.get(Servo.class, "drone");
         slides = hardwareMap.get(DcMotorEx.class, "slides");
         s1 = hardwareMap.get(Servo.class, "s1");
+        s2 = hardwareMap.get(Servo.class, "s2");
+        s2.setDirection(Servo.Direction.REVERSE);
 
         while (opModeInInit()){
-            s1.setPosition(0.25);
+            set1(0.25);
             }
         while (opModeIsActive()){
-            s1.setPosition(0.0);
+            set1(0);
 //            if (gamepad1.dpad_up) {
 //                slides.setPower(0.2);
 //            }
@@ -64,6 +68,11 @@ ElapsedTime timer = new ElapsedTime();
         }
 telemetry.update();
     }
+    public void set1(double pos1){
+        s1.setPosition(pos1);
+        s2.setPosition(pos1);
+    }
+    
     /*
     public void setLiftPosition(int pos) {
         slides.setTargetPosition(pos);

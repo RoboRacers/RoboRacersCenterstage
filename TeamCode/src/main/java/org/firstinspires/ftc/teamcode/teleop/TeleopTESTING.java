@@ -28,6 +28,7 @@ public class TeleopTESTING extends LinearOpMode {
 DcMotorEx slides;
 Servo s1;
 Servo s2;
+Servo c1;
 ElapsedTime timer = new ElapsedTime();
 
    @Override
@@ -38,6 +39,7 @@ ElapsedTime timer = new ElapsedTime();
         slides = hardwareMap.get(DcMotorEx.class, "slides");
         s1 = hardwareMap.get(Servo.class, "s1");
         s2 = hardwareMap.get(Servo.class, "s2");
+        c1 = hardwareMap.get(Servo.class, "c1");
         s2.setDirection(Servo.Direction.REVERSE);
 
         while (opModeInInit()){
@@ -73,9 +75,19 @@ telemetry.update();
         s2.setPosition(pos1);
     }
 
+    public void clawopen(boolean set){
+       double close = 0.0;
+       double open = 0.25;
+       if (set){
+           c1.setPosition(open);
+        }else{
+           c1.setPosition(close);
+       }
+
+    }
 
 
-    
+
     /*
     public void setLiftPosition(int pos) {
         slides.setTargetPosition(pos);

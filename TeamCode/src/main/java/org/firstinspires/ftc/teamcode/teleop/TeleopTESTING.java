@@ -72,6 +72,9 @@ telemetry.update();
         s1.setPosition(pos1);
         s2.setPosition(pos1);
     }
+
+
+
     
     /*
     public void setLiftPosition(int pos) {

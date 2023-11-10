@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -25,10 +26,11 @@ public class TeleopTESTING extends LinearOpMode {
     private double lasterror = 0;
 
 //Servo drone;
-DcMotorEx slides;
+DcMotorEx slides1;
+DcMotorEx slides2;
+
 Servo s1;
 Servo s2;
-Servo c1;
 ElapsedTime timer = new ElapsedTime();
 
    @Override
@@ -36,10 +38,11 @@ ElapsedTime timer = new ElapsedTime();
 
 
        // drone = hardwareMap.get(Servo.class, "drone");
-        slides = hardwareMap.get(DcMotorEx.class, "slides");
+        slides1 = hardwareMap.get(DcMotorEx.class, "slides1");
+        slides2 = hardwareMap.get(DcMotorEx.class, "slides2");
+        slides2.setDirection(DcMotorSimple.Direction.REVERSE);
         s1 = hardwareMap.get(Servo.class, "s1");
         s2 = hardwareMap.get(Servo.class, "s2");
-        c1 = hardwareMap.get(Servo.class, "c1");
         s2.setDirection(Servo.Direction.REVERSE);
 
         while (opModeInInit()){
@@ -48,13 +51,13 @@ ElapsedTime timer = new ElapsedTime();
         while (opModeIsActive()){
             set1(0);
 //            if (gamepad1.dpad_up) {
-//                slides.setPower(0.2);
+       //     slidesSet(0.2);
 //            }
 //            if (gamepad1.dpad_down) {
-//                slides.setPower(-0.2);
+//                slidesSet(-0.2);
 //            }
 //            else {
-//                slides.setPower(0.0);
+//                slidesSet(0.0);
 //            }
             /*
             if (gamepad1.a){
@@ -75,17 +78,14 @@ telemetry.update();
         s2.setPosition(pos1);
     }
 
-    public void clawopen(boolean set){
-       double close = 0.0;
-       double open = 0.25;
-       if (set){
-           c1.setPosition(open);
-        }else{
-           c1.setPosition(close);
-       }
 
-    }
 
+
+
+public void slidesSet(double slidesPower){
+       slides1.setPower(slidesPower);
+       slides2.setPower(slidesPower);
+}
 
 
     /*

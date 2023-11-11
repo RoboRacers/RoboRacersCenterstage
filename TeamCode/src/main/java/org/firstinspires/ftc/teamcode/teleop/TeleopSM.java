@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.modules.statemachines.LauncherSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 
-@TeleOp(name = "Teleop For League Tournament", group = "16481-Power-Play")
+@TeleOp(name = "Teleop State Machines", group = "16481-Power-Play")
 public class TeleopSM extends LinearOpMode {
 
     RobotCore robot;

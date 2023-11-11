@@ -19,9 +19,10 @@ Servo Ss2;
 Servo Cs1;
 ElapsedTime timer = new ElapsedTime();
 
+double Increment = 0.01;
 double MINPOS = 0.0;
 double MAXPOS = 1.0;
-
+double position = 0.0;
 
    @Override
     public void runOpMode(){
@@ -43,10 +44,21 @@ double MAXPOS = 1.0;
             }
         while (opModeIsActive()){
             if(gamepad1.dpad_up){
-
+                position += Increment;
+                if (position >= MAXPOS){
+                    position = MAXPOS;
+                }
+            }
+            else if(gamepad1.dpad_down){
+                position -= Increment;
+                if (position <= MINPOS){
+                    position = MINPOS;
+                }
             }
 
-                Bs1.setPosition(0.25);
+
+            Bs1.setPosition(position);
+            Bs2.setPosition(position);
 
         }
 telemetry.update();

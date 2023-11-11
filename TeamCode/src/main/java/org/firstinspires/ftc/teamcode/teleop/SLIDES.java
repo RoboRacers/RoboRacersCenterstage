@@ -5,10 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.apache.commons.math3.analysis.function.Min;
-
 @TeleOp(name = "Launcher_TEST", group = "16481-Power-Play")
-public class TeleopTESTING extends LinearOpMode {
+public class SLIDES extends LinearOpMode {
 
 //Servo drone;
 //DcMotorEx slides1;

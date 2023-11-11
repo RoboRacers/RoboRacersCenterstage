@@ -22,7 +22,8 @@ ElapsedTime timer = new ElapsedTime();
 double Increment = 0.01;
 double MINPOS = 0.0;
 double MAXPOS = 1.0;
-double position = 0.0;
+double position1 = 0.0;
+double position2 = 0.1;
 
    @Override
     public void runOpMode(){
@@ -44,26 +45,30 @@ double position = 0.0;
             }
         while (opModeIsActive()){
             if(gamepad1.dpad_up){
-                position += Increment;
-                if (position >= MAXPOS){
-                    position = MAXPOS;
+                position1 += Increment;
+                position2 += Increment;
+                if (position2 >= MAXPOS){
+                    position2 = MAXPOS;
+                    position1 = MAXPOS - 0.1;
                 }
             }
             else if(gamepad1.dpad_down){
-                position -= Increment;
-                if (position <= MINPOS){
-                    position = MINPOS;
+                position1 -= Increment;
+                position2 -= Increment;
+                if (position1 <= MINPOS){
+                    position1 = MINPOS;
+                    position2 = MINPOS + 0.1;
                 }
             }
             
-            set1(position);
+            set1(position1, position2);
 
         }
 telemetry.update();
     }
-    public void set1(double pos1){
+    public void set1(double pos1, double pos2){
         Bs1.setPosition(pos1);
-        Bs2.setPosition(pos1);
+        Bs2.setPosition(pos2);
     }
 
 }

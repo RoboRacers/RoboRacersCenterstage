@@ -55,8 +55,7 @@ double position = 0.0;
                     position = MINPOS;
                 }
             }
-
-
+            
             set1(position);
 
         }

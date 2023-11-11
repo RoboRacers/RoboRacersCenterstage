@@ -57,8 +57,7 @@ double position = 0.0;
             }
 
 
-            Bs1.setPosition(position);
-            Bs2.setPosition(position);
+            set1(position);
 
         }
 telemetry.update();

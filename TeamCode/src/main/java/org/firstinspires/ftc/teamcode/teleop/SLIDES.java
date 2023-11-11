@@ -34,12 +34,12 @@ double slidesPower2 = 0.0;
             }
         while (opModeIsActive()){
 
-          if (gamepad1.right_trigger > 0){
+          if (gamepad1.right_trigger > 0.1){
               slidesPower1 = 0.2;
               slidesPower2 = 0.2;
           }
 
-          else if (gamepad1.left_trigger > 0){
+          else if (gamepad1.left_trigger > 0.1){
                 slidesPower1 = -0.2;
                 slidesPower2 = -0.2;
           }

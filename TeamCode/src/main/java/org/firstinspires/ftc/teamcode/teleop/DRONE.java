@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name = "DRONE_TEST", group = "16481-Power-Play")
 public class DRONE extends LinearOpMode {
 
-CRServo drone;
+Servo drone;
 
 
 ElapsedTime timer = new ElapsedTime();
@@ -20,7 +20,7 @@ ElapsedTime timer = new ElapsedTime();
     public void runOpMode(){
 
 
-        drone = hardwareMap.get(CRServo.class, "drone");
+        drone = hardwareMap.get(Servo.class, "drone");
 
 
 
@@ -30,15 +30,13 @@ ElapsedTime timer = new ElapsedTime();
         while (opModeIsActive()){
 
            if (gamepad1.left_bumper){
-               drone.setPower(0.001);
-               timer.startTime();
-               if (timer.time() >= 5){
-                   drone.setPower(0.0);
+             drone.setPosition(0.56);
                }
-               timer.reset();
-               }
-               //telemetry.addData("shots fired", "");
+           else if (gamepad1.right_bumper) {
+               drone.setPosition(0.9);
            }
-           telemetry.update();
+            telemetry.addData("Drone position", drone.getPosition());
+            telemetry.update();
+           }
         }
     }

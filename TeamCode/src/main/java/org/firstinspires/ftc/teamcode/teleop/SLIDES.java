@@ -25,7 +25,7 @@ double slidesPower2 = 0.0;
 
 
        // drone = hardwareMap.get(Servo.class, "drone");
-     
+
         slides1 = hardwareMap.get(DcMotorEx.class, "slides1");
         slides2 = hardwareMap.get(DcMotorEx.class, "slides2");
 

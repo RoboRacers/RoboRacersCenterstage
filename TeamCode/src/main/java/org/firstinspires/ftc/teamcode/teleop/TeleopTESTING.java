@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.apache.commons.math3.analysis.function.Min;
 
-@TeleOp(name = "Launcher_TEST", group = "16481-Power-Play")
+@TeleOp(name = "Intake_TEST", group = "16481-Power-Play")
 public class TeleopTESTING extends LinearOpMode {
 
 //Servo drone;

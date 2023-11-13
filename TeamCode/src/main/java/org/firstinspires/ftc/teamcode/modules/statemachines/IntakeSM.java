@@ -66,7 +66,7 @@ double retract = 0;
                 break;
         }
     }
-/* WHERE DO WE ADD THE EVENT SO THAT WHEN WE CLICK A BUTTON IT SWTICHES EVENTS? IN LAUNCHER.JAVA OR Launcher.SM.java??????*/
+
     public void update() {
         switch (currentClawState) {
             case CLAW_OPEN:

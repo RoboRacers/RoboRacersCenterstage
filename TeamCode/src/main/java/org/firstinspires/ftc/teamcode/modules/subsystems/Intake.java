@@ -32,8 +32,12 @@ public class Intake extends Subsystem {
         //4 servos
 
         claw = hardwareMap.get(Servo.class, "claw");
+
         claw_flip_one = hardwareMap.get(Servo.class, "claw_flip_one");
         claw_flip_two = hardwareMap.get(Servo.class, "claw_flip_two");
+        claw_flip_two.setDirection(Servo.Direction.REVERSE);
+
+
         claw_extend_one = hardwareMap.get(Servo.class, "claw_extend_one");
         claw_extend_two = hardwareMap.get(Servo.class, "claw_extend_two");
         leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
@@ -59,16 +63,10 @@ public class Intake extends Subsystem {
     public void setIntake(boolean intakeExtend){
         if (intakeExtend=true){
             claw_flip_one.setPosition(out);
-            claw_flip_two.setDirection(Servo.Direction.REVERSE);
+
             claw_flip_two.setPosition(out);
             claw_extend_one.setPosition(extend);
             claw_extend_two.setPosition(extend);
-            claw_extend_two.setDirection(Servo.Direction.REVERSE);
-          //  leftMotor.setPower(500);
-         //   rightMotor.setTargetPosition(5);
-         //   rightMotor.setPower(500);
-         //   leftMotor.setTargetPosition(5);
-         //   leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         }
         if (intakeExtend=false){
             claw_flip_one.setPosition(in);

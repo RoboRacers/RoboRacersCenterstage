@@ -11,11 +11,13 @@ public class LauncherSM implements StateMachine {
     public enum STATE {
         DRONE_LAUNCHER_LOADED,
         DRONE_LAUNCHED,
+        DRONE_LAUNCHER_RETRACTED,
     }
 
     public enum EVENT {
         GAME_START,
         DRONE_LAUNCH_BUTTON_PRESSED,
+        DRONE_RETRACT_BUTTON_PRESSED,
     }
 
     public LauncherSM(Launcher launcher) {
@@ -34,6 +36,9 @@ public class LauncherSM implements StateMachine {
             case DRONE_LAUNCH_BUTTON_PRESSED:
                 currentState = LauncherSM.STATE.DRONE_LAUNCHED;
                 break;
+            case DRONE_RETRACT_BUTTON_PRESSED:
+                currentState = STATE.DRONE_LAUNCHER_RETRACTED;
+                break;
         }
     }
 
@@ -41,10 +46,13 @@ public class LauncherSM implements StateMachine {
     public void update() {
         switch (currentState) {
             case DRONE_LAUNCHED:
-                launcher.setServoSpeed(500); // not done and not right thing;
+                launcher.setServoPos(true); // not done and not right thing;
                 break;
             case DRONE_LAUNCHER_LOADED:
-                launcher.setServoSpeed(0);
+                launcher.setServoPos(false);
+                break;
+            case DRONE_LAUNCHER_RETRACTED:
+                launcher.setServoPos(false);
                 break;
         }
     }

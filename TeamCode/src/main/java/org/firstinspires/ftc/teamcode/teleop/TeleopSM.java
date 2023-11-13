@@ -34,11 +34,15 @@ Intake intake;
             intake.statemachine.transition(IntakeSM.EVENT.GAME_START);
         }
         while (opModeIsActive()){
-            if (gamepad2.dpad_up){
+            if (gamepad1.circle){
                 robot.launcher.statemachine.transition(LauncherSM.EVENT.DRONE_LAUNCH_BUTTON_PRESSED);
                 telemetry.addData("Drone is being launched", "");
             }
-
+            else if(gamepad1.cross){
+                robot.launcher.statemachine.transition(LauncherSM.EVENT.DRONE_RETRACT_BUTTON_PRESSED);
+                telemetry.addData("Drone launcher retracted", "");
+            }
+            //below isn't finished and needs to be finished at sometime(soon maybe)
             else if (gamepad2.a){
                 robot.intake.statemachine.transition(IntakeSM.EVENT.EXTEND_TO_PIXEL);
                 telemetry.addData("Intake Extended", "");

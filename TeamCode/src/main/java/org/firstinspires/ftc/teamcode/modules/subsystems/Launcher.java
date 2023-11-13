@@ -12,14 +12,20 @@ public class Launcher extends Subsystem  {
 
     public LauncherSM statemachine;
 
-    public CRServo actuationServo;
+    public Servo actuationServo;
 
     public Launcher(HardwareMap hardwareMap) {
-        actuationServo = hardwareMap.get(CRServo.class, "actuationServo");
+        actuationServo = hardwareMap.get(Servo.class, "actuationServo");
         statemachine = new LauncherSM(this);
     }
 
-    public void setServoSpeed(double speed){actuationServo.setPower(speed);}
+    public void setServoPos(boolean ifshoot){
+        if(ifshoot){
+            actuationServo.setPosition(0.56);
+        } else if (ifshoot == true){
+            actuationServo.setPosition(0.9);
+        }
+    }
 
     @Override
     public void update() {statemachine.update();}

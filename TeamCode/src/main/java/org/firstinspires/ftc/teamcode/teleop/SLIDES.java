@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "Slides_TEST", group = "16481-Power-Play")
+@TeleOp(name = "Slides_TEST_ANISH", group = "16481-Power-Play")
 public class SLIDES extends LinearOpMode {
 
 //Servo drone;
@@ -25,7 +25,7 @@ double slidesPower2 = 0.0;
 
 
        // drone = hardwareMap.get(Servo.class, "drone");
-     //
+
         slides1 = hardwareMap.get(DcMotorEx.class, "slides1");
         slides2 = hardwareMap.get(DcMotorEx.class, "slides2");
 

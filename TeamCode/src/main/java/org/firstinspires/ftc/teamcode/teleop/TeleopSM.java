@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 import org.firstinspires.ftc.teamcode.modules.statemachines.LauncherSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.modules.subsystems.SlidesSubsystem;
 
 @TeleOp(name = "Teleop For State Machines", group = "16481-Power-Play")
 public class TeleopSM extends LinearOpMode {
@@ -21,6 +22,7 @@ public class TeleopSM extends LinearOpMode {
     RobotCore robot;
 Launcher launcher;
 Intake intake;
+
 
 
 
@@ -34,13 +36,17 @@ Intake intake;
             intake.statemachine.transition(IntakeSM.EVENT.GAME_START);
         }
         while (opModeIsActive()){
-            if (gamepad2.dpad_up){
+            if (gamepad1.circle){
                 robot.launcher.statemachine.transition(LauncherSM.EVENT.DRONE_LAUNCH_BUTTON_PRESSED);
                 telemetry.addData("Drone is being launched", "");
             }
-
-            else if (gamepad2.a){
-                robot.intake.statemachine.transition(IntakeSM.EVENT.EXTEND_TO_PIXEL);
+            else if(gamepad1.cross){
+                robot.launcher.statemachine.transition(LauncherSM.EVENT.DRONE_RETRACT_BUTTON_PRESSED);
+                telemetry.addData("Drone launcher retracted", "");
+            }
+            //below isn't finished and needs to be finished at sometime(soon maybe)
+            else if (gamepad1.dpad_up){
+                //robot.
                 telemetry.addData("Intake Extended", "");
             }
             else if (gamepad2.b){

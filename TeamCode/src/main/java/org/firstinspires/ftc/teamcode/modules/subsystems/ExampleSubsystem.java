@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.modules.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.modules.statemachines.DepositSM;
 import org.firstinspires.ftc.teamcode.modules.statemachines.ExampleSM;
 
 public class ExampleSubsystem extends Subsystem {

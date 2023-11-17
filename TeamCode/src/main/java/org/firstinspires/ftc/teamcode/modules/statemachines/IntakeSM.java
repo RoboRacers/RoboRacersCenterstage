@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules.statemachines;
 
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.modules.subsystems.Deposit;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 
 public class IntakeSM implements StateMachine {

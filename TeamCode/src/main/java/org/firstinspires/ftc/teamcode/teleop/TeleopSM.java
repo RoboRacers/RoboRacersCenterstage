@@ -1,20 +1,12 @@
 package org.firstinspires.ftc.teamcode.teleop;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 import org.firstinspires.ftc.teamcode.modules.statemachines.LauncherSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.modules.subsystems.SlidesSubsystem;
 
 @TeleOp(name = "Teleop For State Machines", group = "16481-Power-Play")
 public class TeleopSM extends LinearOpMode {

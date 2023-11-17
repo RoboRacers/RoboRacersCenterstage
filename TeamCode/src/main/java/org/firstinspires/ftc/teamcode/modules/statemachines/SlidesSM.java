@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules.statemachines;
 
-import android.transition.Slide;
-
-import org.firstinspires.ftc.teamcode.modules.subsystems.SlidesSubsystem;
-import org.firstinspires.ftc.teamcode.teleop.SLIDES;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 
 /**
  * Class that outlines an example state machine.
@@ -13,7 +10,7 @@ public class SlidesSM implements StateMachine {
     /**
      * This is the subsystem object that this statemacine controls.
      */
-    SlidesSubsystem slides;
+    Slides slides;
 
     /**
      * The current state of this subsystem.
@@ -45,7 +42,7 @@ public class SlidesSM implements StateMachine {
      * Takes in the subsystem object that this state machine controls.
      * @param
      */
-    public SlidesSM(SlidesSubsystem slides) {
+    public SlidesSM(Slides slides) {
         this.slides = slides;
     }
 
@@ -65,10 +62,11 @@ public class SlidesSM implements StateMachine {
     public void transition(SlidesSM.EVENT event) {
         switch (event) {
             case REACH_BUTTON_PRESSED:
-                // You can run one time events here.
+                slides.setTargetPosition(300);
                 currentState = SLIDESTATE.REACHED_OUT;
                 break;
             case FOLD_BUTTON_PRESSED:
+                slides.setTargetPosition(0);
                 currentState = SLIDESTATE.FOLDED_IN;
                 break;
             case AT_BOTTOM:
@@ -87,13 +85,13 @@ public class SlidesSM implements StateMachine {
     public void update() {
         switch (currentState) {
             case REACHED_OUT:
-                slides.setTargetPower(0.2);
+                slides.setPower(.8);
                 break;
             case FOLDED_IN:
-                slides.setTargetPower(-0.2);
+                slides.setPower(.8);
                 break;
             case RESTING:
-                slides.setTargetPower(0.0);
+                slides.setPower(0);
         }
     }
 

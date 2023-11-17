@@ -16,7 +16,7 @@ public class SlidesTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        rightSlides = hardwareMap.get(DcMotor.class, "rightSlides");
+        rightSlides = hardwareMap.get(DcMotor.class, "rightSlide");
 
         rightSlides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //leftStage1 = hardwareMap.get(ServoImplEx.class, "leftStage1");
@@ -39,9 +39,9 @@ public class SlidesTest extends LinearOpMode {
         while (!isStopRequested()) {
 
             if (gamepad1.left_stick_y > 0.1) {
-                rightSlides.setPower(-.3);
+                rightSlides.setPower(-gamepad1.left_stick_y*.3);
             } else if (gamepad1.left_stick_y < -0.1) {
-                rightSlides.setPower(.7);
+                rightSlides.setPower(-gamepad1.left_stick_y*.6);
             } else {
                 rightSlides.setPower(0);
             }

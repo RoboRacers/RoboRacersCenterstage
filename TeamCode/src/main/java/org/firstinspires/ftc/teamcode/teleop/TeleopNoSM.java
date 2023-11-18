@@ -1,9 +1,15 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 
@@ -35,6 +41,14 @@ public class TeleopNoSM extends LinearOpMode {
 
     Slides slides;
 
+    DcMotorEx motorLeft;
+    DcMotorEx motorRight;
+    double driveSensitivity = .5;
+    double turnSensitivity = .75;
+    double liftSpeed = .5;
+
+
+
 
     @Override
     public void runOpMode(){
@@ -52,13 +66,37 @@ public class TeleopNoSM extends LinearOpMode {
 
         slides = new Slides(hardwareMap);
 
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Motor and Servo Setup
+        motorLeft = hardwareMap.get(DcMotorEx.class, "LiftLeft");
+        motorRight = hardwareMap.get(DcMotorEx.class, "LiftRight");
+
+
         while (opModeInInit()){
             Bs2.setDirection(Servo.Direction.REVERSE);
             Ss2.setDirection(Servo.Direction.REVERSE);
             Cs1.setDirection(Servo.Direction.REVERSE);
+            motorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorRight.setDirection(DcMotorSimple.Direction.FORWARD);
+
+            motorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            motorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+
         while (opModeIsActive()){
-            if(gamepad1.dpad_up){
+            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y*driveSensitivity, -gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
+            drive.update();
+
+            if(gamepad2.dpad_up){
                 position1 += Increment;
                 position2 += Increment;
                 if (position2 >= MAXPOS){
@@ -66,7 +104,7 @@ public class TeleopNoSM extends LinearOpMode {
                     position1 = MAXPOS - 0.1;
                 }
             }
-            else if(gamepad1.dpad_down){
+            else if(gamepad2.dpad_down){
                 position1 -= Increment;
                 position2 -= Increment;
                 if (position1 <= MINPOS){
@@ -74,7 +112,7 @@ public class TeleopNoSM extends LinearOpMode {
                     position2 = MINPOS + 0.1;
                 }
             }
-            if(gamepad1.dpad_left){
+            if(gamepad2.dpad_left){
                 position3 += Increment;
                 position4 += Increment;
                 if (position3 >= MAXPOS){
@@ -82,7 +120,7 @@ public class TeleopNoSM extends LinearOpMode {
                     position4 = MAXPOS;
                 }
             }
-            else if(gamepad1.dpad_right){
+            else if(gamepad2.dpad_right){
                 position3 -= Increment;
                 position4 -= Increment;
                 if (position4 <= MINPOS){
@@ -90,9 +128,9 @@ public class TeleopNoSM extends LinearOpMode {
                     position4 = MINPOS;
                 }
             }
-            if (gamepad1.left_bumper){
+            if (gamepad2.left_bumper){
                 position5 = 0.54;
-            }else if(gamepad1.right_bumper){
+            }else if(gamepad2.right_bumper){
                 position5 = 0.8;
             }
             if (gamepad1.circle){

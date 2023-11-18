@@ -144,6 +144,8 @@ public class TeleopNoSM extends LinearOpMode {
 
             }else if(gamepad1.dpad_down){
                 slides.setPower(-3);
+            }else{
+                slides.setPower(0);
             }
 
             // Telemetry

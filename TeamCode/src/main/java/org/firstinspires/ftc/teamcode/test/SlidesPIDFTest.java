@@ -27,7 +27,7 @@ public class SlidesPIDFTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         rightSlides = hardwareMap.get(DcMotorImplEx.class, "rightSlide");
-        leftSlides = hardwareMap.get(DcMotorImplEx.class, "leftSlides");
+        leftSlides = hardwareMap.get(DcMotorImplEx.class, "leftSlide");
 
 
 
@@ -57,7 +57,7 @@ public class SlidesPIDFTest extends LinearOpMode {
 
             rightSlides.setTargetPosition(setPoint);
             leftSlides.setTargetPosition(setPoint);
-            
+
             // Telemetry
             telemetry.addData("Right Slide Motor", rightSlides.getCurrentPosition());
             telemetry.addData("Left Slide Motor", leftSlides.getCurrentPosition());

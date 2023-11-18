@@ -17,7 +17,7 @@ public class DoubleSlidesTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         rightSlides = hardwareMap.get(DcMotor.class, "rightSlide");
-        leftSlides = hardwareMap.get(DcMotor.class, "leftSlides");
+        leftSlides = hardwareMap.get(DcMotor.class, "leftSlide");
 
 
 

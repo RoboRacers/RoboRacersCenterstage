@@ -1,14 +1,12 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.apache.commons.math3.analysis.function.Min;
-
-@TeleOp(name = "Intake_TEST", group = "16481-Power-Play")
-public class TeleopTESTING extends LinearOpMode {
+@TeleOp(name = "Intake Range Test", group = "16481-Power-Play")
+public class IntakeRangeTest extends LinearOpMode {
 
 //Servo drone;
 //DcMotorEx slides1;
@@ -40,11 +38,11 @@ double position5 = 0.0;
      //   slides1 = hardwareMap.get(DcMotorEx.class, "slides1");
       //  slides2 = hardwareMap.get(DcMotorEx.class, "slides2");
       //  slides2.setDirection(DcMotorSimple.Direction.REVERSE);
-        Bs1 = hardwareMap.get(Servo.class, "Bs1");
-        Bs2 = hardwareMap.get(Servo.class, "Bs2");
-        Ss1 = hardwareMap.get(Servo.class, "Ss1");
-        Ss2 = hardwareMap.get(Servo.class, "Ss2");
-        Cs1 = hardwareMap.get(Servo.class, "Cs1");
+        Bs1 = hardwareMap.get(Servo.class, "stage1right");
+        Bs2 = hardwareMap.get(Servo.class, "stage1left");
+        Ss1 = hardwareMap.get(Servo.class, "stage2right");
+        Ss2 = hardwareMap.get(Servo.class, "stage2left");
+        Cs1 = hardwareMap.get(Servo.class, "claw");
 
         while (opModeInInit()){
             Bs2.setDirection(Servo.Direction.REVERSE);

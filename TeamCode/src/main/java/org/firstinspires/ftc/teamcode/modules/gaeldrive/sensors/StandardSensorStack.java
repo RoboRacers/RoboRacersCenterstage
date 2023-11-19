@@ -14,22 +14,13 @@ import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.RRLocalizerMotion
  */
 public class StandardSensorStack extends SensorStack {
 
-
     /**
      * Initialize the Sensor stack. Initialize the common sensors and motion models here.
      * TODO: Update this with your own sensors.
      * @param hardwareMap
      */
     static public void init(HardwareMap hardwareMap) {
-        motionModel = new RRLocalizerMotionModel(LocalizationConstants.START_POSE, new StandardTrackingWheelLocalizer(hardwareMap));
 
-        // Config our Ultrasonic Distance Sensor
-        AnalogDistanceSensorModel ultrasonicRight = SensorUtils.createMB1240Sensor(hardwareMap.get(AnalogInput.class,"ultrasonicRight"), 1, new Pose2d(-7,0, -90));
-        sensorModels.add(ultrasonicRight);
-        AnalogDistanceSensorModel ultrasonicLeft = SensorUtils.createMB1240Sensor(hardwareMap.get(AnalogInput.class,"ultrasonicLeft"), 1, new Pose2d(7,0, 90));
-        sensorModels.add(ultrasonicLeft);
-        AnalogDistanceSensorModel ultrasonicBack = SensorUtils.createMB1240Sensor(hardwareMap.get(AnalogInput.class,"ultrasonicBack"), 1, new Pose2d(-7,0, 180));
-        sensorModels.add(ultrasonicBack);
     }
 
 }

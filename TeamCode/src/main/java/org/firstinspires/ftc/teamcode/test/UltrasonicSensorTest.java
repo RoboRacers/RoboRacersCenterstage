@@ -3,6 +3,7 @@ import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.KalmanFilter;
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.RobotCore;
 
 import java.util.List;
 
+@Disabled
 @TeleOp(name = "Ultrasonic Sensor Test", group = "Test")
 public class UltrasonicSensorTest extends LinearOpMode {
 

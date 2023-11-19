@@ -12,24 +12,20 @@ double in = 0;
 double extend = 0.25;
 double retract = 0;
     STATE currentState;
-    CLAWSTATE currentClawState;
 
     public enum STATE {
         FOLDED_IN,
         REACHED_OUT,
     }
 
-    public enum CLAWSTATE {
-        CLAW_OPEN,
-        CLAW_CLOSE
-    }
-
     public enum EVENT {
         GAME_START,
-        EXTEND_TO_PIXEL,
-        RETRACT_WITH_PIXEL,
-        GRABBING_PIXEL,
-        OPEN_CLAW
+        OPEN_FOR_PIXEL,
+        CLOSING_FOR_PIXEL,
+        CLOSED_WITH_PIXEL,
+        EXTEND_WITH_PIXEL,
+        RELEASE_PIXEL
+
     }
 
     public IntakeSM(Intake intake) {
@@ -43,45 +39,27 @@ double retract = 0;
     public void transition(IntakeSM.EVENT event) {
         switch (event) {
             case GAME_START:
-                //NOT WORKING YET
-                //NOW ITS WORKING
-                currentState = IntakeSM.STATE.FOLDED_IN;
-                currentClawState = IntakeSM.CLAWSTATE.CLAW_OPEN;
                 break;
-            case EXTEND_TO_PIXEL:
-                currentState = IntakeSM.STATE.REACHED_OUT;
+            case OPEN_FOR_PIXEL:
+                intake.setIntake(.47, .68, .8);
                 break;
-            case RETRACT_WITH_PIXEL:
-                currentState = STATE.FOLDED_IN;
+            case CLOSING_FOR_PIXEL:
+                intake.setIntake(.6,.75,.8);
                 break;
-            case OPEN_CLAW:
-                currentClawState = CLAWSTATE.CLAW_OPEN;
+            case CLOSED_WITH_PIXEL:
+                intake.setIntake(.47,.73,.8);
                 break;
-            case GRABBING_PIXEL:
-                currentClawState = CLAWSTATE.CLAW_CLOSE;
+            case EXTEND_WITH_PIXEL:
+                intake.setIntake(.47,.3, .18);
+                break;
+            case RELEASE_PIXEL:
+                intake.claw.setPosition(.6);
                 break;
         }
     }
 
     public void update() {
-        switch (currentClawState) {
-            case CLAW_OPEN:
-                intake.setClawPos(open);
-                break;
-            case CLAW_CLOSE:
-                intake.setClawPos(closed);
-                break;
-        }
-        switch (currentState) {
-            case REACHED_OUT:
-                intake.setIntake(true);
-               // intake.setIntakePos(out, extend, 500, 5, 500, 5, DcMotorSimple.Direction.REVERSE);
-               break;
-            case FOLDED_IN:
-                intake.setIntake(false);
-                //intake.setIntakePos(in, retract, 500, 0, 500, 0, DcMotorSimple.Direction.REVERSE);
-                break;
-        }
+
     }
 
 }

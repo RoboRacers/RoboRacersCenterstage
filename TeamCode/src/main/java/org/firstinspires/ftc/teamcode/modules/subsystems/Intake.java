@@ -18,72 +18,60 @@ public class Intake extends Subsystem {
     public IntakeSM statemachine;
 
     public Servo claw;
-    public Servo claw_flip_one;
-    public Servo claw_flip_two;
-    public Servo claw_extend_one;
-    public Servo claw_extend_two;
-
-    public DcMotor leftMotor;
-    public DcMotor rightMotor;
-
-    double currentSpeed;
+    public Servo stage1Right;
+    public Servo stage1Left;
+    public Servo stage2Right;
+    public Servo stage2Left;
 
     public Intake(HardwareMap hardwareMap) {
         //4 servos
-
+        stage1Right = hardwareMap.get(Servo.class, "stage1right");
+        stage1Left = hardwareMap.get(Servo.class, "stage1left");
+        stage2Right = hardwareMap.get(Servo.class, "stage2right");
+        stage2Left = hardwareMap.get(Servo.class, "stage2left");
         claw = hardwareMap.get(Servo.class, "claw");
 
-        claw_flip_one = hardwareMap.get(Servo.class, "claw_flip_one");
-        claw_flip_two = hardwareMap.get(Servo.class, "claw_flip_two");
-        claw_flip_two.setDirection(Servo.Direction.REVERSE);
-
-
-        claw_extend_one = hardwareMap.get(Servo.class, "claw_extend_one");
-        claw_extend_two = hardwareMap.get(Servo.class, "claw_extend_two");
-        leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
-        rightMotor = hardwareMap.get(DcMotor.class, "rightMotor");
+        stage1Left.setDirection(Servo.Direction.REVERSE);
+        stage2Left.setDirection(Servo.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.REVERSE);
 
         statemachine = new IntakeSM(this);
     }
 
     public void setClawPos(double pos1) {claw.setPosition(pos1);}
 
-    /*
-    public void setIntakePos(double pos2, double pos3, double speed1, int motorPos, double speed2, int motorPos2, DcMotorSimple.Direction direction) {
-        claw_flip.setPosition(pos2);
-        claw_extend_one.setPosition(pos3);
-        leftMotor.setPower(speed1);
-        rightMotor.setTargetPosition(motorPos);
-        rightMotor.setPower(speed2);
-        leftMotor.setTargetPosition(motorPos2);
-        leftMotor.setDirection(direction);
-    }
-    */
 
-    public void setIntake(boolean intakeExtend){
-        if (intakeExtend=true){
-            claw_flip_one.setPosition(out);
-
-            claw_flip_two.setPosition(out);
-            claw_extend_one.setPosition(extend);
-            claw_extend_two.setPosition(extend);
-        }
-        if (intakeExtend=false){
-            claw_flip_one.setPosition(in);
-            claw_flip_two.setDirection(Servo.Direction.REVERSE);
-            claw_flip_two.setPosition(in);
-            claw_extend_one.setPosition(retract);
-            claw_extend_two.setDirection(Servo.Direction.REVERSE);
-            claw_extend_two.setPosition(retract);
-         //   leftMotor.setPower(500);
-           // rightMotor.setTargetPosition(0);
-           // rightMotor.setPower(500);
-        //    leftMotor.setTargetPosition(0);
-          //  leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        }
+    public void setIntake(double clawpos, double s1, double s2){
+        claw.setPosition(clawpos);
+        stage1Right.setPosition(s1);
+        stage1Left.setPosition(s1+.1);
+        stage2Right.setPosition(s2);
+        stage2Right.setPosition(s2);
     }
-     //public void setClawExtendTwoPos(int pos4) {claw_extend_two.setPosition(pos4);}
-    //public void setClawExtendTwoDirection(Servo.Direction direction){claw_extend_two.setDirection(direction);}
+
+    public void intakeStageOne() {
+        claw.setPosition(0.3);
+        stage1Right.setPosition(0.7);
+        stage1Left.setPosition(0.7);
+        stage2Right.setPosition(0.8);
+        stage2Right.setPosition(0.8);
+    }
+
+    public void intakeStageTwo() {
+        claw.setPosition(0.6);
+        stage1Right.setPosition(0.75);
+        stage1Left.setPosition(0.75);
+        stage2Right.setPosition(0.8);
+        stage2Right.setPosition(0.8);
+    }
+
+    public void intakeStageThree() {
+        claw.setPosition(0.2);
+        stage1Right.setPosition(0.73);
+        stage1Left.setPosition(0.73);
+        stage2Right.setPosition(0.8);
+        stage2Right.setPosition(0.8);
+    }
 
     @Override
     public void update() {

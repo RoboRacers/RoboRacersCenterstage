@@ -8,12 +8,12 @@ import org.firstinspires.ftc.teamcode.RobotCore;
 @TeleOp(name = "Template Teleop", group = "16481-Centerstage")
 public class TemplateTeleop extends LinearOpMode {
 
-
+    RobotCore robot;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        RobotCore robot = new RobotCore(hardwareMap);
+        robot = new RobotCore(hardwareMap);
 
         while (opModeInInit()) {
         }

@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.modules.statemachines.LauncherSM;
 
 public class Launcher extends Subsystem  {
 
-
     public LauncherSM statemachine;
 
     public Servo actuationServo;

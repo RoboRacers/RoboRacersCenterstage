@@ -30,8 +30,6 @@ public class RobotCore extends Subsystem {
 
     public Intake intake;
 
-    public Launcher launcher;
-
     public Slides slides;
 
 
@@ -49,12 +47,10 @@ public class RobotCore extends Subsystem {
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         intake = new Intake(hardwareMap);
-        launcher = new Launcher(hardwareMap);
         slides = new Slides(hardwareMap);
 
         subsystems = Arrays.asList(
                 intake,
-                launcher,
                 slides
         );
 

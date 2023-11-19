@@ -41,7 +41,7 @@ public class TemplateAutoop extends LinearOpMode{
 
         if (isStopRequested()) return;
 
-        robot.drive.followTrajectorySequence(traj2);
+        robot.drive.followTrajectorySequenceAsync(traj2);
 
 
     }

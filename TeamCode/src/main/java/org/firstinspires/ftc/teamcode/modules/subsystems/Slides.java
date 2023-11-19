@@ -63,6 +63,13 @@ public class Slides extends Subsystem {
         leftmotor.setPower(power);
     }
 
+    public void setManualPower(double power){
+        rightmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightmotor.setPower(power);
+        leftmotor.setPower(power);
+    }
+
     /**
      * Function that will run every single loop. Run any code that
      * needs to be run every loop here, and update the statemachine object.

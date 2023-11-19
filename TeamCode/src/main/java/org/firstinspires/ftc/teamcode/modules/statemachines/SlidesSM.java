@@ -83,16 +83,6 @@ public class SlidesSM implements StateMachine {
      * You can define transitions to other states internally here as well.
      */
     public void update() {
-        switch (currentState) {
-            case REACHED_OUT:
-                slides.setPower(.8);
-                break;
-            case FOLDED_IN:
-                slides.setPower(.8);
-                break;
-            case RESTING:
-                slides.setPower(0);
-        }
     }
 
 }

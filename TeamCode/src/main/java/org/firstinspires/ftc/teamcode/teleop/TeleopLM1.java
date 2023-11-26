@@ -55,7 +55,7 @@ public class TeleopLM1 extends LinearOpMode {
             }
 
             if (gamepad2.right_stick_y > 0.1) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y*.4);
+                robot.slides.setManualPower(-gamepad2.right_stick_y*1);
             } else if (gamepad2.right_stick_y < -0.1) {
                 robot.slides.setManualPower(-gamepad2.right_stick_y*.7);
             } else {

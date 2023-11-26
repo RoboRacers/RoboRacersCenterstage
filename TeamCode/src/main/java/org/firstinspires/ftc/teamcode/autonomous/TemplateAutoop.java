@@ -33,6 +33,8 @@ public class TemplateAutoop extends LinearOpMode{
 
 
 
+
+
         while(!isStopRequested() && !opModeIsActive()) {
 
         }

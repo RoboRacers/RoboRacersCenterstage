@@ -29,7 +29,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
+import org.firstinspires.ftc.teamcode.util.RoadrunnerUtil.LynxModuleUtil;
 
 import java.util.Arrays;
 import java.util.List;

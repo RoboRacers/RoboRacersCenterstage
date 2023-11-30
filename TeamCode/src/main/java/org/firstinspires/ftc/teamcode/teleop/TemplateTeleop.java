@@ -21,7 +21,7 @@ public class TemplateTeleop extends LinearOpMode {
 
         while (!isStopRequested()) {
 
-
+            robot.update();
         }
     }
 }

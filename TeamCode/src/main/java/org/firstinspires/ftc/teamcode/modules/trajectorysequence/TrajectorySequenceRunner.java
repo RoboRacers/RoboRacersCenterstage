@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.modules.trajectorysequence.sequencesegment
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.sequencesegment.TrajectorySegment;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.sequencesegment.TurnSegment;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.sequencesegment.WaitSegment;
-import org.firstinspires.ftc.teamcode.util.DashboardUtil;
+import org.firstinspires.ftc.teamcode.util.RoadrunnerUtil.DashboardUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

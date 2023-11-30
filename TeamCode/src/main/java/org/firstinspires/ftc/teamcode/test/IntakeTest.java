@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
-@TeleOp(name = "Intake Test", group = "16481-Power-Play")
+@TeleOp(name = "Intake Test", group = "Test")
 public class IntakeTest extends LinearOpMode {
 
 Servo stage1Right;

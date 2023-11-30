@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 
-@TeleOp(name = "Template Teleop", group = "16481-Centerstage")
+
+@TeleOp(name = "Template Teleop", group = "16481-Template")
 public class TemplateTeleop extends LinearOpMode {
 
     RobotCore robot;

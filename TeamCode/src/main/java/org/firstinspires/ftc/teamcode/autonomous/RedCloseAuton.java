@@ -7,23 +7,28 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
+import org.firstinspires.ftc.teamcode.modules.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
 
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Autonomous(name = "Blank Testing Autoop", group = "16481-Power-Play")
-public class BlankTestingAutoop extends LinearOpMode{
+@Autonomous(name = "Red Close Side Auton", group = "16481-Centerstage")
+public class RedCloseAuton extends LinearOpMode{
 
     RobotCore robot;
+
+    SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
     @Override
     public void runOpMode() {
 
         robot = new RobotCore(hardwareMap);
 
-        TrajectorySequence traj1 = robot.drive.trajectorySequenceBuilder(new Pose2d(15.85, 62.00, Math.toRadians(90)))
+        Pose2d startLocation = new Pose2d(15.85, 62.00, Math.toRadians(90));
+
+        TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)
                 .splineTo(new Vector2d(12.95, 29.04), Math.toRadians(266.31))
                 .setReversed(false)
@@ -68,25 +73,25 @@ public class BlankTestingAutoop extends LinearOpMode{
                 .splineTo(new Vector2d(58,60), Math.toRadians(0))
                 .build();
 
-
-
-
-
-
-
-
         while(!isStopRequested() && !opModeIsActive()) {
-
+            // Vision code here
         }
 
         waitForStart();
 
         if (isStopRequested()) return;
 
+        robot.drive.setPoseEstimate(startLocation);
 
-        robot.drive.setPoseEstimate(traj1.start());
-        robot.drive.followTrajectorySequence(traj1);
-
+        // Runs the trajectory based on the start location
+        switch (spikeMarkerLocation) {
+            case LEFT:
+                break;
+            case CENTER:
+                robot.drive.followTrajectorySequence(CenterNoCycle);
+            case RIGHT:
+                break;
+        }
 
     }
 

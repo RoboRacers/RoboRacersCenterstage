@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySeque
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Autonomous(name = "Template Autoop", group = "16481-Power-Play")
+@Autonomous(name = "Template Autoop", group = "16481-Template")
 public class TemplateAutoop extends LinearOpMode{
 
     boolean finished = false;
@@ -30,10 +30,6 @@ public class TemplateAutoop extends LinearOpMode{
                 .splineTo(new Vector2d(-30.68, -11.87), Math.toRadians(-0.90))
                 .splineTo(new Vector2d(43.87, -33.85), Math.toRadians(8.13))
                 .build();
-
-
-
-
 
         while(!isStopRequested() && !opModeIsActive()) {
 

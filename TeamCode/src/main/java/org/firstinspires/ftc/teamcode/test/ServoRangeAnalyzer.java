@@ -47,7 +47,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-@TeleOp(name = "Servo Range Analyzer", group = "Concept")
+@TeleOp(name = "Servo Range Analyzer", group = "Test")
 public class ServoRangeAnalyzer extends LinearOpMode {
 
     static final double INCREMENT   = 0.005;     // amount to slew servo each CYCLE_MS cycle

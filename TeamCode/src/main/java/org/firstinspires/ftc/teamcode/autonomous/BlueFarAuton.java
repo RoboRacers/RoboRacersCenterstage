@@ -43,28 +43,21 @@ public class BlueFarAuton extends LinearOpMode{
                 .build();
 
 
-        TrajectorySequence traj2 = robot.drive.trajectorySequenceBuilder(new Pose2d(15.85, 62.00, Math.toRadians(90)))
+        TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(new Pose2d(15.85, 62.00, Math.toRadians(90)))
                 .setReversed(true)
-                .splineTo(new Vector2d(11.56, 44.15), Math.toRadians(270.00))
-                .splineTo(new Vector2d(2.27, 31.90), Math.toRadians(232.84))
+                .splineTo(new Vector2d(-28.30, 33.07), Math.toRadians(-79.08))
                 .setReversed(false)
-                .splineTo(new Vector2d(14.32, 44.35), Math.toRadians(45.92))
+                .splineTo(new Vector2d(-51.94, 34.66), Math.toRadians(176.15))
+                .splineTo(new Vector2d(-55.12, 13.41), Math.toRadians(-8.95))
                 .setReversed(true)
-                .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(IntakeSM.EVENT.EXTEND_WITH_PIXEL);
-                    robot.slides.setTargetPosition(800);
-                    robot.slides.setPower(.8);
-                })
-                .splineTo(new Vector2d(46.50, 35.90), Math.toRadians(0.00))
-                .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(IntakeSM.EVENT.RELEASE_PIXEL);
-                    robot.slides.setTargetPosition(0);
-                })
+                .splineTo(new Vector2d(5.46, 12.41), Math.toRadians(11.51))
+                .splineTo(new Vector2d(46.97, 35.85), Math.toRadians(-10.09))
                 .setReversed(false)
-                .splineTo(new Vector2d(39, 35.90), Math.toRadians(180))
+                .splineTo(new Vector2d(36.45, 20.16), Math.toRadians(222.11))
                 .setReversed(true)
-                .splineTo(new Vector2d(58,60), Math.toRadians(0))
+                .splineTo(new Vector2d(65.25, 12.41), Math.toRadians(-32.81))
                 .build();
+
 
         while(!isStopRequested() && !opModeIsActive()) {
             // Vision code here

@@ -26,7 +26,7 @@ public class BlueFarAuton extends LinearOpMode{
 
         robot = new RobotCore(hardwareMap);
 
-        Pose2d startLocation = new Pose2d(15.85, 62.00, Math.toRadians(90));
+        Pose2d startLocation = new Pose2d(-40, 62.00, Math.toRadians(90));
 
         TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)

@@ -43,7 +43,7 @@ public class BlueFarAuton extends LinearOpMode{
                 .build();
 
 
-        TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(new Pose2d(15.85, 62.00, Math.toRadians(90)))
+        TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)
                 .splineTo(new Vector2d(-28.30, 33.07), Math.toRadians(-79.08))
                 .setReversed(false)
@@ -57,6 +57,21 @@ public class BlueFarAuton extends LinearOpMode{
                 .setReversed(true)
                 .splineTo(new Vector2d(65.25, 12.41), Math.toRadians(-32.81))
                 .build();
+
+        TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
+                .setReversed(true)
+                .splineTo(new Vector2d(-43.53, 30.22), Math.toRadians(186.44))
+                .setReversed(false)
+                .splineTo(new Vector2d(-35.03, 16.91), Math.toRadians(-61.39))
+                .setReversed(true)
+                .splineTo(new Vector2d(-35.03, 1.02), Math.toRadians(-73.57))
+                .splineTo(new Vector2d(15.44, 6.56), Math.toRadians(27.88))
+                .splineTo(new Vector2d(46.68, 34.66), Math.toRadians(0.00))
+                .setReversed(false)
+                .splineTo(new Vector2d(43.16, 9.52), Math.toRadians(-52.43))
+                .splineTo(new Vector2d(62.94, 8.78), Math.toRadians(18.43))
+                .build();
+
 
 
         while(!isStopRequested() && !opModeIsActive()) {

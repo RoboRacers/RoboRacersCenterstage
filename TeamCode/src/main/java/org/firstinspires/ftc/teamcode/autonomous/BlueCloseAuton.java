@@ -66,7 +66,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .build();
 
 
-        TrajectorySequence traj2 = robot.drive.trajectorySequenceBuilder(new Pose2d(15.85, 62.00, Math.toRadians(90)))
+        TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(new Pose2d(15.85, 62.00, Math.toRadians(90)))
                 .setReversed(true)
                 .splineTo(new Vector2d(11.56, 44.15), Math.toRadians(270.00))
                 .splineTo(new Vector2d(2.27, 31.90), Math.toRadians(232.84))

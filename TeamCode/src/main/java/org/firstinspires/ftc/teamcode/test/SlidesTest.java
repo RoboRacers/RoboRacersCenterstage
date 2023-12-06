@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import java.util.List;
 
-@TeleOp(name = "Slides Test", group = "Test")
+@TeleOp(name = "Single Slide Test", group = "Slides-Test")
 public class SlidesTest extends LinearOpMode {
 
     DcMotor rightSlides;

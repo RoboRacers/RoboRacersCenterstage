@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,8 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import java.util.List;
-
-@TeleOp(name = "Slides RTP Test", group = "Test")
+@Deprecated
+@Disabled
+@TeleOp(name = "Slides RTP Test", group = "Slides-Test")
 public class SlidesRunToPositionTest extends LinearOpMode {
 
 

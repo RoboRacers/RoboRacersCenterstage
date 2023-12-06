@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import java.util.List;
 
 @Config
-@TeleOp(name = "Slides PIDF Test", group = "Test")
+@TeleOp(name = "Slides PIDF Test", group = "Slides-Test")
 public class SlidesPIDFTest extends LinearOpMode {
 
     DcMotorImplEx rightSlides;

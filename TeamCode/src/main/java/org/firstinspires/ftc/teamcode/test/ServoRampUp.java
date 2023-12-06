@@ -29,9 +29,13 @@
 
 package org.firstinspires.ftc.teamcode.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.concurrent.TimeUnit;
 
 /*
  * This OpMode scans a single servo back and forward until Stop is pressed.
@@ -47,26 +51,19 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-@TeleOp(name = "Servo Range Analyzer", group = "Test")
-public class ServoRangeAnalyzer extends LinearOpMode {
+@TeleOp(name = "Servo ", group = "Test")
+@Disabled
+public class ServoRampUp extends LinearOpMode {
 
-    static final double INCREMENT   = 0.005;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   40;     // period of each cycle
+    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static final int    CYCLE_MS    =   50;     // period of each cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
     static final double MIN_POS     =  0.0;     // Minimum rotational position
 
     // Define class members
-    Servo rightServo;
-    Servo   leftServo;
-    double  position = .6; // Start at halfway position
-
-    double  lposition = .72; // Start at halfway position
-
-
-    // L midpos : 0.72
-    // R midpos: 0.60
+    Servo   servo;
+    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
     boolean rampUp = true;
-    boolean lrampUp = true;
 
 
     @Override
@@ -74,64 +71,32 @@ public class ServoRangeAnalyzer extends LinearOpMode {
 
         // Connect to servo (Assume Robot Left Hand)
         // Change the text in quotes to match any servo name on your robot.
-        rightServo = hardwareMap.get(Servo.class, "rightStage1");
-        leftServo = hardwareMap.get(Servo.class, "leftStage1");
+        servo = hardwareMap.get(Servo.class, "left_hand");
 
-
-        leftServo.setDirection(Servo.Direction.REVERSE);
+        ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         // Wait for the start button
         telemetry.addData(">", "Press Start to scan Servo." );
         telemetry.update();
         waitForStart();
 
+        double target = timer.time() + 5;
 
         // Scan servo till stop pressed.
         while(opModeIsActive()){
 
-            // slew the servo, according to the rampUp (direction) variable.
-            if (gamepad1.dpad_up) {
-                // Keep stepping up until we hit the max value.
-                position += INCREMENT ;
-                lposition += INCREMENT;
-                if (position <= MAX_POS && lposition <= MAX_POS) {
-                    rightServo.setPosition(position);
-                    leftServo.setPosition(lposition);
-                }
-
-            }
-            else if (gamepad1.dpad_down) {
-                // Keep stepping down until we hit the min value.
-                position -= INCREMENT;
-                lposition -= INCREMENT;
-                if (position >= MIN_POS && lposition >= MIN_POS) {
-                    rightServo.setPosition(position);
-                    leftServo.setPosition(lposition);
-                } else {
-                    position += INCREMENT;
-                    lposition += INCREMENT;
-                }
+            if (timer.time() > target) {
+                target += 5;
+                position += INCREMENT;
+                servo.setPosition(position);
             }
 
-            if (gamepad1.triangle) {
-                rightServo.setPosition(0);
-                leftServo.setPosition(0);
-            }
-            else if (gamepad1.cross) {
-                rightServo.setPosition(1);
-                leftServo.setPosition(1);
-            }
 
             // Display the current value
-            telemetry.addData("Right Servo Position", "%5.2f", position);
-
-            telemetry.addData("Left Servo Position", "%5.2f", lposition);
+            telemetry.addData("Servo Position", "%5.2f", position);
             telemetry.addData(">", "Press Stop to end test." );
             telemetry.update();
 
-            // Set the servo to the new position and pause;
-            sleep(CYCLE_MS);
-            idle();
         }
 
         // Signal done;

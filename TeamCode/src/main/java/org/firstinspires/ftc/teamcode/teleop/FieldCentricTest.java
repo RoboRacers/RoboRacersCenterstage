@@ -54,7 +54,6 @@ public class FieldCentricTest extends LinearOpMode {
             robot.drive.update();
 
             poses = mcl.getParticlePoses();
-            map = mcl.getParticleMap();
 
 
 

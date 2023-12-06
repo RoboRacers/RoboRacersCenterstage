@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 import java.util.List;
 
 @Config
-@TeleOp(name = "Slides Subsystem Test", group = "Test")
+@TeleOp(name = "Slides Subsystem Test", group = "Slides-Test")
 public class SlidesSubsystemTest extends LinearOpMode {
 
     Slides slides;

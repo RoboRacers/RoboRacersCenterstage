@@ -27,7 +27,7 @@ public class TeleopLM1 extends LinearOpMode {
             robot.drive.setWeightedDrivePower(
                     new Pose2d(
                             -gamepad1.left_stick_y * speedMultiplier,
-                            -gamepad1.left_stick_x * speedMultiplier, //imperfect strafing fix, must be tuned for new drivetrain
+                            gamepad1.left_stick_x * speedMultiplier, //imperfect strafing fix, must be tuned for new drivetrain
                             gamepad1.right_stick_x * strafeMultiplier
                     )
             );
@@ -55,7 +55,7 @@ public class TeleopLM1 extends LinearOpMode {
             }
 
             if (gamepad2.right_stick_y > 0.1) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y*.4);
+                robot.slides.setManualPower(-gamepad2.right_stick_y*1);
             } else if (gamepad2.right_stick_y < -0.1) {
                 robot.slides.setManualPower(-gamepad2.right_stick_y*.7);
             } else {

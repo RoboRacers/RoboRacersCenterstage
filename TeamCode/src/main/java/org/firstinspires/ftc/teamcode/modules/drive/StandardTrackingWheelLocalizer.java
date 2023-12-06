@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.modules.drive;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -7,8 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.teamcode.util.Encoder;
+import org.firstinspires.ftc.teamcode.util.RoadrunnerUtil.Encoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,22 +16,23 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.6889764;
     public static double GEAR_RATIO = 1;
-    public static double LATERAL_DISTANCE = 21.9;
-    public static double FORWARD_OFFSET = -6;
+    public static double LATERAL_DISTANCE = 8.38;
+    public static double FORWARD_OFFSET = -4.80;
     public static double X_MULTIPLIER = 1.0256410256;
     public static double Y_MULTIPLIER = 1.0322580645;
     private Encoder leftEncoder, rightEncoder, frontEncoder;
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) {
         super(Arrays.asList(
-                new Pose2d(2, LATERAL_DISTANCE / 2, 0), // left
-                new Pose2d(2.5 -LATERAL_DISTANCE / 2, 0), // right
-                new Pose2d(FORWARD_OFFSET, -1, Math.toRadians(90)) // front
+                new Pose2d(0, LATERAL_DISTANCE / 2, 0), // left
+                new Pose2d(0, -LATERAL_DISTANCE / 2, 0), // right
+                new Pose2d(FORWARD_OFFSET, 0, Math.toRadians(90)) // front
         ));
 
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Bl")); // Port Number 3
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Fr")); // Port Number 2
+
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Fr")); // Port Number 3
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Bl")); // Port Number 2
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Br")); // Port Number 1
-        leftEncoder.setDirection(Encoder.Direction.REVERSE);
+
 
     }
 

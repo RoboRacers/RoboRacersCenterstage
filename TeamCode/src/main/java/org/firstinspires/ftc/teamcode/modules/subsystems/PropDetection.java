@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.modules.subsystems;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Subsystem;
+import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -10,11 +12,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamPropDetectionPipeline {
+public class PropDetection extends Subsystem {
     TeamPropPipeline teamPropDetectionPipeline;
     Telemetry telemetry;
 
-    public TeamPropDetectionPipeline(OpenCvCamera camera, Telemetry telemetry) {
+    public PropDetection(OpenCvCamera camera, Telemetry telemetry) {
         this.telemetry = telemetry;
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -33,7 +35,7 @@ public class TeamPropDetectionPipeline {
         }
     }
 
-    public String getDirection() {
+    public SpikeMarkerLocation getDirection() {
         return teamPropDetectionPipeline.getDirection();
     }
     public String getElapsedTime() {
@@ -41,6 +43,11 @@ public class TeamPropDetectionPipeline {
     }
     public String getEndTime() {
         return teamPropDetectionPipeline.getEndTime();
+    }
+
+    @Override
+    public void update() {
+
     }
 
 
@@ -58,7 +65,7 @@ public class TeamPropDetectionPipeline {
         int frameCount = 1;
 
 
-        private String direction = "";
+        private SpikeMarkerLocation direction = SpikeMarkerLocation.CENTER;
 
         private String elapsedTime = "";
 
@@ -165,11 +172,11 @@ public class TeamPropDetectionPipeline {
                 }
 
                 if (leftBlackPixelCount > centerBlackPixelCount && leftBlackPixelCount > rightBlackPixelCount) {
-                    direction = "left";
+                    direction = SpikeMarkerLocation.LEFT;
                 } else if (rightBlackPixelCount > leftBlackPixelCount && rightBlackPixelCount > centerBlackPixelCount) {
-                    direction = "right";
+                    direction = SpikeMarkerLocation.RIGHT;
                 } else {
-                    direction = "center";
+                    direction = SpikeMarkerLocation.CENTER;
                 }
                 frameCount = 1;
 
@@ -183,7 +190,7 @@ public class TeamPropDetectionPipeline {
             return frame;
         }
 
-        public String getDirection() {
+        public SpikeMarkerLocation getDirection() {
             return direction;
         }
 

@@ -33,25 +33,17 @@ public class TeleopLM1 extends LinearOpMode {
             );
 
             if (gamepad2.dpad_down) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.OPEN_FOR_PIXEL
-                );
+                robot.intake.setIntake(.1, .475, .8);
             } else if (gamepad2.dpad_left) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.CLOSING_FOR_PIXEL
-                );
+                robot.intake.setIntake(.27,0.55,.8);
             } else if (gamepad2.dpad_right) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.CLOSED_WITH_PIXEL
-                );
+                robot.intake.setIntake(.1,.475,.8);
             } else if (gamepad2.dpad_up) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.EXTEND_WITH_PIXEL
-                );
+                robot.intake.setIntake(.1,0.05, .0);
             }
 
             if (gamepad2.right_bumper) {
-                robot.intake.claw.setPosition(0.6);
+                robot.intake.claw.setPosition(0.3);
             }
 
             if (gamepad2.right_stick_y > 0.1) {

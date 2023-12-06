@@ -35,18 +35,28 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineTo(new Vector2d(7.46, 40.02), Math.toRadians(143.13))
                 .setReversed(true)
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(IntakeSM.EVENT.EXTEND_WITH_PIXEL);
-                    robot.slides.setTargetPosition(800);
+                    robot.intake.statemachine.transition(
+                            IntakeSM.EVENT.EXTEND_WITH_PIXEL
+                    );
+                    robot.slides.setTargetPosition(820);
                     robot.slides.setPower(.8);
                 })
                 .splineTo(new Vector2d(46.50, 35.90), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(IntakeSM.EVENT.RELEASE_PIXEL);
-                    robot.slides.setTargetPosition(0);
+                    robot.intake.statemachine.transition(
+                            IntakeSM.EVENT.RELEASE_PIXEL
+                    );
                 })
+                .waitSeconds(2)
                 .setReversed(false)
                 .splineTo(new Vector2d(39, 35.90), Math.toRadians(180))
                 .setReversed(true)
+                .addDisplacementMarker(() -> {
+                    robot.slides.setTargetPosition(0);
+                    robot.intake.statemachine.transition(
+                            IntakeSM.EVENT.CLOSED_WITH_PIXEL
+                    );
+                })
                 .splineTo(new Vector2d(58,60), Math.toRadians(0))
                 .build();
 
@@ -74,24 +84,41 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineTo(new Vector2d(14.32, 44.35), Math.toRadians(45.92))
                 .setReversed(true)
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(IntakeSM.EVENT.EXTEND_WITH_PIXEL);
+                    robot.intake.statemachine.transition(
+                            IntakeSM.EVENT.EXTEND_WITH_PIXEL
+                    );
                     robot.slides.setTargetPosition(800);
                     robot.slides.setPower(.8);
                 })
                 .splineTo(new Vector2d(46.50, 35.90), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(IntakeSM.EVENT.RELEASE_PIXEL);
+                    robot.intake.statemachine.transition(
+                            IntakeSM.EVENT.RELEASE_PIXEL
+                    );
                     robot.slides.setTargetPosition(0);
                 })
                 .setReversed(false)
                 .splineTo(new Vector2d(39, 35.90), Math.toRadians(180))
                 .setReversed(true)
+                .addDisplacementMarker(() -> {
+                    robot.intake.statemachine.transition(
+                            IntakeSM.EVENT.CLOSED_WITH_PIXEL
+                    );
+                })
                 .splineTo(new Vector2d(58,60), Math.toRadians(0))
                 .build();
 
         while(!isStopRequested() && !opModeIsActive()) {
             // Vision code here
             spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Placeholder, change this based on vision
+
+            if (gamepad2.square) {
+                spikeMarkerLocation = SpikeMarkerLocation.LEFT;
+            } else if (gamepad2.circle) {
+                spikeMarkerLocation = SpikeMarkerLocation.CENTER;
+            } else if (gamepad2.triangle) {
+                spikeMarkerLocation = SpikeMarkerLocation.RIGHT;
+            }
 
             telemetry.addData("Spike Marker Location", spikeMarkerLocation);
         }
@@ -101,14 +128,18 @@ public class BlueCloseAuton extends LinearOpMode{
         if (isStopRequested()) return;
 
         robot.drive.setPoseEstimate(startLocation);
+        robot.intake.claw.setPosition(0.05);
 
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {
             case LEFT:
-                break;
+               robot.drive.followTrajectorySequence(LeftNoCycle);
+               break;
             case CENTER:
                 robot.drive.followTrajectorySequence(CenterNoCycle);
+                break;
             case RIGHT:
+                robot.drive.followTrajectorySequence(RightNoCycle);
                 break;
         }
 

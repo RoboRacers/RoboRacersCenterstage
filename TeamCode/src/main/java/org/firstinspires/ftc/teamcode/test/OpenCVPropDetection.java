@@ -1,15 +1,17 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.modules.subsystems.PropDetection;
+import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@TeleOp(name="Team Prop Detection OpMode", group="Linear Opmode")
+@TeleOp(name="Team Prop Detection OpMode", group="Test")
 public class OpenCVPropDetection extends LinearOpMode {
     private OpenCvWebcam camera;
-    private TeamPropDetectionPipeline teamPropDetectionPipeline;
+    private PropDetection teamPropDetectionPipeline;
 
     @Override
     public void runOpMode() {
@@ -19,12 +21,12 @@ public class OpenCVPropDetection extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
                 .get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        teamPropDetectionPipeline = new TeamPropDetectionPipeline(camera, telemetry);
+        teamPropDetectionPipeline = new PropDetection(camera, telemetry);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            String direction = teamPropDetectionPipeline.getDirection();
+            SpikeMarkerLocation direction = teamPropDetectionPipeline.getDirection();
 
             telemetry.addData("Direction", direction);
             telemetry.update();

@@ -41,19 +41,19 @@ double retract = 0;
             case GAME_START:
                 break;
             case OPEN_FOR_PIXEL:
-                intake.setIntake(.32, .68, .8);
+                intake.setIntake(.27,0.55,.8);
                 break;
             case CLOSING_FOR_PIXEL:
-                intake.setIntake(.525,.75,.8);
+                intake.setIntake(.05,.5,.8);
                 break;
             case CLOSED_WITH_PIXEL:
-                intake.setIntake(.32,.73,.8);
+                intake.setIntake(.05, .475, .8);
                 break;
             case EXTEND_WITH_PIXEL:
-                intake.setIntake(.32,.3, .18);
+                intake.setIntake(.05,0.05, .05);
                 break;
             case RELEASE_PIXEL:
-                intake.claw.setPosition(.525);
+                intake.claw.setPosition(.4);
                 break;
         }
     }

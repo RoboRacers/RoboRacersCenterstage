@@ -44,7 +44,7 @@ public class Intake extends Subsystem {
     public void setIntake(double clawpos, double s1, double s2){
         claw.setPosition(clawpos);
         stage1Right.setPosition(s1);
-        stage1Left.setPosition(s1+.1);
+        stage1Left.setPosition(s1);
         stage2Right.setPosition(s2);
         stage2Right.setPosition(s2);
     }

@@ -5,6 +5,8 @@ import com.acmerobotics.roadrunner.localization.Localizer;
 import com.roboracers.gaeldrive.motion.MotionModel;
 
 import org.apache.commons.math3.linear.RealVector;
+
+import com.roboracers.gaeldrive.utils.MismatchedLengthException;
 import com.roboracers.gaeldrive.utils.PoseUtils;
 import com.roboracers.gaeldrive.utils.StatsUtils;
 
@@ -20,6 +22,8 @@ public class RRLocalizerMotionModel implements MotionModel {
 
     RealVector prevState;
     RealVector currentState;
+
+    double[] deviance = {0.05, 0.05, 0.01};
 
 
     public RRLocalizerMotionModel(Pose2d startPose, Localizer localizer) {
@@ -37,18 +41,17 @@ public class RRLocalizerMotionModel implements MotionModel {
      * @return Translational vector
      */
     @Override
-    public  RealVector getTranslationVector() {
+    public  RealVector getTranslationVector() throws Exception {
         prevState = currentState;
         currentState = PoseUtils.poseToVector(trackingWheelPose);
         RealVector translation = currentState.subtract(prevState);
 
-        return StatsUtils.addGaussianNoise2D(translation, 0.05, 0.005);
+        return StatsUtils.addGaussianNoise(translation, deviance);
     }
 
     @Override
     public Pose2d getRawEstimate() {
         return trackingWheelPose;
     }
-
 
 }

@@ -20,7 +20,6 @@ import com.roboracers.gaeldrive.utils.Updatable;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.RRLocalizerMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.AnalogDistanceSensorModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorUtils;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.StandardSensorStack;
 
 
 import java.util.ArrayList;

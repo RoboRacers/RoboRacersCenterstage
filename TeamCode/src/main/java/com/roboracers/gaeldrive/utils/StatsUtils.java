@@ -16,40 +16,26 @@ public class StatsUtils {
     static ChiSquaredDistribution distribution2DOF = new ChiSquaredDistribution(2);
     static ChiSquaredDistribution distribution3DOF = new ChiSquaredDistribution(3);
 
+    /**
+     * Adds Gaussian noise to a vector of arbitrary length.
+     * @param state
+     * @param deviances
+     * @return Vector with noise
+     * @throws MismatchedLengthException
+     */
     public static RealVector addGaussianNoise(RealVector state, double[] deviances) throws MismatchedLengthException {
-        if (deviances.length != state.getDimension()) {
+
+        int len = state.getDimension();
+
+        if (deviances.length != len) {
             throw new MismatchedLengthException("Mismatched Length for resampling deviances");
         }
 
-        int len = state.getDimension();
         for (int i = 0; i < len; i++) {
-            state.setEntry(i, state.getEntry(i) + generateGaussian(deviances[i]));
+            state.setEntry(i, generateGaussian(deviances[i], state.getEntry(i)));
         }
         return new ArrayRealVector(state);
     }
-
-    public static RealVector addGaussianNoise2D(RealVector state) {
-        if (state.getDimension() != 3) {
-            return null;
-        } else {
-            state.setEntry(0, state.getEntry(0) + generateGaussian(1,0));
-            state.setEntry(1, state.getEntry(1) + generateGaussian(1,0));
-            state.setEntry(2, state.getEntry(2) + generateGaussian(0.01,0));
-        }
-        return state;
-    }
-
-    public static RealVector addGaussianNoise2D(RealVector state, double positionDeviation, double headingDeviation) {
-        if (state.getDimension() != 3) {
-            return null;
-        } else {
-            state.setEntry(0, state.getEntry(0) + generateGaussian(positionDeviation,0));
-            state.setEntry(1, state.getEntry(1) + generateGaussian(positionDeviation,0));
-            state.setEntry(2, state.getEntry(2) + generateGaussian(headingDeviation,0));
-        }
-        return state;
-    }
-
 
     public static double generateGaussian() {
         return random.nextGaussian() * STD_DEVIATION + MEAN;
@@ -77,13 +63,13 @@ public class StatsUtils {
 
         RealVector readingDelta = v1.subtract(v2);
 
-        double probSensorGivenState = 0;
         if (DOF == 2){
-            probSensorGivenState = distribution2DOF.density(readingDelta.getNorm());
+            return distribution2DOF.density(readingDelta.getNorm());
         } else if ( DOF == 3 ) {
-            probSensorGivenState = distribution3DOF.density(readingDelta.getNorm());
+            return distribution3DOF.density(readingDelta.getNorm());
+        } else {
+            return distribution2DOF.density(readingDelta.getNorm());
         }
 
-        return probSensorGivenState;
     }
 }

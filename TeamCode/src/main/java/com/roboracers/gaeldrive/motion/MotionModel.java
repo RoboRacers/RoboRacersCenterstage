@@ -1,6 +1,7 @@
 package com.roboracers.gaeldrive.motion;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.roboracers.gaeldrive.utils.MismatchedLengthException;
 import com.roboracers.gaeldrive.utils.Updatable;
 
 import org.apache.commons.math3.linear.RealVector;
@@ -14,7 +15,7 @@ public interface MotionModel extends Updatable {
      * Get the predictive translation in the form of a vector.
      * @return Translation Vector
      */
-    public RealVector getTranslationVector();
+    public RealVector getTranslationVector() throws MismatchedLengthException, Exception;
 
     /**
      * Get the raw estimate of the predictive model

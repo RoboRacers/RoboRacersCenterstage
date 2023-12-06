@@ -1,6 +1,7 @@
 package com.roboracers.gaeldrive.utils;
 
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
+import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
 import java.util.Random;
@@ -24,7 +25,7 @@ public class StatsUtils {
         for (int i = 0; i < len; i++) {
             state.setEntry(i, state.getEntry(i) + generateGaussian(deviances[i]));
         }
-        return state;
+        return new ArrayRealVector(state);
     }
 
     public static RealVector addGaussianNoise2D(RealVector state) {

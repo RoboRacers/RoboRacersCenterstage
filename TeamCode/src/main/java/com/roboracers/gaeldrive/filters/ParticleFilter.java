@@ -20,6 +20,7 @@ import org.apache.commons.math3.linear.RealVector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -134,44 +135,6 @@ public class ParticleFilter {
         }
     }
 
-    /**
-     *
-     * @param models List of models to be used.
-     */
-    public void weighParticlesBayesian(List<SensorModel> models) {
-        //TODO: Implement Fully Bayesian Weighting
-
-        // For every particle in our state space
-        int index = 0;
-        for (Particle particle: Particles) {
-
-            double cumulativeWeight = 0;
-            double cumulativeWeightModifier = 0;
-
-            // For every sensor model that we are considering
-            for (SensorModel model: models) {
-
-                // Get both the actual and simulated reading
-                RealVector simulatedSensorValue = model.getSimulatedReading(particle.getState());
-                RealVector actualSensorValue = model.getActualReading();
-
-                double probability = StatsUtils.readingDeltaProbability(actualSensorValue, simulatedSensorValue, model.getDOF());
-
-                // Add the probability multiplied by the weight of the model.
-                cumulativeWeight += probability * model.getWeightModifier();
-                // Add the weight of this sensor model to the overall weight modifier
-                cumulativeWeightModifier += model.getWeightModifier();
-
-            }
-
-            // Calculate the average weights of all the sensors and assign it to the particle
-            particle.setWeight((cumulativeWeight/cumulativeWeightModifier)*particle.getWeight());
-
-            // Add the particle with the updated weight back into our particle set.
-            Particles.set(index, particle);
-            index ++;
-        }
-    }
 
     /**
      * Systematic resampling for the particle filter.
@@ -179,7 +142,6 @@ public class ParticleFilter {
     public void resampleParticles(double[] resamplingDeviances) throws Exception {
         int numParticles = Particles.size();
         ArrayList<Particle> newParticles = new ArrayList<>(numParticles);
-        newParticles.clear();
 
         double totalWeight = 0.0;
 
@@ -199,34 +161,22 @@ public class ParticleFilter {
                 cumulativeWeight += Particles.get(index).getWeight();
             }
 
-            Particle particle = Particles.get(index);
-
-            Particle particle1 = new Particle();
-
-            particle1.setState(
+            //System.out.println("New Particle #" + i + p);
+            newParticles.add(new Particle(
                     StatsUtils.addGaussianNoise(
-                            particle.getState(),
+                            Particles.get(index).getState(),
                             resamplingDeviances
-                    )
-            );
-            particle1.setWeight(1.0);
+                    ),
+                    1.0,
+                    ThreadLocalRandom.current().nextInt()
+            ));
 
-
-
-            System.out.println("New Particle #" + i + particle1);
-            newParticles.add(particle1);
-            //System.out.println("New Particle #" + i + newParticles.get(i));
             position += stepSize;
 
         }
 
-        System.out.println("New particles After (Should be full)");
-
-        for (Particle p: newParticles) {
-            System.out.println(p);
-        }
-
         Particles = newParticles;
+
     }
 
 
@@ -252,12 +202,10 @@ public class ParticleFilter {
 
     /**
      * Get a random particle from the particle set. Used for debugging.
-     * @return
      */
     public Particle getRandomParticle() {
         int range = Particles.size();
-        return Particles.get(1);
-        // return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
+        return Particles.get(ThreadLocalRandom.current().nextInt(0, range));
     }
 
     public Particle getParticle(int i) {

@@ -8,6 +8,7 @@ import com.roboracers.gaeldrive.utils.StatsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -22,6 +23,8 @@ public class ParticleFilter2d extends ParticleFilter {
     private double yMax = 0.01;
     private double headingMin = -0.001;
     private double headingMax = 0.001;
+
+    public double[] resampleDeviances;
 
     /**
      * Quick initialization of a Particle Filter with default covariances
@@ -46,6 +49,27 @@ public class ParticleFilter2d extends ParticleFilter {
         this.yMax = yMax;
         this.headingMin = headingMin;
         this.headingMax = headingMax;
+        resampleDeviances = new double[] {0.1, 0.1, 0.01};
+    }
+
+    /**
+     * Thorough initialization of a Particle Filter with custom covariances
+     * @param xMin Minimum x deviation
+     * @param xMax Maximum x deviation
+     * @param yMin Minimum y deviation
+     * @param yMax Maximum y deviation
+     * @param headingMin Minimum heading deviation
+     * @param headingMax Maximum heading deviation
+     *
+     */
+    public ParticleFilter2d(double xMin, double xMax, double yMin, double yMax, double headingMin, double headingMax, double[] resampleDeviances) {
+        this.xMin = xMin;
+        this.xMax = xMax;
+        this.yMin = yMin;
+        this.yMax = yMax;
+        this.headingMin = headingMin;
+        this.headingMax = headingMax;
+        this.resampleDeviances = resampleDeviances;
     }
 
     /**
@@ -101,6 +125,10 @@ public class ParticleFilter2d extends ParticleFilter {
             add(new Particle2d(addedPose, 0, i));
         }
 
+    }
+
+    public void resampleParticles() throws Exception {
+        super.resampleParticles(this.resampleDeviances);
     }
 
     /**

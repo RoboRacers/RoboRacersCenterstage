@@ -93,10 +93,6 @@ public class MonteCarloLocalizer implements Localizer {
         return particleFilter2d.getParticlePoses();
     }
 
-    public ArrayList<Particle> getParticleMap() {
-        return particleFilter2d.getParticles();
-    }
-
     /**
      * Runs one localization cycle of Monte Carlo Localization.
      */

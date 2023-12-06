@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,7 +15,8 @@ import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 
 import org.apache.commons.math3.analysis.function.Min;
-
+@Deprecated
+@Disabled
 @TeleOp(name = "Teleop No SM", group = "16481-Power-Play")
 public class TeleopNoSM extends LinearOpMode {
 

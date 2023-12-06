@@ -14,13 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class contains the declaration and setup for all motors and cameras on the robot.
- * To use this class in an opmode, declare:
- * RobotCore robot = new RobotCore(hardwareMap);
- * You can call motors and such through:
- * robot.componentName.command();
+ * This class contains the declaration and setup for all subsystems of the robot.
  */
-
 public class RobotCore extends Subsystem {
 
     /*
@@ -31,7 +26,6 @@ public class RobotCore extends Subsystem {
     public Intake intake;
 
     public Slides slides;
-
 
     public List<Subsystem> subsystems;
 
@@ -56,6 +50,9 @@ public class RobotCore extends Subsystem {
 
     }
 
+    /**
+     * Updates all subsystems.
+     */
     @Override
     public void update() {
         drive.update();

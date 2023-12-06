@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "Intake Range Test", group = "16481-Power-Play")
+@TeleOp(name = "Intake Range Test", group = "Test")
 public class IntakeRangeTest extends LinearOpMode {
 
 //Servo drone;

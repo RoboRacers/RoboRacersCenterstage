@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PropDetection extends Subsystem {
-    TeamPropPipeline teamPropDetectionPipeline;
+    public TeamPropPipeline teamPropDetectionPipeline;
     Telemetry telemetry;
 
     public PropDetection(OpenCvCamera camera, Telemetry telemetry) {
@@ -31,12 +31,17 @@ public class PropDetection extends Subsystem {
             }
         });
 
-        while (teamPropDetectionPipeline == null) {
-        }
+        //while (teamPropDetectionPipeline == null) {
+        //}
     }
 
     public SpikeMarkerLocation getDirection() {
-        return teamPropDetectionPipeline.getDirection();
+        if (teamPropDetectionPipeline != null) {
+            return teamPropDetectionPipeline.getDirection();
+        } else {
+            return null;
+        }
+
     }
     public String getElapsedTime() {
         return teamPropDetectionPipeline.getElapsedTime();

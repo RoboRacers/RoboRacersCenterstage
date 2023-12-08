@@ -6,10 +6,14 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RobotCore;
+import org.firstinspires.ftc.teamcode.modules.subsystems.PropDetection;
 import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 // Localization is doesn't show drift, follower if it does
 
@@ -72,10 +76,30 @@ public class BlueFarAuton extends LinearOpMode{
                 .splineTo(new Vector2d(62.94, 8.78), Math.toRadians(18.43))
                 .build();
 
+        int cameraMonitorViewId = hardwareMap.appContext.getResources()
+                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
+        OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
+                .get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        PropDetection teamPropDetectionPipeline = new PropDetection(camera, telemetry);
 
         while(!isStopRequested() && !opModeIsActive()) {
             // Vision code here
+            if (gamepad1.left_bumper) {
+                spikeMarkerLocation = teamPropDetectionPipeline.getDirection();
+            }
+
+            if (gamepad1.square) {
+                spikeMarkerLocation = SpikeMarkerLocation.LEFT;
+            } else if (gamepad1.circle) {
+                spikeMarkerLocation = SpikeMarkerLocation.CENTER;
+            } else if (gamepad1.triangle) {
+                spikeMarkerLocation = SpikeMarkerLocation.RIGHT;
+            }
+
+            telemetry.addData("Spike Marker Location", spikeMarkerLocation);
+            telemetry.update();
         }
 
         waitForStart();
@@ -87,10 +111,13 @@ public class BlueFarAuton extends LinearOpMode{
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {
             case LEFT:
+                robot.drive.followTrajectorySequence(LeftNoCycle);
                 break;
             case CENTER:
                 robot.drive.followTrajectorySequence(CenterNoCycle);
+                break;
             case RIGHT:
+                robot.drive.followTrajectorySequence(RightNoCycle);
                 break;
         }
 

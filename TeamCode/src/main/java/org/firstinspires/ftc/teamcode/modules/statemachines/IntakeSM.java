@@ -24,7 +24,8 @@ double retract = 0;
         CLOSING_FOR_PIXEL,
         CLOSED_WITH_PIXEL,
         EXTEND_WITH_PIXEL,
-        RELEASE_PIXEL
+        OPEN_CLAW,
+        CLOSE_CLAW
 
     }
 
@@ -50,10 +51,13 @@ double retract = 0;
                 intake.setIntake(.05, .475, .8);
                 break;
             case EXTEND_WITH_PIXEL:
-                intake.setIntake(.05,0.05, .05);
+                intake.setIntake(.05,0.05, .13);
                 break;
-            case RELEASE_PIXEL:
+            case OPEN_CLAW:
                 intake.claw.setPosition(.4);
+                break;
+            case CLOSE_CLAW:
+                intake.claw.setPosition(.05);
                 break;
         }
     }

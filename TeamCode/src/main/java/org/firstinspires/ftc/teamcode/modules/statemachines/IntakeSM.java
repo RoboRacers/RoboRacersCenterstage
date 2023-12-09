@@ -42,22 +42,22 @@ double retract = 0;
             case GAME_START:
                 break;
             case OPEN_FOR_PIXEL:
-                intake.setIntake(.27,0.55,.8);
+                intake.setIntake(.65,0.55,.8);
                 break;
             case CLOSING_FOR_PIXEL:
-                intake.setIntake(.05,.5,.8);
+                intake.setIntake(.65,.55,.8);//same as above anish said he doesn't want another button
                 break;
             case CLOSED_WITH_PIXEL:
-                intake.setIntake(.05, .475, .8);
+                intake.setIntake(.55, .45, .8);
                 break;
             case EXTEND_WITH_PIXEL:
-                intake.setIntake(.05,0.05, .13);
+                intake.setIntake(.55,0.05, 0);
                 break;
             case OPEN_CLAW:
-                intake.claw.setPosition(.4);
+                intake.claw.setPosition(.7);
                 break;
             case CLOSE_CLAW:
-                intake.claw.setPosition(.05);
+                intake.claw.setPosition(.55);
                 break;
         }
     }

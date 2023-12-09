@@ -41,7 +41,7 @@ public class RedFarAuton extends LinearOpMode{
                 })
                 .splineTo(new Vector2d(46.50, 35.90), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(IntakeSM.EVENT.RELEASE_PIXEL);
+                    robot.intake.statemachine.transition(IntakeSM.EVENT.OPEN_CLAW);
                     robot.slides.setTargetPosition(0);
                 })
                 .setReversed(false)
@@ -64,7 +64,7 @@ public class RedFarAuton extends LinearOpMode{
                 })
                 .splineTo(new Vector2d(46.50, 35.90), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(IntakeSM.EVENT.RELEASE_PIXEL);
+                    robot.intake.statemachine.transition(IntakeSM.EVENT.OPEN_CLAW);
                     robot.slides.setTargetPosition(0);
                 })
                 .setReversed(false)

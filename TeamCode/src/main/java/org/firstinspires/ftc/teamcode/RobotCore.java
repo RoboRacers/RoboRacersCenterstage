@@ -27,6 +27,8 @@ public class RobotCore extends Subsystem {
 
     public Slides slides;
 
+    public Launcher drone;
+
     public List<Subsystem> subsystems;
 
     /**
@@ -42,10 +44,12 @@ public class RobotCore extends Subsystem {
 
         intake = new Intake(hardwareMap);
         slides = new Slides(hardwareMap);
+        drone = new Launcher(hardwareMap);
 
         subsystems = Arrays.asList(
                 intake,
-                slides
+                slides,
+                drone
         );
 
     }

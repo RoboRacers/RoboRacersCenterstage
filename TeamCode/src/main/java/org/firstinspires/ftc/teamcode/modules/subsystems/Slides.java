@@ -36,6 +36,9 @@ public class Slides extends Subsystem {
         rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftmotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        rightmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         // Setup the state machine associated with
         statemachine = new SlidesSM(this);
     }

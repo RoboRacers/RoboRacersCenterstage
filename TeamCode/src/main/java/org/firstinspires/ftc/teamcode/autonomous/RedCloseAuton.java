@@ -36,12 +36,11 @@ public class RedCloseAuton extends LinearOpMode{
 
         TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)
-                .splineTo(new Vector2d(11.42, -34.80), Math.toRadians(-270.00))
-                .splineTo(new Vector2d(17.50, -34.38), Math.toRadians(18.43))
+                .splineTo(new Vector2d(18.00, -32.37), Math.toRadians(25.20))
                 .setReversed(false)
-                .splineTo(new Vector2d(10.89, -31.49), Math.toRadians(75.96))
+                .splineTo(new Vector2d(6.00, -43.00), Math.toRadians(-142.70))
                 .setReversed(true)
-                .splineTo(new Vector2d(17.86, -44.56), Math.toRadians(1.64))
+                .splineTo(new Vector2d(26.89, -48.60), Math.toRadians(19.54))
                 .addDisplacementMarker(() -> {
                     robot.intake.statemachine.transition(
                             IntakeSM.EVENT.EXTEND_WITH_PIXEL
@@ -49,8 +48,7 @@ public class RedCloseAuton extends LinearOpMode{
                     robot.slides.setTargetPosition(800);
                     robot.slides.setPower(.8);
                 })
-                // To backboard
-                .splineTo(new Vector2d(45.11, -42.36), Math.toRadians(0.00))
+                .splineTo(new Vector2d(48.00, -43.5), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
                     robot.intake.statemachine.transition(
                             IntakeSM.EVENT.OPEN_CLAW
@@ -58,7 +56,7 @@ public class RedCloseAuton extends LinearOpMode{
                 })
                 .waitSeconds(.75)
                 .setReversed(false)
-                .splineTo(new Vector2d(40.54,-35.36), Math.toRadians(-180.00))
+                .splineTo(new Vector2d(40.54,-43.5), Math.toRadians(-180.00))
                 .setReversed(true)
                 .addDisplacementMarker(() -> {
                     robot.slides.setTargetPosition(0);
@@ -104,7 +102,7 @@ public class RedCloseAuton extends LinearOpMode{
                 .build();
 
 
-        TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(new Pose2d(15.85, 62.00, Math.toRadians(90)))
+        TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)
                 // Pushing purple pixel
                 .splineTo(new Vector2d(11.56, -44.15), Math.toRadians(-270.00))
@@ -147,6 +145,8 @@ public class RedCloseAuton extends LinearOpMode{
                 .get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         PropDetection teamPropDetectionPipeline = new PropDetection(camera, telemetry);
+
+        robot.intake.claw.setPosition(0.4);
 
         while(!isStopRequested() && !opModeIsActive()) {
             // Vision code here

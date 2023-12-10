@@ -44,9 +44,9 @@ public class Intake extends Subsystem {
     public void setIntake(double clawpos, double s1, double s2){
         claw.setPosition(clawpos);
         stage1Right.setPosition(s1);
-        stage1Left.setPosition(s1);
+        stage1Left.setPosition(s1-0.05);
         stage2Right.setPosition(s2);
-        stage2Right.setPosition(s2);
+        stage2Left.setPosition(s2+0.07);
     }
 
     public void intakeStageOne() {
@@ -54,7 +54,7 @@ public class Intake extends Subsystem {
         stage1Right.setPosition(0.7);
         stage1Left.setPosition(0.7);
         stage2Right.setPosition(0.8);
-        stage2Right.setPosition(0.8);
+        stage2Left.setPosition(0.8);
     }
 
     public void intakeStageTwo() {
@@ -62,7 +62,7 @@ public class Intake extends Subsystem {
         stage1Right.setPosition(0.75);
         stage1Left.setPosition(0.75);
         stage2Right.setPosition(0.8);
-        stage2Right.setPosition(0.8);
+        stage2Left.setPosition(0.8);
     }
 
     public void intakeStageThree() {
@@ -70,7 +70,7 @@ public class Intake extends Subsystem {
         stage1Right.setPosition(0.73);
         stage1Left.setPosition(0.73);
         stage2Right.setPosition(0.8);
-        stage2Right.setPosition(0.8);
+        stage2Left.setPosition(0.8);
     }
 
     @Override

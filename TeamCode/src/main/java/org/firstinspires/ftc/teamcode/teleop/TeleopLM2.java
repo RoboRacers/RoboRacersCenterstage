@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.teleop;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,16 +8,18 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 
+@Config
 @TeleOp(name = "Teleop for LM2", group = "16481-Centerstage")
 public class TeleopLM2 extends LinearOpMode {
 
     RobotCore robot;
 
-    double speedMultiplier = .7;
-    double strafeMultiplier = .8;
-    double retractionSpeed = 0.5;
-    double extensionSpeed = 1;
-    boolean liftRetractionOverride = false;
+    public static double speedMultiplier = .7;
+    public static double strafeMultiplier = .8;
+    public static double retractionSpeed = 0.5;
+    public static double extensionSpeed = 1;
+    public static double feedforward = 0.1;
+    public static boolean liftRetractionOverride = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -76,7 +79,8 @@ public class TeleopLM2 extends LinearOpMode {
                 }
             }
 
-            // Slides control
+            /* Slides control
+
             if (gamepad2.right_stick_y > 0.1 && !liftRetractionOverride) {
                 robot.slides.setManualPower(-gamepad2.right_stick_y*retractionSpeed);
             } else if (gamepad2.right_stick_y > 0.1 && liftRetractionOverride) {
@@ -84,13 +88,29 @@ public class TeleopLM2 extends LinearOpMode {
             } else if (gamepad2.right_stick_y < -0.1) {
                 robot.slides.setManualPower(-gamepad2.right_stick_y*extensionSpeed);
             } else {
-                robot.slides.setManualPower(0);
+                robot.slides.setManualPower(0+feedforward);
+            }
+            */
+
+            if (gamepad2.right_stick_y > 0.1) {
+                robot.slides.setManualPower(-gamepad2.right_stick_y*retractionSpeed);
+            } else if (gamepad2.right_stick_y > 0.1 && gamepad2.right_trigger > 0.1) {
+                robot.slides.setManualPower(-gamepad2.right_stick_y);
+                telemetry.addLine("Lift TURBO Mode");
+            } else if (gamepad2.right_stick_y < -0.1) {
+                robot.slides.setManualPower(-gamepad2.right_stick_y*extensionSpeed);
+            } else {
+                robot.slides.setManualPower(0+feedforward);
             }
 
             robot.update();
 
             previousGamepad1 = gamepad1;
             previousGamepad2 = gamepad2;
+
+            telemetry.addLine("\uD83C\uDFCE RoboRacers Teleop for League Meet 2");
+
+            telemetry.update();
         }
     }
 }

@@ -20,9 +20,9 @@ public class Launcher extends Subsystem  {
 
     public void setServoPos(boolean ifshoot){
         if(ifshoot){
-            actuationServo.setPosition(0.56);
+            actuationServo.setPosition(1);
         } else {
-            actuationServo.setPosition(0.9);
+            actuationServo.setPosition(0);
         }
     }
 

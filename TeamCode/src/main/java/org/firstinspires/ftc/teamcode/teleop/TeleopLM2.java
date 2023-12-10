@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
+import org.firstinspires.ftc.teamcode.modules.statemachines.LauncherSM;
 
 @TeleOp(name = "Teleop for LM2", group = "16481-Centerstage")
 public class TeleopLM2 extends LinearOpMode {
@@ -65,6 +66,10 @@ public class TeleopLM2 extends LinearOpMode {
             } else if (gamepad2.left_bumper) {
                 robot.intake.statemachine.transition(
                         IntakeSM.EVENT.CLOSE_CLAW
+                );
+            } else if (gamepad2.cross){
+                robot.drone.statemachine.transition(
+                        LauncherSM.EVENT.DRONE_LAUNCH_BUTTON_PRESSED
                 );
             }
 

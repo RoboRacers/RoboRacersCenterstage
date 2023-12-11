@@ -19,7 +19,7 @@ public class TeleopLM2 extends LinearOpMode {
     public static double strafeMultiplier = .8;
     public static double retractionSpeed = 0.5;
     public static double extensionSpeed = 1;
-    public static double feedforward = 0.1;
+    public static double feedforward = 0.0;
     public static boolean liftRetractionOverride = false;
 
     @Override
@@ -70,10 +70,10 @@ public class TeleopLM2 extends LinearOpMode {
                 robot.intake.statemachine.transition(
                         IntakeSM.EVENT.CLOSE_CLAW
                 );
-            } else if (gamepad2.cross){
-                robot.drone.statemachine.transition(
-                        LauncherSM.EVENT.DRONE_LAUNCH_BUTTON_PRESSED
-                );
+            }
+
+            if (gamepad2.cross){
+                robot.drone.setServoPos(true);
             }
 
             if (gamepad2.a && !previousGamepad2.a) {
@@ -97,15 +97,15 @@ public class TeleopLM2 extends LinearOpMode {
             }
             */
 
-            if (gamepad2.right_stick_y > 0.1) {
+            if (gamepad2.right_stick_y > 0.2 && gamepad2.right_trigger < 0.1) {
                 robot.slides.setManualPower(-gamepad2.right_stick_y*retractionSpeed);
-            } else if (gamepad2.right_stick_y > 0.1 && gamepad2.right_trigger > 0.1) {
+            } else if (gamepad2.right_stick_y > 0.2 && gamepad2.right_trigger >= 0.1) {
                 robot.slides.setManualPower(-gamepad2.right_stick_y);
                 telemetry.addLine("Lift TURBO Mode");
-            } else if (gamepad2.right_stick_y < -0.1) {
+            } else if (gamepad2.right_stick_y < -0.2) {
                 robot.slides.setManualPower(-gamepad2.right_stick_y*extensionSpeed);
             } else {
-                robot.slides.setManualPower(0+feedforward);
+                robot.slides.setManualPower(0);
             }
 
             robot.update();

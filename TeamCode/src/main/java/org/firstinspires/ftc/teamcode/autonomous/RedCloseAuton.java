@@ -48,7 +48,7 @@ public class RedCloseAuton extends LinearOpMode{
                     robot.slides.setTargetPosition(800);
                     robot.slides.setPower(.8);
                 })
-                .splineTo(new Vector2d(48.00, -43.5), Math.toRadians(0.00))
+                .splineTo(new Vector2d(47.00, -43.5), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
                     robot.intake.statemachine.transition(
                             IntakeSM.EVENT.OPEN_CLAW
@@ -66,11 +66,10 @@ public class RedCloseAuton extends LinearOpMode{
                 })
                 .splineTo(new Vector2d(58.01, -60.21), Math.toRadians(0.00))
                 .build();
-
         //DONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEE
         TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)
-                .splineTo(new Vector2d(12.95, -28.00), Math.toRadians(-266.31))
+                .splineTo(new Vector2d(12.95, -29.00), Math.toRadians(-266.31))
                 .setReversed(false)
                 .splineTo(new Vector2d(7.46, -40.02), Math.toRadians(-143.13))
                 .setReversed(true)
@@ -119,7 +118,7 @@ public class RedCloseAuton extends LinearOpMode{
                     robot.slides.setPower(.8);
                 })
                 // To backboard
-                .splineTo(new Vector2d(49.50, -28.3), Math.toRadians(0.00))
+                .splineTo(new Vector2d(48.50, -28.3), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
                     robot.intake.statemachine.transition(
                             IntakeSM.EVENT.OPEN_CLAW
@@ -150,22 +149,20 @@ public class RedCloseAuton extends LinearOpMode{
 
         while(!isStopRequested() && !opModeIsActive()) {
             // Vision code here
-            if (gamepad1.left_bumper) { // Remove this for actual operation
-                try {
-                    // Catches any null pointer exceptions from the camera not being initialized
-                    if (teamPropDetectionPipeline != null) {
-                        spikeMarkerLocation = teamPropDetectionPipeline.getDirection();
-                    } else {
-                        telemetry.addLine("Camera not initialized");
-                        telemetry.update();
-                    }
-                } catch (Exception e) {
-                    telemetry.addLine("Exception! " + e);
+            try {
+                // Catches any null pointer exceptions from the camera not being initialized
+                if (teamPropDetectionPipeline != null) {
+                    spikeMarkerLocation = teamPropDetectionPipeline.getDirection();
+                } else {
+                    telemetry.addLine("Camera not initialized");
                     telemetry.update();
                 }
-
+            } catch (Exception e) {
+                telemetry.addLine("Exception! " + e);
+                telemetry.update();
             }
 
+            /*
             if (gamepad1.square) {
                 spikeMarkerLocation = SpikeMarkerLocation.LEFT;
             } else if (gamepad1.circle) {
@@ -173,6 +170,8 @@ public class RedCloseAuton extends LinearOpMode{
             } else if (gamepad1.triangle) {
                 spikeMarkerLocation = SpikeMarkerLocation.RIGHT;
             }
+
+             */
 
             telemetry.addData("Spike Marker Location", spikeMarkerLocation);
             telemetry.update();
@@ -188,13 +187,13 @@ public class RedCloseAuton extends LinearOpMode{
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {
             case LEFT:
-                robot.drive.followTrajectorySequence(LeftNoCycle);
+                robot.drive.followTrajectorySequence(RightNoCycle);
                 break;
             case CENTER:
                 robot.drive.followTrajectorySequence(CenterNoCycle);
                 break;
             case RIGHT:
-                robot.drive.followTrajectorySequence(RightNoCycle);
+                robot.drive.followTrajectorySequence(LeftNoCycle);
                 break;
         }
 

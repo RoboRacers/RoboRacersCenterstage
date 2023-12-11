@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 
 public class LauncherSM implements StateMachine {
 
-    STATE currentState;
+    STATE currentState = STATE.DRONE_LAUNCHER_LOADED;
 
     Launcher launcher;
 
@@ -30,30 +30,12 @@ public class LauncherSM implements StateMachine {
 
     public void transition(EVENT event) {
         switch (event) {
-            case GAME_START:
-                currentState = LauncherSM.STATE.DRONE_LAUNCHER_LOADED;
-                break;
-            case DRONE_LAUNCH_BUTTON_PRESSED:
-                currentState = LauncherSM.STATE.DRONE_LAUNCHED;
-                break;
-            case DRONE_RETRACT_BUTTON_PRESSED:
-                currentState = STATE.DRONE_LAUNCHER_RETRACTED;
-                break;
+
         }
     }
 
     @Override
     public void update() {
-        switch (currentState) {
-            case DRONE_LAUNCHED:
-                launcher.setServoPos(true); // not done and not right thing;
-                break;
-            case DRONE_LAUNCHER_LOADED:
-                launcher.setServoPos(false);
-                break;
-            case DRONE_LAUNCHER_RETRACTED:
-                launcher.setServoPos(false);
-                break;
-        }
+
     }
 }

@@ -39,6 +39,7 @@ public class RedFarAuton extends LinearOpMode{
                 .setReversed(false)
                 .splineTo(new Vector2d(-48.03, -47.84), Math.toRadians(220.60))
                 .setReversed(true)
+                /*
                 .splineTo(new Vector2d(-55.96, -15.38), Math.toRadians(66.80))
                 .splineTo(new Vector2d(-2.36, -2.36), Math.toRadians(2.79))
                 .splineTo(new Vector2d(33.88, -17.08), Math.toRadians(-35.22))
@@ -69,6 +70,8 @@ public class RedFarAuton extends LinearOpMode{
                 .setReversed(true)
                 .splineTo(new Vector2d(42.24, -9.70), Math.toRadians(60.34))
                 .splineTo(new Vector2d(61.46, -9.50), Math.toRadians(-2.39))
+
+                 */
                 .build();
 
 
@@ -78,6 +81,7 @@ public class RedFarAuton extends LinearOpMode{
                 .setReversed(false)
                 .splineTo(new Vector2d(-46.52, -49.73), Math.toRadians(270.00))
                 .setReversed(true)
+                /*
                 .splineTo(new Vector2d(-45.39, -14.82), Math.toRadians(39.67))
                 .splineTo(new Vector2d(-12.55, -8.59), Math.toRadians(-4.55))
                 .splineTo(new Vector2d(24.25, -10.29), Math.toRadians(-7.52))
@@ -108,6 +112,8 @@ public class RedFarAuton extends LinearOpMode{
                 })
                 .splineTo(new Vector2d(42.24, -9.70), Math.toRadians(60.34))
                 .splineTo(new Vector2d(61.46, -9.50), Math.toRadians(-2.39))
+
+                 */
                 .build();
 
         TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
@@ -115,6 +121,7 @@ public class RedFarAuton extends LinearOpMode{
                 .splineTo(new Vector2d(-42.30, -34.49), Math.toRadians(135.00))
                 .setReversed(false)
                 .splineTo(new Vector2d(-36.07, -53.24), Math.toRadians(262.41))
+                /*
                 .setReversed(true)
                 .splineTo(new Vector2d(-35.00, -15.34), Math.toRadians(45.00))
                 .splineTo(new Vector2d(9.28, -5.57), Math.toRadians(-5.78))
@@ -145,6 +152,8 @@ public class RedFarAuton extends LinearOpMode{
                 })
                 .splineTo(new Vector2d(42.24, -9.70), Math.toRadians(60.34))
                 .splineTo(new Vector2d(61.46, -9.50), Math.toRadians(-2.39))
+
+                 */
                 .build();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
@@ -159,10 +168,20 @@ public class RedFarAuton extends LinearOpMode{
 
         while(!isStopRequested() && !opModeIsActive()) {
             // Vision code here
-            if (gamepad1.left_bumper) {
-                spikeMarkerLocation = teamPropDetectionPipeline.getDirection();
+            try {
+                // Catches any null pointer exceptions from the camera not being initialized
+                if (teamPropDetectionPipeline != null) {
+                    spikeMarkerLocation = teamPropDetectionPipeline.getDirection();
+                } else {
+                    telemetry.addLine("Camera not initialized");
+                    telemetry.update();
+                }
+            } catch (Exception e) {
+                telemetry.addLine("Exception! " + e);
+                telemetry.update();
             }
 
+            /*
             if (gamepad1.square) {
                 spikeMarkerLocation = SpikeMarkerLocation.LEFT;
             } else if (gamepad1.circle) {
@@ -170,6 +189,8 @@ public class RedFarAuton extends LinearOpMode{
             } else if (gamepad1.triangle) {
                 spikeMarkerLocation = SpikeMarkerLocation.RIGHT;
             }
+
+             */
 
             telemetry.addData("Spike Marker Location", spikeMarkerLocation);
             telemetry.update();
@@ -184,13 +205,13 @@ public class RedFarAuton extends LinearOpMode{
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {
             case LEFT:
-                robot.drive.followTrajectorySequence(LeftNoCycle);
+                robot.drive.followTrajectorySequence(RightNoCycle);
                 break;
             case CENTER:
                 robot.drive.followTrajectorySequence(CenterNoCycle);
                 break;
             case RIGHT:
-                robot.drive.followTrajectorySequence(RightNoCycle);
+                robot.drive.followTrajectorySequence(LeftNoCycle);
                 break;
         }
 

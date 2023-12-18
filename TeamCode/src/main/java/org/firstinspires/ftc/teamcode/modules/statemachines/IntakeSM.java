@@ -5,12 +5,12 @@ import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 public class IntakeSM implements StateMachine {
 
     Intake intake;
-double closed = 0.25;
-double open = 0;
-double out = 0.5;
-double in = 0;
-double extend = 0.25;
-double retract = 0;
+    double closed = 0.25;
+    double open = 0;
+    double out = 0.5;
+    double in = 0;
+    double extend = 0.25;
+    double retract = 0;
     STATE currentState;
 
     public enum STATE {
@@ -24,7 +24,8 @@ double retract = 0;
         CLOSING_FOR_PIXEL,
         CLOSED_WITH_PIXEL,
         EXTEND_WITH_PIXEL,
-        RELEASE_PIXEL
+        OPEN_CLAW,
+        CLOSE_CLAW
 
     }
 
@@ -41,19 +42,22 @@ double retract = 0;
             case GAME_START:
                 break;
             case OPEN_FOR_PIXEL:
-                intake.setIntake(.32, .68, .8);
+                intake.setIntake(.55,.67,.1);
                 break;
             case CLOSING_FOR_PIXEL:
-                intake.setIntake(.525,.75,.8);
+                intake.setIntake(.4,.5,.5);//same as above anish said he doesn't want another button
                 break;
             case CLOSED_WITH_PIXEL:
-                intake.setIntake(.32,.73,.8);
+                intake.setIntake(.4, .53, .7);
                 break;
             case EXTEND_WITH_PIXEL:
-                intake.setIntake(.32,.3, .18);
+                intake.setIntake(.4,0.22, 0.1);
                 break;
-            case RELEASE_PIXEL:
-                intake.claw.setPosition(.525);
+            case OPEN_CLAW:
+                intake.claw.setPosition(.55);
+                break;
+            case CLOSE_CLAW:
+                intake.claw.setPosition(.4);
                 break;
         }
     }

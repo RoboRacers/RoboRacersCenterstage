@@ -1,21 +1,32 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.modules.subsystems;
+
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamPropDetectionPipeline {
-    TeamPropPipeline teamPropDetectionPipeline;
+public class Vision extends Subsystem {
+    public TeamPropPipeline teamPropDetectionPipeline;
     Telemetry telemetry;
 
-    public TeamPropDetectionPipeline(OpenCvCamera camera, Telemetry telemetry) {
-        this.telemetry = telemetry;
+    public Vision(HardwareMap hardwareMap) {
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources()
+                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
+                .get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -29,18 +40,28 @@ public class TeamPropDetectionPipeline {
             }
         });
 
-        while (teamPropDetectionPipeline == null) {
-        }
+        //while (teamPropDetectionPipeline == null) {
+        //}
     }
 
-    public String getDirection() {
-        return teamPropDetectionPipeline.getDirection();
+    public SpikeMarkerLocation getDirection() {
+        if (teamPropDetectionPipeline != null) {
+            return teamPropDetectionPipeline.getDirection();
+        } else {
+            return null;
+        }
+
     }
     public String getElapsedTime() {
         return teamPropDetectionPipeline.getElapsedTime();
     }
     public String getEndTime() {
         return teamPropDetectionPipeline.getEndTime();
+    }
+
+    @Override
+    public void update() {
+
     }
 
 
@@ -58,7 +79,7 @@ public class TeamPropDetectionPipeline {
         int frameCount = 1;
 
 
-        private String direction = "";
+        private SpikeMarkerLocation direction = SpikeMarkerLocation.CENTER;
 
         private String elapsedTime = "";
 
@@ -165,11 +186,11 @@ public class TeamPropDetectionPipeline {
                 }
 
                 if (leftBlackPixelCount > centerBlackPixelCount && leftBlackPixelCount > rightBlackPixelCount) {
-                    direction = "left";
+                    direction = SpikeMarkerLocation.LEFT;
                 } else if (rightBlackPixelCount > leftBlackPixelCount && rightBlackPixelCount > centerBlackPixelCount) {
-                    direction = "right";
+                    direction = SpikeMarkerLocation.RIGHT;
                 } else {
-                    direction = "center";
+                    direction = SpikeMarkerLocation.CENTER;
                 }
                 frameCount = 1;
 
@@ -183,7 +204,7 @@ public class TeamPropDetectionPipeline {
             return frame;
         }
 
-        public String getDirection() {
+        public SpikeMarkerLocation getDirection() {
             return direction;
         }
 

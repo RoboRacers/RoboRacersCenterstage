@@ -24,7 +24,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.ArrayList;
 import java.util.Vector;
 
-@Deprecated
+
 
 public class ConstructerTags extends LinearOpMode {
     static final String cameraname = "Webcam 1";

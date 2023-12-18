@@ -8,12 +8,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RobotCore;
-import org.firstinspires.ftc.teamcode.modules.subsystems.PropDetection;
+import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+
+import java.util.List;
 
 // Localization is doesn't show drift, follower if it does
 
@@ -147,43 +150,64 @@ public class BlueFarAuton extends LinearOpMode{
                 .splineTo(new Vector2d(61.46, 9.50), Math.toRadians(2.39))
                 .build();
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources()
-                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        // Close claw
+        robot.intake.statemachine.transition(IntakeSM.EVENT.CLOSE_CLAW);
 
-        OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
-                .get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        PropDetection teamPropDetectionPipeline = new PropDetection(camera, telemetry);
-
-        robot.intake.claw.setPosition(0.4);
+        boolean manualPropControl = false;
 
         while(!isStopRequested() && !opModeIsActive()) {
+            telemetry.addLine("SELF CHECK -----");
+
+            // Checks if the positions of the encoders to make sure they are not unplugged
+            robot.drive.updatePoseEstimate();
+            StandardTrackingWheelLocalizer localizer = (StandardTrackingWheelLocalizer) robot.drive.getLocalizer();
+            List<Double> deadwheelPositions = localizer.getWheelPositions();
+
+            telemetry.addData("Left Encoder Pos", deadwheelPositions.get(0));
+            telemetry.addData("Right Encoder Pos", deadwheelPositions.get(1));
+            telemetry.addData("Perpendicular Encoder Pos", deadwheelPositions.get(2));
+
+            if (deadwheelPositions.get(0) == 0) {
+                telemetry.addLine("LEFT ENCODER UNPLUGGED, Check wiring of Port x");
+            }
+            if (deadwheelPositions.get(1) == 0) {
+                telemetry.addLine("RIGHT ENCODER UNPLUGGED, Check wiring of Port x");
+            }
+            if (deadwheelPositions.get(2) == 0) {
+                telemetry.addLine("PERPENDICULAR ENCODER UNPLUGGED, Check wiring of Port x");
+            }
+
+
             // Vision code here
-            try {
-                // Catches any null pointer exceptions from the camera not being initialized
-                if (teamPropDetectionPipeline != null) {
-                    spikeMarkerLocation = teamPropDetectionPipeline.getDirection();
+            telemetry.addLine("VISION -----");
+
+            // Switch between manual and automatic vision control
+            if (gamepad1.left_bumper) {
+                manualPropControl = true;
+            } else if (gamepad1.right_bumper) {
+                manualPropControl = false;
+            }
+
+            if (!manualPropControl) {
+                telemetry.addLine("Prop Detection mode is AUTOMATIC");
+                if (robot.vision.getDirection() != null) {
+                    spikeMarkerLocation = robot.vision.getDirection();
+                    telemetry.addData("Spike Marker Location", spikeMarkerLocation);
                 } else {
                     telemetry.addLine("Camera not initialized");
-                    telemetry.update();
                 }
-            } catch (Exception e) {
-                telemetry.addLine("Exception! " + e);
-                telemetry.update();
+            } else {
+                telemetry.addLine("Prop Detection is MANUAL");
+                if (gamepad1.square) {
+                    spikeMarkerLocation = SpikeMarkerLocation.LEFT;
+                } else if (gamepad1.circle) {
+                    spikeMarkerLocation = SpikeMarkerLocation.CENTER;
+                } else if (gamepad1.triangle) {
+                    spikeMarkerLocation = SpikeMarkerLocation.RIGHT;
+                }
+                telemetry.addData("Spike Marker Location", spikeMarkerLocation);
             }
 
-            /*
-            if (gamepad1.square) {
-                spikeMarkerLocation = SpikeMarkerLocation.LEFT;
-            } else if (gamepad1.circle) {
-                spikeMarkerLocation = SpikeMarkerLocation.CENTER;
-            } else if (gamepad1.triangle) {
-                spikeMarkerLocation = SpikeMarkerLocation.RIGHT;
-            }
-
-             */
-
-            telemetry.addData("Spike Marker Location", spikeMarkerLocation);
             telemetry.update();
         }
 

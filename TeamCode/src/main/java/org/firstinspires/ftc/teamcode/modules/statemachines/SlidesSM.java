@@ -83,6 +83,7 @@ public class SlidesSM implements StateMachine {
      * You can define transitions to other states internally here as well.
      */
     public void update() {
+
     }
 
 }

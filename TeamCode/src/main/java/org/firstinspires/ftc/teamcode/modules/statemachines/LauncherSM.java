@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.modules.statemachines;
 
 import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 
+@Deprecated
 public class LauncherSM implements StateMachine {
 
     STATE currentState = STATE.DRONE_LAUNCHER_LOADED;

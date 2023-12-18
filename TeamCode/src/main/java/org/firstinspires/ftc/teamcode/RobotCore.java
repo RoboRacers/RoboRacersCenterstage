@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Subsystem;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Vision;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,7 @@ public class RobotCore extends Subsystem {
     public Slides slides;
 
     public Launcher drone;
+    public Vision vision;
 
     public List<Subsystem> subsystems;
 
@@ -45,11 +47,13 @@ public class RobotCore extends Subsystem {
         intake = new Intake(hardwareMap);
         slides = new Slides(hardwareMap);
         drone = new Launcher(hardwareMap);
+        vision = new Vision(hardwareMap);
 
         subsystems = Arrays.asList(
                 intake,
                 slides,
-                drone
+                drone,
+                vision
         );
 
     }

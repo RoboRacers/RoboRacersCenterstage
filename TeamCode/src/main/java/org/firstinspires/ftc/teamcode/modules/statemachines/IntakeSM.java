@@ -5,12 +5,12 @@ import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 public class IntakeSM implements StateMachine {
 
     Intake intake;
-double closed = 0.25;
-double open = 0;
-double out = 0.5;
-double in = 0;
-double extend = 0.25;
-double retract = 0;
+    double closed = 0.25;
+    double open = 0;
+    double out = 0.5;
+    double in = 0;
+    double extend = 0.25;
+    double retract = 0;
     STATE currentState;
 
     public enum STATE {

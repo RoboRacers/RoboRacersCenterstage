@@ -41,11 +41,11 @@ public class MonteCarloLocalizer implements Localizer {
 
     MotionModel motionModel;
 
-    public static List<SensorModel> sensorModels = new ArrayList<>();
+    public List<SensorModel> sensorModels = new ArrayList<>();
 
     public MonteCarloLocalizer(HardwareMap hardwareMap){
 
-        motionModel = new RRLocalizerMotionModel(LocalizationConstants.START_POSE, new StandardTrackingWheelLocalizer(hardwareMap));
+        motionModel = new RRLocalizerMotionModel(poseEstimate, new StandardTrackingWheelLocalizer(hardwareMap));
 
         // Config our Ultrasonic Distance Sensor
         AnalogDistanceSensorModel ultrasonicRight = SensorUtils.createMB1240Sensor(
@@ -103,7 +103,11 @@ public class MonteCarloLocalizer implements Localizer {
             sensorModel.update();
         }
         // Translate all particles in our particle filter
-        particleFilter2d.translateParticles(motionModel.getTranslationVector());
+        try {
+            particleFilter2d.translateParticles(motionModel.getTranslationVector());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         // Weigh Particles
         particleFilter2d.weighParticles(sensorModels);
         // Get the best pose estimate

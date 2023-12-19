@@ -6,6 +6,8 @@ import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.sensors.TestDistanceSensorModel;
 import com.roboracers.gaeldrive.utils.Updatable;
 
+import org.apache.commons.math3.linear.ArrayRealVector;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class WeightingUnitTest {
 
     static ParticleFilter2d filter = new ParticleFilter2d();
     static List<SensorModel> models = new ArrayList<>();
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         System.out.println("* * * * * * * * * * * *");
         System.out.println("Unit Test Started!");
@@ -37,11 +39,11 @@ public class WeightingUnitTest {
         System.out.println("Actual Sensor Reading: " + models.get(0).getActualReading() + ", Relative Sensor Location " + pose1);
         System.out.println("Actual Sensor Reading: " + models.get(1).getActualReading() + ", Relative Sensor Location: " + pose2);
         System.out.println("Actual Sensor Reading: " + models.get(2).getActualReading() + ", Relative Sensor Location: " + pose3);
-        filter.initializeParticles(2000, new Pose2d(0, 0,Math.toRadians(45)));
+        filter.initializeParticles(2000, new ArrayRealVector(new double[] {0, 0,Math.toRadians(45)}));
         filter.weighParticles(models);
         loopTime = System.nanoTime();
 
-        System.out.println("Best Particle Pose: " + filter.getBestPose());
+        System.out.println("Best Particle Pose: " + filter.getBestParticle().getState());
         System.out.println("Best Particle Weight: " + filter.getBestParticle().getWeight());
         System.out.println("Time for function call: " + (loopTime-loop)/1000000 + "ms");
 

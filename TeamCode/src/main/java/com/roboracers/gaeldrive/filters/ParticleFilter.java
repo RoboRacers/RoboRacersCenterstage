@@ -1,26 +1,16 @@
 package com.roboracers.gaeldrive.filters;
 
 
-import android.provider.Settings;
-import android.provider.Telephony;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.particles.Particle;
-import com.roboracers.gaeldrive.particles.Particle2d;
 import com.roboracers.gaeldrive.sensors.SensorModel;
-import com.roboracers.gaeldrive.tests.TestConstants;
-import com.roboracers.gaeldrive.utils.MismatchedLengthException;
 import com.roboracers.gaeldrive.utils.StatsUtils;
-import com.roboracers.gaeldrive.utils.VectorUtils;
 
-import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -52,8 +42,8 @@ public class ParticleFilter {
     }
 
     /**
-     * Return the Hashmap that stores the particles.
-     * @return Hashmap of particles
+     * Return the arraylist that stores the particles.
+     * @return arraylist of particles
      */
     public ArrayList<Particle> getParticles() {
         return this.Particles;
@@ -101,7 +91,7 @@ public class ParticleFilter {
      * sensor value simulated for each one of our sensors.
      * @param models List of models to be used.
      */
-    public void weighParticles(List<SensorModel> models) {
+    public void weighParticles(List<SensorModel> models) throws Exception {
 
         // For every particle in our state space
         int index = 0;
@@ -161,14 +151,13 @@ public class ParticleFilter {
                 cumulativeWeight += Particles.get(index).getWeight();
             }
 
-            //System.out.println("New Particle #" + i + p);
             newParticles.add(new Particle(
                     StatsUtils.addGaussianNoise(
                             Particles.get(index).getState(),
                             resamplingDeviances
                     ),
                     1.0,
-                    ThreadLocalRandom.current().nextInt()
+                    ThreadLocalRandom.current().nextInt() // TODO: Change
             ));
 
             position += stepSize;

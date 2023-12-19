@@ -1,7 +1,7 @@
 package com.roboracers.gaeldrive.sensors;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.roboracers.gaeldrive.utils.PoseUtils;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.PoseUtils;
 
 /**
  * Class to process the data from a distance sensor to be suitable for MCL.

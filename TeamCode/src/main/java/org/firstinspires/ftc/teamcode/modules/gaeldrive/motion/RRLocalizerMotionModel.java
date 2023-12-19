@@ -6,8 +6,7 @@ import com.roboracers.gaeldrive.motion.MotionModel;
 
 import org.apache.commons.math3.linear.RealVector;
 
-import com.roboracers.gaeldrive.utils.MismatchedLengthException;
-import com.roboracers.gaeldrive.utils.PoseUtils;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.PoseUtils;
 import com.roboracers.gaeldrive.utils.StatsUtils;
 
 /**
@@ -16,14 +15,12 @@ import com.roboracers.gaeldrive.utils.StatsUtils;
  */
 public class RRLocalizerMotionModel implements MotionModel {
 
-    Localizer localizer;
+    public Localizer localizer;
 
-    Pose2d trackingWheelPose;
+    private RealVector prevState;
+    private RealVector currentState;
 
-    RealVector prevState;
-    RealVector currentState;
-
-    double[] deviance = {0.05, 0.05, 0.01};
+    public double[] deviance = {0.005, 0.005, 0.001};
 
 
     public RRLocalizerMotionModel(Pose2d startPose, Localizer localizer) {
@@ -31,9 +28,22 @@ public class RRLocalizerMotionModel implements MotionModel {
         this.localizer = localizer;
     }
 
+    public RRLocalizerMotionModel(Pose2d startPose, Localizer localizer, double[] deviance) {
+        currentState = PoseUtils.poseToVector(startPose);
+        this.localizer = localizer;
+        this.deviance = deviance;
+    }
+
     public void update() {
         localizer.update();
-        trackingWheelPose = localizer.getPoseEstimate();
+        prevState = currentState;
+        currentState = PoseUtils.poseToVector(localizer.getPoseEstimate());
+    }
+
+    public void setPoseEstimate(Pose2d pose) {
+        prevState = PoseUtils.poseToVector(pose);
+        currentState = PoseUtils.poseToVector(pose);
+        localizer.setPoseEstimate(pose);
     }
 
     /**
@@ -42,16 +52,13 @@ public class RRLocalizerMotionModel implements MotionModel {
      */
     @Override
     public  RealVector getTranslationVector() throws Exception {
-        prevState = currentState;
-        currentState = PoseUtils.poseToVector(trackingWheelPose);
         RealVector translation = currentState.subtract(prevState);
-
         return StatsUtils.addGaussianNoise(translation, deviance);
     }
 
     @Override
     public Pose2d getRawEstimate() {
-        return trackingWheelPose;
+        return localizer.getPoseEstimate();
     }
 
 }

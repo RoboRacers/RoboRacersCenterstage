@@ -6,6 +6,7 @@ import static org.apache.commons.math3.util.FastMath.sin;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.PoseUtils;
 import com.roboracers.gaeldrive.utils.VectorUtils;
 
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class FieldDistance {
             return -1;
         }
 
-        double t1 = VectorUtils.CrossProduct2d(VectorUtils.Vector2dToVector(v2), VectorUtils.Vector2dToVector(v1))/dot;
+        double t1 = VectorUtils.CrossProduct2d(PoseUtils.Vector2dToVector(v2), PoseUtils.Vector2dToVector(v1))/dot;
         double t2 = (v1.dot(v3)) / dot;
 
         if (t1 >= 0.0 && (t2 >= 0.0 && t2 <= 1.0)) {
@@ -109,7 +110,7 @@ public class FieldDistance {
             return -1;
         }
 
-        double t1 = VectorUtils.CrossProduct2d(VectorUtils.Vector2dToVector(v2), VectorUtils.Vector2dToVector(v1))/dot;
+        double t1 = VectorUtils.CrossProduct2d(PoseUtils.Vector2dToVector(v2), PoseUtils.Vector2dToVector(v1))/dot;
         double t2 = (v1.dot(v3)) / dot;
 
         if (t1 >= 0.0 && (t2 >= 0.0 && t2 <= 1.0)) {

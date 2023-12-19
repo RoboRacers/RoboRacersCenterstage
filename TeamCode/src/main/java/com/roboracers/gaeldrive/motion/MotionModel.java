@@ -15,7 +15,7 @@ public interface MotionModel extends Updatable {
      * Get the predictive translation in the form of a vector.
      * @return Translation Vector
      */
-    public RealVector getTranslationVector() throws MismatchedLengthException, Exception;
+    public RealVector getTranslationVector() throws Exception;
 
     /**
      * Get the raw estimate of the predictive model

@@ -53,7 +53,7 @@ public class FieldCentricTest extends LinearOpMode {
             robot.drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y*driveSensitivity,-gamepad1.left_stick_x*driveSensitivity, -gamepad1.right_stick_x*turnSensitivity));
             robot.drive.update();
 
-            poses = mcl.getParticlePoses();
+            poses = null;
 
 
 

@@ -10,20 +10,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
 
-import com.roboracers.gaeldrive.filters.ParticleFilter;
 import com.roboracers.gaeldrive.filters.ParticleFilter2d;
+import com.roboracers.gaeldrive.filters.ParticleFilter2d.Bound;
 import com.roboracers.gaeldrive.motion.MotionModel;
-import com.roboracers.gaeldrive.particles.Particle;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.utils.Updatable;
 
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.RRLocalizerMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.AnalogDistanceSensorModel;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.PoseUtils;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorUtils;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -37,6 +36,14 @@ public class MonteCarloLocalizer implements Localizer {
     Pose2d poseEstimate = LocalizationConstants.START_POSE;
     int particleCount = LocalizationConstants.PARTICLE_COUNT;
 
+    public double[] motionDeviances = {0.005, 0.005, 0.001};
+
+    public double[] resampleDeviances = new double[] {0.1, 0.1, 0.01};
+
+    public Bound initializatioBound = new Bound(-0.5,0.5,-0.5,0.5, -0.001, 0.001);
+
+    public Bound reInitializatioBound = new Bound(-0.5,0.5,-0.5,0.5, -0.001, 0.001);
+
     ParticleFilter2d particleFilter2d;
 
     MotionModel motionModel;
@@ -45,7 +52,7 @@ public class MonteCarloLocalizer implements Localizer {
 
     public MonteCarloLocalizer(HardwareMap hardwareMap){
 
-        motionModel = new RRLocalizerMotionModel(poseEstimate, new StandardTrackingWheelLocalizer(hardwareMap));
+        motionModel = new RRLocalizerMotionModel(poseEstimate, new StandardTrackingWheelLocalizer(hardwareMap), motionDeviances);
 
         // Config our Ultrasonic Distance Sensor
         AnalogDistanceSensorModel ultrasonicRight = SensorUtils.createMB1240Sensor(
@@ -66,9 +73,8 @@ public class MonteCarloLocalizer implements Localizer {
         );
         sensorModels.add(ultrasonicBack);
 
-        particleFilter2d = new ParticleFilter2d();
-        particleFilter2d.initializeParticles(this.particleCount, this.poseEstimate);
-
+        particleFilter2d = new ParticleFilter2d(initializatioBound, resampleDeviances);
+        particleFilter2d.initializeParticles(particleCount, PoseUtils.poseToVector(poseEstimate), initializatioBound);
     }
 
     @Override
@@ -79,17 +85,13 @@ public class MonteCarloLocalizer implements Localizer {
     @Override
     public void setPoseEstimate(@NonNull Pose2d pose2d) {
         this.poseEstimate = pose2d;
-        particleFilter2d.initializeParticles(particleCount, poseEstimate);
+        particleFilter2d.initializeParticles(particleCount, PoseUtils.poseToVector(poseEstimate));
 
     }
 
     @Override
     public Pose2d getPoseVelocity() {
         return null;
-    }
-
-    public List<Pose2d> getParticlePoses() {
-        return particleFilter2d.getParticlePoses();
     }
 
     /**
@@ -109,9 +111,13 @@ public class MonteCarloLocalizer implements Localizer {
             throw new RuntimeException(e);
         }
         // Weigh Particles
-        particleFilter2d.weighParticles(sensorModels);
+        try {
+            particleFilter2d.weighParticles(sensorModels);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         // Get the best pose estimate
-        poseEstimate = particleFilter2d.getBestPose();
+        poseEstimate = PoseUtils.vectorToPose(particleFilter2d.getBestParticle().getState());
 
     }
 

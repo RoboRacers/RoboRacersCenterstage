@@ -1,5 +1,6 @@
 package com.roboracers.gaeldrive.utils;
 
+
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
@@ -34,7 +35,9 @@ public class StatsUtils {
         for (int i = 0; i < len; i++) {
             state.setEntry(i, generateGaussian(deviances[i], state.getEntry(i)));
         }
+
         return new ArrayRealVector(state);
+
     }
 
     public static double generateGaussian() {

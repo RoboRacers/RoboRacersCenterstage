@@ -7,16 +7,15 @@ import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.apache.commons.math3.linear.RealVector;
 import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.LocalizationConstants;
 
 import com.roboracers.gaeldrive.filters.ParticleFilter2d;
 import com.roboracers.gaeldrive.filters.ParticleFilter2d.Bound;
-import com.roboracers.gaeldrive.motion.MotionModel;
 import com.roboracers.gaeldrive.sensors.SensorModel;
+import com.roboracers.gaeldrive.utils.StatsUtils;
 import com.roboracers.gaeldrive.utils.Updatable;
 
-import org.firstinspires.ftc.teamcode.modules.gaeldrive.motion.RRLocalizerMotionModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.AnalogDistanceSensorModel;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.PoseUtils;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors.SensorUtils;
@@ -32,27 +31,58 @@ import java.util.List;
  */
 public class MonteCarloLocalizer implements Localizer {
 
-    // Change these in LocalizationConstants only!
-    Pose2d poseEstimate = LocalizationConstants.START_POSE;
-    int particleCount = LocalizationConstants.PARTICLE_COUNT;
 
-    public double[] motionDeviances = {0.005, 0.005, 0.001};
-
-    public double[] resampleDeviances = new double[] {0.1, 0.1, 0.01};
-
-    public Bound initializatioBound = new Bound(-0.5,0.5,-0.5,0.5, -0.001, 0.001);
-
-    public Bound reInitializatioBound = new Bound(-0.5,0.5,-0.5,0.5, -0.001, 0.001);
-
+    /**
+     * The particle filter at the heart of monte carlo localization.
+     */
     ParticleFilter2d particleFilter2d;
-
-    MotionModel motionModel;
+    /**
+     * Roadrunner Localizer interface that is used to translate particles periodically.
+     * AKA the "Motion Model"
+     */
+    Localizer internalLocalizer;
 
     public List<SensorModel> sensorModels = new ArrayList<>();
 
+    Pose2d poseEstimate;
+
+    /*
+     * These are the parameters that you can tune to your liking.
+     */
+    /**
+     * This defines the number of particles used in the particle filter.
+     * A higher particle leads to more diversity and a higher accuracy and "resolution",
+     * But has a high performance cost. Monitor your looptimes when changing this variable to ensure
+     * that your performance is not being affected drastically.
+     */
+    int particleCount = 2000;
+
+    /**
+     * This defines the amount of guassian noise applied whenever the particles are
+     * translated based on the internal localizer.
+     */
+    public double[] translationDeviances = {0.005, 0.005, 0.001};
+    /**
+     * This defines the deviances that are applied when resampling particles as part of
+     * the monte carlo cycle.
+     */
+    public double[] resampleingDeviances = {0.1, 0.1, 0.01};
+
+    public Bound initializatioBound = new Bound(
+            -0.5,0.5,-0.5,0.5, -0.001, 0.001
+    );
+
+    public Bound reInitializatioBound = new Bound(
+            -0.5,0.5,-0.5,0.5, -0.001, 0.001
+    );
+
+
     public MonteCarloLocalizer(HardwareMap hardwareMap){
 
-        motionModel = new RRLocalizerMotionModel(poseEstimate, new StandardTrackingWheelLocalizer(hardwareMap), motionDeviances);
+        internalLocalizer = new StandardTrackingWheelLocalizer(hardwareMap); // Change the internal localizer here
+
+        internalLocalizer.setPoseEstimate(poseEstimate);
+        currentState = PoseUtils.poseToVector(poseEstimate);
 
         // Config our Ultrasonic Distance Sensor
         AnalogDistanceSensorModel ultrasonicRight = SensorUtils.createMB1240Sensor(
@@ -73,7 +103,7 @@ public class MonteCarloLocalizer implements Localizer {
         );
         sensorModels.add(ultrasonicBack);
 
-        particleFilter2d = new ParticleFilter2d(initializatioBound, resampleDeviances);
+        particleFilter2d = new ParticleFilter2d(initializatioBound, resampleingDeviances);
         particleFilter2d.initializeParticles(particleCount, PoseUtils.poseToVector(poseEstimate), initializatioBound);
     }
 
@@ -85,8 +115,12 @@ public class MonteCarloLocalizer implements Localizer {
     @Override
     public void setPoseEstimate(@NonNull Pose2d pose2d) {
         this.poseEstimate = pose2d;
-        particleFilter2d.initializeParticles(particleCount, PoseUtils.poseToVector(poseEstimate));
-
+        // Reinitialize particles at the new position
+        particleFilter2d.initializeParticles(particleCount, PoseUtils.poseToVector(poseEstimate), reInitializatioBound);
+        // Set the state and the internal localizer to the new pose
+        prevState = PoseUtils.poseToVector(pose2d);
+        currentState = PoseUtils.poseToVector(pose2d);
+        internalLocalizer.setPoseEstimate(pose2d);
     }
 
     @Override
@@ -99,19 +133,18 @@ public class MonteCarloLocalizer implements Localizer {
      */
     @Override
     public void update() {
+        // Update the internal localizer
+        internalLocalizerUpdate();
+
         // Update all sensor values
-        motionModel.update();
         for (Updatable sensorModel : sensorModels) {
             sensorModel.update();
         }
-        // Translate all particles in our particle filter
+
         try {
-            particleFilter2d.translateParticles(motionModel.getTranslationVector());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        // Weigh Particles
-        try {
+            // Translate all particles in our particle filter
+            particleFilter2d.translateParticles(getTranslationVector());
+            // Weigh Particles
             particleFilter2d.weighParticles(sensorModels);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -119,6 +152,20 @@ public class MonteCarloLocalizer implements Localizer {
         // Get the best pose estimate
         poseEstimate = PoseUtils.vectorToPose(particleFilter2d.getBestParticle().getState());
 
+    }
+
+    private RealVector prevState;
+    private RealVector currentState;
+
+    private void internalLocalizerUpdate () {
+        internalLocalizer.update();
+        prevState = currentState;
+        currentState = PoseUtils.poseToVector(internalLocalizer.getPoseEstimate());
+    }
+
+    private RealVector getTranslationVector() throws Exception {
+        RealVector translation = currentState.subtract(prevState);
+        return StatsUtils.addGaussianNoise(translation, translationDeviances);
     }
 
 }

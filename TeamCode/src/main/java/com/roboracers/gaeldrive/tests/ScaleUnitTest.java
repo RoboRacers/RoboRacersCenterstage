@@ -4,10 +4,10 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.filters.ParticleFilter2d;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 import com.roboracers.gaeldrive.sensors.TestDistanceSensorModel;
+import com.roboracers.gaeldrive.utils.Updatable;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.PoseUtils;
-import com.roboracers.gaeldrive.utils.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;

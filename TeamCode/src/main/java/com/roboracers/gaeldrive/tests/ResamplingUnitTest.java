@@ -1,6 +1,5 @@
 package com.roboracers.gaeldrive.tests;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.roboracers.gaeldrive.filters.ParticleFilter2d;
 import com.roboracers.gaeldrive.sensors.SensorModel;
 

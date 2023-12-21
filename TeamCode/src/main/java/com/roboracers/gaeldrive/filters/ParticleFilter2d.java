@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ParticleFilter2d extends ParticleFilter {
 
     public Bound bound;
-    public double[] resampleDeviances = new double[] {0.1, 0.1, 0.01};
+    public double[] resampleDeviances = {0.1, 0.1, 0.01};
 
     /**
      * Quick initialization of a Particle Filter with default covariances
@@ -38,6 +38,7 @@ public class ParticleFilter2d extends ParticleFilter {
      * @param resampleDeviances
      */
     public ParticleFilter2d(Bound bound, double[] resampleDeviances) {
+        super.Dimensions = 3;
         this.bound = bound;
         this.resampleDeviances = resampleDeviances;
     }

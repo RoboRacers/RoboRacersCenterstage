@@ -8,7 +8,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResamplingUnitTest {
+class ResamplingUnitTest {
     static long loop;
     static long loopTime = 0;
 

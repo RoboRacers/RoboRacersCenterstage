@@ -1,7 +1,7 @@
 package com.roboracers.gaeldrive.tests;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.roboracers.gaeldrive.distance.FieldDistance;
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.distance.FieldDistance;
 
 public class DistanceCalcTest {
     static long loop;

@@ -1,6 +1,8 @@
-package com.roboracers.gaeldrive.sensors;
+package org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors;
 
-import com.roboracers.gaeldrive.distance.FieldDistance;
+import com.roboracers.gaeldrive.sensors.SensorModel;
+
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.distance.FieldDistance;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;

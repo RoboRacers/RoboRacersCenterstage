@@ -1,7 +1,9 @@
-package com.roboracers.gaeldrive.tests;
+package org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.roboracers.gaeldrive.distance.FieldDistance;
+import com.roboracers.gaeldrive.tests.TestTemplate;
+
+import org.firstinspires.ftc.teamcode.modules.gaeldrive.distance.FieldDistance;
 
 public class MapTest extends TestTemplate {
     static long loop;

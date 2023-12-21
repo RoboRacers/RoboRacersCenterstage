@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.modules.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 
 public class Slides extends Subsystem {
@@ -17,8 +20,8 @@ public class Slides extends Subsystem {
      * More variables/objects related to the operation of this subsystem.
      */
 
-    public DcMotor rightmotor;
-    public DcMotor leftmotor;
+    public DcMotorImplEx rightmotor;
+    public DcMotorImplEx leftmotor;
 
     private int targetPosition = 0;
 
@@ -29,8 +32,8 @@ public class Slides extends Subsystem {
      */
     public Slides(HardwareMap hardwareMap) {
         // Set up the motor related to this subsystem
-        rightmotor = hardwareMap.get(DcMotor.class, "rightSlide");
-        leftmotor = hardwareMap.get(DcMotor.class, "leftSlide");
+        rightmotor = hardwareMap.get(DcMotorImplEx.class, "rightSlide");
+        leftmotor = hardwareMap.get(DcMotorImplEx.class, "leftSlide");
 
         rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.modules.gaeldrive.sensors;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.roboracers.gaeldrive.sensors.DistanceSensorModel;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.modules.gaeldrive.PoseUtils;

@@ -153,6 +153,8 @@ public class BlueFarAuton extends LinearOpMode{
         // Close claw
         robot.intake.statemachine.transition(IntakeSM.EVENT.CLOSE_CLAW);
 
+        robot.vision.startPropDetection();
+
         boolean manualPropControl = false;
 
         while(!isStopRequested() && !opModeIsActive()) {
@@ -211,6 +213,8 @@ public class BlueFarAuton extends LinearOpMode{
             telemetry.update();
         }
 
+        robot.vision.stopPropDetection();
+        
         waitForStart();
 
         if (isStopRequested()) return;

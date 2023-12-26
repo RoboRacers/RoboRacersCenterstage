@@ -12,7 +12,10 @@ import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealVector;
 import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.ColumnMatrixF;
+import org.firstinspires.ftc.robotcore.external.matrices.GeneralMatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -20,6 +23,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.opencv.core.Mat;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -60,23 +64,27 @@ public class ConstructerTags extends LinearOpMode {
                 while (tag.ftcPose.x != 0) {
 
 
-                    VectorF Prel = new VectorF(
-                            (float) tag.ftcPose.x,
-                            (float) tag.ftcPose.y,
-                            (float) tag.ftcPose.z
+                    VectorF tagTranslation = tag.metadata.fieldPosition;
+                    MatrixF tagRotation = tag.metadata.fieldOrientation.toMatrix();
+
+                    VectorF cameraToTagTranslation = new VectorF(
+                            (float) tag.rawPose.x,
+                            (float) tag.rawPose.y,
+                            (float) tag.rawPose.z
                     );
+                    MatrixF cameraToTagRotation = tag.rawPose.R;
 
-                    VectorF P1 = tag.metadata.fieldPosition;
+                    VectorF zeroVector = new VectorF(0,0,0);
+                    MatrixF zeroMatrix = new GeneralMatrixF(3,3);
 
-                    MatrixF Rrel = tag.rawPose.R;
+                    MatrixF tagToCameraRotation = zeroMatrix.subtracted(cameraToTagRotation);
+                    VectorF tagToCameraTranslation = tagToCameraRotation.multiplied(zeroVector.subtracted(cameraToTagTranslation));
 
-                    MatrixF R1 = tag.metadata.fieldOrientation.toMatrix();
+                    VectorF cameraTranslation = tagTranslation.added(tagRotation.multiplied(tagToCameraTranslation));
+                    MatrixF cameraRotation = tagRotation.multiplied(tagToCameraRotation);
 
-                    MatrixF Rnew = Rrel.multiplied(R1);
-
-                    VectorF Pfinal = P1.added(Rnew.multiplied(Prel));
-
-                    telemetry.addData("Position", Pfinal);
+                    VectorF robotToCameraTranslation = new VectorF(0,0,0);
+                    MatrixF robotToCameraRotation = new GeneralMatrixF(3,3);
 
 
                 }

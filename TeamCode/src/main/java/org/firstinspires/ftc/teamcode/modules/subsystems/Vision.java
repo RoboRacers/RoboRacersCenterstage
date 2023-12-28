@@ -1,26 +1,21 @@
 package org.firstinspires.ftc.teamcode.modules.subsystems;
 
-import android.util.Size;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.GeneralMatrixF;
-import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.teamcode.modules.vision.Pose3d;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.modules.vision.Transform3d;
 import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
@@ -45,29 +40,30 @@ public class Vision extends Subsystem {
     public Vision(HardwareMap hardwareMap) {
 
         tagProcessor = new AprilTagProcessor.Builder()
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-                .setDrawTagID(true)
-                .setDrawTagOutline(true)
+                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS)
                 .build();
 
-        visionPortal = new VisionPortal.Builder()
-                .addProcessor(tagProcessor)
-                .setCamera(hardwareMap.get(WebcamName.class, cameraname))
-                .setCameraResolution(new Size(width, height))
-                .build();
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, cameraname), tagProcessor);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
                 .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
-                .get(WebcamName.class, cameraname), cameraMonitorViewId);
+        // camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
+        //.get(WebcamName.class, cameraname), cameraMonitorViewId);
 
+    }
+
+
+    public void startPropDetection() {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
                 cameraOpened = true;
-
+                camera.startStreaming(width, height, OpenCvCameraRotation.UPRIGHT);
+                teamPropDetectionPipeline = new TeamPropPipeline();
+                camera.setPipeline(teamPropDetectionPipeline);
             }
 
             @Override
@@ -77,32 +73,21 @@ public class Vision extends Subsystem {
 
     }
 
-    public void startPropDetection() {
-        if (cameraOpened) {
-            camera.startStreaming(width, height, OpenCvCameraRotation.UPRIGHT);
-            teamPropDetectionPipeline = new TeamPropPipeline();
-            camera.setPipeline(teamPropDetectionPipeline);
-        } else {
-
-        }
-    }
-
     public void stopPropDetection() {
         camera.closeCameraDeviceAsync(() -> cameraOpened = false);
     }
 
     public SpikeMarkerLocation getDirection() {
-        if (teamPropDetectionPipeline != null) {
+        if (cameraOpened) {
             return teamPropDetectionPipeline.getDirection();
         } else {
             return null;
         }
-
     }
 
     public void startAprilTagDetection() {
         visionPortal.setProcessorEnabled(tagProcessor,true);
-        visionPortal.resumeStreaming();
+        if (visionPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY) visionPortal.resumeStreaming();
     }
 
     public void stopAprilTagDetection() {
@@ -110,20 +95,23 @@ public class Vision extends Subsystem {
     }
 
     public ArrayList<Pose2d> getAprilTagPoses() {
-        ArrayList<AprilTagDetection> tags = tagProcessor.getDetections();
+        ArrayList<AprilTagDetection> tags = new ArrayList<>();
+
+        if (visionPortal.getProcessorEnabled(tagProcessor)) {
+            tags = tagProcessor.getDetections();
+        }
 
         ArrayList<Pose2d> poses = new ArrayList<>();
 
         for (AprilTagDetection tag: tags) {
-            if (tag.ftcPose.x != 0) {
+            if (tag.metadata != null) {
 
-                Pose3d tagPose = new Pose3d(
+                Transform3d tagPose = new Transform3d(
                         tag.metadata.fieldPosition,
                         tag.metadata.fieldOrientation.toMatrix()
                 );
 
-
-                Pose3d cameraToTagTransform = new Pose3d(
+                Transform3d cameraToTagTransform = new Transform3d(
                         new VectorF(
                                 (float) tag.rawPose.x,
                                 (float) tag.rawPose.y,
@@ -131,24 +119,25 @@ public class Vision extends Subsystem {
                         ),
                         tag.rawPose.R
                 );
+                Transform3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
 
+                Transform3d cameraPose = tagPose.plus(tagToCameraTransform);
 
-                Pose3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
+                Transform3d robotToCameraTransform = new Transform3d();
+                Transform3d cameraToRobotTransform = robotToCameraTransform.unaryMinusInverse();
 
-                Pose3d cameraPose = tagPose.plus(tagToCameraTransform);
-
-                Pose3d robotToCameraTransform = new Pose3d();
-
-                Pose3d cameraToRobotTransform = robotToCameraTransform.unaryMinusInverse();
-
-                Pose3d robotPose = cameraPose.plus(cameraToRobotTransform);
+                Transform3d robotPose = cameraPose.plus(cameraToRobotTransform);
 
                 poses.add(robotPose.toPose2d());
-
             }
         }
 
         return poses;
+    }
+
+    public void closeAll() {
+        visionPortal.close();
+        stopPropDetection();
     }
 
     @Override
@@ -156,7 +145,7 @@ public class Vision extends Subsystem {
 
     }
 
-    private static class TeamPropPipeline extends OpenCvPipeline {
+    private class TeamPropPipeline extends OpenCvPipeline {
 
         Mat gray = new Mat();
         Mat shadowMask = new Mat();

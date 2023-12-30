@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.teamcode.modules.vision.Transform3d;
 import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -108,7 +109,7 @@ public class Vision extends Subsystem {
 
                 Transform3d tagPose = new Transform3d(
                         tag.metadata.fieldPosition,
-                        tag.metadata.fieldOrientation.toMatrix()
+                        tag.metadata.fieldOrientation
                 );
 
                 Transform3d cameraToTagTransform = new Transform3d(
@@ -117,13 +118,20 @@ public class Vision extends Subsystem {
                                 (float) tag.rawPose.y,
                                 (float) tag.rawPose.z
                         ),
-                        tag.rawPose.R
+                        Transform3d.MatrixToQuaternion(tag.rawPose.R)
                 );
                 Transform3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
 
                 Transform3d cameraPose = tagPose.plus(tagToCameraTransform);
 
-                Transform3d robotToCameraTransform = new Transform3d();
+                Transform3d robotToCameraTransform = new Transform3d(
+                        new VectorF(
+                                34.00f - 42.30f,
+                                 35.88f - 29.700f,
+                                8.50f
+                        ),
+                        new Quaternion(0,0,1f,0, System.nanoTime())
+                );
                 Transform3d cameraToRobotTransform = robotToCameraTransform.unaryMinusInverse();
 
                 Transform3d robotPose = cameraPose.plus(cameraToRobotTransform);

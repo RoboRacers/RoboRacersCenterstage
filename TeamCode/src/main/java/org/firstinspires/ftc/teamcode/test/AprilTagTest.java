@@ -37,53 +37,12 @@ public class AprilTagTest extends LinearOpMode {
 
             } else if (gamepad1.dpad_up) {
                 vision.visionPortal.resumeStreaming();
-            } else if (gamepad1.dpad_left) {
-                vision.tagProcessor.getDetections().get(0).metadata.fieldOrientation.toMatrix();
-            } else if (gamepad1.dpad_right) {
-                AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(1).fieldOrientation.toMatrix();
             }
+
             telemetry.addData("Portal State", vision.visionPortal.getCameraState());
             telemetry.addData("Detections", vision.tagProcessor.getDetections());
 
-            ArrayList<AprilTagDetection> tags = vision.tagProcessor.getDetections();
-
-            ArrayList<Pose2d> poses = new ArrayList<>();
-
-            for (AprilTagDetection tag: tags) {
-                if (tag.metadata != null) {
-
-
-                    Transform3d tagPose = new Transform3d(
-                            tag.metadata.fieldPosition,
-                            tag.metadata.fieldOrientation.toMatrix()
-                    );
-
-
-
-                    Transform3d cameraToTagTransform = new Transform3d(
-                            new VectorF(
-                                    (float) tag.rawPose.x,
-                                    (float) tag.rawPose.y,
-                                    (float) tag.rawPose.z
-                            ),
-                            tag.rawPose.R
-                    );
-
-
-                    Transform3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
-
-                    Transform3d cameraPose = tagPose.plus(tagToCameraTransform);
-
-                    Transform3d robotToCameraTransform = new Transform3d();
-                    Transform3d cameraToRobotTransform = robotToCameraTransform.unaryMinusInverse();
-
-                    Transform3d robotPose = cameraPose.plus(cameraToRobotTransform);
-
-                    poses.add(robotPose.toPose2d());
-
-
-                }
-            }
+            ArrayList<Pose2d> poses = vision.getAprilTagPoses();
 
             telemetry.addData("Possible Pose", poses);
             telemetry.update();
@@ -92,13 +51,6 @@ public class AprilTagTest extends LinearOpMode {
         vision.visionPortal.close();
 
     }
-
-    public static void main(String[] args) {
-        MatrixF R = new Quaternion().toMatrix();
-
-        System.out.println(R);
-    }
-
 }
 
 

@@ -6,19 +6,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RobotCore;
-import org.firstinspires.ftc.teamcode.modules.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
-import org.firstinspires.ftc.teamcode.modules.subsystems.Vision;
+import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 // Localization is doesn't show drift, follower if it does
 
@@ -154,7 +148,7 @@ public class BlueCloseAuton extends LinearOpMode{
 
             // Checks if the positions of the encoders to make sure they are not unplugged
             robot.drive.updatePoseEstimate();
-            StandardTrackingWheelLocalizer localizer = (StandardTrackingWheelLocalizer) robot.drive.getLocalizer();
+            ThreeTrackingWheelLocalizer localizer = (ThreeTrackingWheelLocalizer) robot.drive.getLocalizer();
             List<Double> deadwheelPositions = localizer.getWheelPositions();
 
             telemetry.addData("Left Encoder Pos", deadwheelPositions.get(0));

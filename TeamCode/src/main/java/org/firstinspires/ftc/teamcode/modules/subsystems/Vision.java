@@ -1,8 +1,19 @@
 package org.firstinspires.ftc.teamcode.modules.subsystems;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.modules.subsystems.Subsystem;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
+import org.firstinspires.ftc.teamcode.modules.vision.Transform3d;
 import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -12,16 +23,46 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropDetection extends Subsystem {
+public class Vision extends Subsystem {
     public TeamPropPipeline teamPropDetectionPipeline;
-    Telemetry telemetry;
 
-    public PropDetection(OpenCvCamera camera, Telemetry telemetry) {
-        this.telemetry = telemetry;
+    OpenCvCamera camera;
+
+    public VisionPortal visionPortal;
+
+    public AprilTagProcessor tagProcessor;
+
+    private static final String cameraname = "Webcam 1";
+    private static final int width = 640;
+    private static final int height = 480;
+
+    public boolean cameraOpened = false;
+
+    public Vision(HardwareMap hardwareMap) {
+
+        tagProcessor = new AprilTagProcessor.Builder()
+                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS)
+                .build();
+
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, cameraname), tagProcessor);
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources()
+                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        // camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
+        //.get(WebcamName.class, cameraname), cameraMonitorViewId);
+
+    }
+
+
+    public void startPropDetection() {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                cameraOpened = true;
+                camera.startStreaming(width, height, OpenCvCameraRotation.UPRIGHT);
                 teamPropDetectionPipeline = new TeamPropPipeline();
                 camera.setPipeline(teamPropDetectionPipeline);
             }
@@ -31,23 +72,80 @@ public class PropDetection extends Subsystem {
             }
         });
 
-        //while (teamPropDetectionPipeline == null) {
-        //}
+    }
+
+    public void stopPropDetection() {
+        camera.closeCameraDeviceAsync(() -> cameraOpened = false);
     }
 
     public SpikeMarkerLocation getDirection() {
-        if (teamPropDetectionPipeline != null) {
+        if (cameraOpened) {
             return teamPropDetectionPipeline.getDirection();
         } else {
             return null;
         }
+    }
 
+    public void startAprilTagDetection() {
+        visionPortal.setProcessorEnabled(tagProcessor,true);
+        if (visionPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY) visionPortal.resumeStreaming();
     }
-    public String getElapsedTime() {
-        return teamPropDetectionPipeline.getElapsedTime();
+
+    public void stopAprilTagDetection() {
+        visionPortal.stopStreaming();
     }
-    public String getEndTime() {
-        return teamPropDetectionPipeline.getEndTime();
+
+    public ArrayList<Pose2d> getAprilTagPoses() {
+        ArrayList<AprilTagDetection> tags = new ArrayList<>();
+
+        if (visionPortal.getProcessorEnabled(tagProcessor)) {
+            tags = tagProcessor.getDetections();
+        }
+
+        ArrayList<Pose2d> poses = new ArrayList<>();
+
+        for (AprilTagDetection tag: tags) {
+            if (tag.metadata != null) {
+
+                Transform3d tagPose = new Transform3d(
+                        tag.metadata.fieldPosition,
+                        tag.metadata.fieldOrientation
+                );
+
+                Transform3d cameraToTagTransform = new Transform3d(
+                        new VectorF(
+                                (float) tag.rawPose.x,
+                                (float) tag.rawPose.y,
+                                (float) tag.rawPose.z
+                        ),
+                        Transform3d.MatrixToQuaternion(tag.rawPose.R)
+                );
+                Transform3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
+
+                Transform3d cameraPose = tagPose.plus(tagToCameraTransform);
+
+                Transform3d robotToCameraTransform = new Transform3d(
+                        new VectorF(
+                                34.00f - 42.30f,
+                                 35.88f - 29.700f,
+                                8.50f
+                        ),
+                        new Quaternion(0,0,1f,0, System.nanoTime())
+                );
+                Transform3d cameraToRobotTransform = robotToCameraTransform.unaryMinusInverse();
+
+                Transform3d robotPose = cameraPose.plus(cameraToRobotTransform);
+
+                poses.add(robotPose.toPose2d());
+            }
+        }
+
+        return poses;
+    }
+
+    public void closeAll() {
+        visionPortal.close();
+        stopPropDetection();
     }
 
     @Override
@@ -55,8 +153,7 @@ public class PropDetection extends Subsystem {
 
     }
 
-
-    static class TeamPropPipeline extends OpenCvPipeline {
+    private class TeamPropPipeline extends OpenCvPipeline {
 
         Mat gray = new Mat();
         Mat shadowMask = new Mat();

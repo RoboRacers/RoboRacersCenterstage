@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules.subsystems;
 
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -18,7 +16,7 @@ public class Launcher extends Subsystem  {
         statemachine = new LauncherSM(this);
     }
 
-    public void setServoPos(boolean ifshoot){
+    public void fireDrone(boolean ifshoot){
         if(ifshoot){
             actuationServo.setPosition(1);
         } else {

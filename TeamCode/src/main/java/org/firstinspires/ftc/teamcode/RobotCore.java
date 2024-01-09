@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.modules.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.modules.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Subsystem;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Vision;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,13 +21,14 @@ public class RobotCore extends Subsystem {
     /*
      * Declare the different subsystems of the robot here.
      */
-    public SampleMecanumDrive drive;
+    public MecanumDrive drive;
 
     public Intake intake;
 
     public Slides slides;
 
     public Launcher drone;
+    public Vision vision;
 
     public List<Subsystem> subsystems;
 
@@ -38,18 +39,20 @@ public class RobotCore extends Subsystem {
     public RobotCore(HardwareMap hardwareMap){
 
         /* Initialize Subsystems */
-        drive = new SampleMecanumDrive(hardwareMap);
+        drive = new MecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         intake = new Intake(hardwareMap);
         slides = new Slides(hardwareMap);
         drone = new Launcher(hardwareMap);
+        vision = new Vision(hardwareMap);
 
         subsystems = Arrays.asList(
                 intake,
                 slides,
-                drone
+                drone,
+                vision
         );
 
     }
@@ -59,6 +62,7 @@ public class RobotCore extends Subsystem {
      */
     @Override
     public void update() {
+
         drive.update();
         for (Subsystem system: subsystems) {
             system.update();

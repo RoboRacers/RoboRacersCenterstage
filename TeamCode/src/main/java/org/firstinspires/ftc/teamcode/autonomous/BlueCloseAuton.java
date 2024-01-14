@@ -136,6 +136,28 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineTo(new Vector2d(58,60), Math.toRadians(0))
                 .build();
 
+        //change the starting position
+        TrajectorySequence cycleFromBackBLueMiddleDoor = robot.drive.trajectorySequenceBuilder(new Pose2d(48.86, 41.88, Math.toRadians(0.00)))
+                .splineTo(new Vector2d(9.18, 8.63), Math.toRadians(180.00))
+                .splineTo(new Vector2d(-64.29, 15.80), Math.toRadians(168.69))
+                //eat pixals here
+                .splineTo(new Vector2d(-42.43, 1.47), Math.toRadians(-4.40))
+                .splineTo(new Vector2d(25.35, 7.53), Math.toRadians(7.61))
+                .splineTo(new Vector2d(53.27, 35.63), Math.toRadians(5.71))
+                .build();
+
+        TrajectorySequence cycleFromBackBlueSideDoor = robot.drive.trajectorySequenceBuilder(new Pose2d(55.47, 37.65, Math.toRadians(-4.32)))
+                .splineTo(new Vector2d(9.00, 61.35), Math.toRadians(185.79))
+                .lineTo(new Vector2d(-39.12, 59.88))
+                .splineTo(new Vector2d(-64.10, 31.04), Math.toRadians(185.44))
+                //eat pixals here
+                .splineTo(new Vector2d(-28.65, 62.82), Math.toRadians(0.00))
+                .splineTo(new Vector2d(21.12, 55.84), Math.toRadians(-15.12))
+                .splineTo(new Vector2d(55.29, 34.53), Math.toRadians(-6.34))
+                .build();
+
+
+
         // Close claw
         robot.intake.statemachine.transition(IntakeSM.EVENT.CLOSE_CLAW);
 

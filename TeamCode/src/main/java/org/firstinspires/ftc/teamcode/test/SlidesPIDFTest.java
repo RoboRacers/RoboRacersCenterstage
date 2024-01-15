@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
+import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 
 import java.util.List;
@@ -18,9 +19,9 @@ public class SlidesPIDFTest extends LinearOpMode {
 
     Slides slides;
 
-    public static double kP = 0.01;
+    public static double kP = 0.1;
     public static double kI = 0;
-    public static double kD = 0;
+    public static double kD = 0.1;
 
     public static int setPoint = 0;
 
@@ -28,6 +29,10 @@ public class SlidesPIDFTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         slides = new Slides(hardwareMap);
+
+        slides.statemachine.transition(
+                SlidesSM.EVENT.ENABLE_PID
+        );
 
         while (opModeInInit()) {
         }
@@ -38,9 +43,9 @@ public class SlidesPIDFTest extends LinearOpMode {
             slides.setTargetPosition(setPoint);
 
             // Telemetry
-            telemetry.addData("Left Slide Motor", slides.leftmotor.getCurrentPosition());
+            telemetry.addData("Slides Current Pos", slides.get());
             telemetry.update();
-
+            slides.update();
         }
     }
 }

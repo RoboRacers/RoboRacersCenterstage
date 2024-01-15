@@ -17,6 +17,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
@@ -51,8 +52,8 @@ public class Vision implements Subsystem {
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
                 .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        // camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
-        //.get(WebcamName.class, cameraname), cameraMonitorViewId);
+         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
+        .get(WebcamName.class, cameraname), cameraMonitorViewId);
 
     }
 

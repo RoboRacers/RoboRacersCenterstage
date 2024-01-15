@@ -16,13 +16,14 @@ public class OpenCVPropDetection extends LinearOpMode {
     public void runOpMode() {
 
         teamVisionPipeline = new Vision(hardwareMap);
-
+        teamVisionPipeline.startPropDetection();
         waitForStart();
 
         while (opModeIsActive()) {
             SpikeMarkerLocation direction = teamVisionPipeline.getDirection();
 
             telemetry.addData("Direction", direction);
+            telemetry.addData("Opened",teamVisionPipeline.cameraOpened);
             telemetry.update();
         }
 

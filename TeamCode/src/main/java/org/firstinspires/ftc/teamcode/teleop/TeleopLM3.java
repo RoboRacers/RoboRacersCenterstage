@@ -35,9 +35,9 @@ public class TeleopLM3 extends LinearOpMode {
 
             robot.drive.setWeightedDrivePower(
                     new Pose2d(
-                            gamepad1.left_stick_y * speedMultiplier,
-                            -gamepad1.left_stick_x * speedMultiplier, //imperfect strafing fix, must be tuned for new drivetrain
-                            gamepad1.right_stick_x * strafeMultiplier
+                            -gamepad1.left_stick_y * speedMultiplier,
+                            gamepad1.left_stick_x * speedMultiplier, //imperfect strafing fix, must be tuned for new drivetrain
+                            -gamepad1.right_stick_x * strafeMultiplier
                     )
             );
 

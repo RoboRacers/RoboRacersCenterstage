@@ -28,7 +28,7 @@ public class BlueCloseAuton extends LinearOpMode{
 
         robot = new RobotCore(hardwareMap);
 
-        Pose2d startLocation = new Pose2d(15.85, 62.00, Math.toRadians(90));
+        Pose2d startLocation = new Pose2d(15.85, 62.00, Math.toRadians(-90));
 
         TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)
@@ -38,8 +38,8 @@ public class BlueCloseAuton extends LinearOpMode{
                 .setReversed(true)
                 .splineTo(new Vector2d(26.89, 48.60), Math.toRadians(-19.54))
                 .addDisplacementMarker(() -> {
-                    robot.slides.setTargetPosition(800);
-                    robot.slides.setPower(.8);
+                    //robot.slides.setTargetPosition(800);
+                    //robot.slides.setPower(.8);
                 })
                 .splineTo(new Vector2d(47.00, 43.5), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
@@ -49,35 +49,25 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineTo(new Vector2d(40.54,43.5), Math.toRadians(180.00))
                 .setReversed(true)
                 .addDisplacementMarker(() -> {
-                    robot.slides.setTargetPosition(0);
+                    //robot.slides.setTargetPosition(0);
                 })
                 .splineTo(new Vector2d(58.01, 60.21), Math.toRadians(0.00))
                 .build();
 
         TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .setReversed(true)
-                .splineTo(new Vector2d(12.95, 29.70), Math.toRadians(266.31))
-                .setReversed(false)
-                .splineTo(new Vector2d(7.46, 40.02), Math.toRadians(143.13))
-                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(21.42, 28.03, Math.toRadians(25.74)), Math.toRadians(25.74))
                 .addDisplacementMarker(() -> {
-
-                    robot.slides.setTargetPosition(820);
-                    robot.slides.setPower(.8);
+                    robot.intake.setIntakePower(-0.7);
                 })
-                // To backboard
-                .splineTo(new Vector2d(47.50, 35.90), Math.toRadians(0.00))
+                .waitSeconds(2)
+                .splineTo(new Vector2d(39.16, 36.33), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
+                    robot.intake.setIntakePower(0);
                 })
-                .waitSeconds(.75)
-                .setReversed(false)
-                .splineTo(new Vector2d(39, 35.90), Math.toRadians(180))
-                .setReversed(true)
-                .addDisplacementMarker(() -> {
-                    robot.slides.setTargetPosition(0);
-                })
-                .splineTo(new Vector2d(58,60), Math.toRadians(0))
+                .waitSeconds(2)
+                .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
                 .build();
+
 
         TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)
@@ -90,8 +80,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .setReversed(true)
                 .addSpatialMarker(new Vector2d(33,33),() -> {
 
-                    robot.slides.setTargetPosition(800);
-                    robot.slides.setPower(.8);
+
                 })
                 // To backboard
                 .splineTo(new Vector2d(47.00, 29.3), Math.toRadians(0.00))
@@ -108,38 +97,15 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineTo(new Vector2d(39, 28.3), Math.toRadians(180))
                 .setReversed(true)
                 .addDisplacementMarker(() -> {
-                    robot.slides.setTargetPosition(0);
+                    //robot.slides.setTargetPosition(0);
 
                 })
                 .splineTo(new Vector2d(58,60), Math.toRadians(0))
                 .build();
-
-        //change the starting position
-        TrajectorySequence cycleFromBackBLueMiddleDoor = robot.drive.trajectorySequenceBuilder(new Pose2d(48.86, 41.88, Math.toRadians(0.00)))
-                .splineTo(new Vector2d(9.18, 8.63), Math.toRadians(180.00))
-                .splineTo(new Vector2d(-64.29, 15.80), Math.toRadians(168.69))
-                //eat pixals here
-                .splineTo(new Vector2d(-42.43, 1.47), Math.toRadians(-4.40))
-                .splineTo(new Vector2d(25.35, 7.53), Math.toRadians(7.61))
-                .splineTo(new Vector2d(53.27, 35.63), Math.toRadians(5.71))
-                .build();
-
-        TrajectorySequence cycleFromBackBlueSideDoor = robot.drive.trajectorySequenceBuilder(new Pose2d(55.47, 37.65, Math.toRadians(-4.32)))
-                .splineTo(new Vector2d(9.00, 61.35), Math.toRadians(185.79))
-                .lineTo(new Vector2d(-39.12, 59.88))
-                .splineTo(new Vector2d(-64.10, 31.04), Math.toRadians(185.44))
-                //eat pixals here
-                .splineTo(new Vector2d(-28.65, 62.82), Math.toRadians(0.00))
-                .splineTo(new Vector2d(21.12, 55.84), Math.toRadians(-15.12))
-                .splineTo(new Vector2d(55.29, 34.53), Math.toRadians(-6.34))
-                .build();
-
-
-
         // Close claw
 
 
-        robot.vision.startPropDetection();
+        //robot.vision.startPropDetection();
 
         boolean manualPropControl = false;
 
@@ -170,10 +136,11 @@ public class BlueCloseAuton extends LinearOpMode{
             telemetry.addLine("VISION -----");
 
             // Switch between manual and automatic vision control
+            manualPropControl = true;
             if (gamepad1.left_bumper) {
                 manualPropControl = true;
             } else if (gamepad1.right_bumper) {
-                manualPropControl = false;
+                //manualPropControl = false;
             }
 
             if (!manualPropControl) {
@@ -199,7 +166,7 @@ public class BlueCloseAuton extends LinearOpMode{
             telemetry.update();
         }
 
-        robot.vision.stopPropDetection();
+        //robot.vision.stopPropDetection();
 
         waitForStart();
 
@@ -210,15 +177,18 @@ public class BlueCloseAuton extends LinearOpMode{
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {
             case LEFT:
-                robot.drive.followTrajectorySequence(LeftNoCycle);
+                robot.drive.followTrajectorySequenceAsync(LeftNoCycle);
                 break;
             case CENTER:
-                robot.drive.followTrajectorySequence(CenterNoCycle);
+                robot.drive.followTrajectorySequenceAsync(CenterNoCycle);
                 break;
             case RIGHT:
-                robot.drive.followTrajectorySequence(RightNoCycle);
+                robot.drive.followTrajectorySequenceAsync(RightNoCycle);
                 break;
+        }
 
+        while (opModeIsActive() && !isStopRequested()) {
+            robot.update();
         }
 
     }

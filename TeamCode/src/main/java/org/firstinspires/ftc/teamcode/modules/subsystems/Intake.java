@@ -31,8 +31,8 @@ public class Intake implements Subsystem {
         flipRight = hardwareMap.get(ServoImplEx.class, "flipRight");
         flipLeft.setDirection(Servo.Direction.REVERSE);
 
-        flipLeftEncoder = new AxonEncoder(hardwareMap.get(AnalogInput.class, "flipLeftEncoder"));
-        flipRightEncoder = new AxonEncoder(hardwareMap.get(AnalogInput.class, "flipRightEncoder"));
+        //flipLeftEncoder = new AxonEncoder(hardwareMap.get(AnalogInput.class, "flipLeftEncoder"));
+        //flipRightEncoder = new AxonEncoder(hardwareMap.get(AnalogInput.class, "flipRightEncoder"));
 
         lockLower = hardwareMap.get(ServoImplEx.class, "lockLower");
         lockHigher = hardwareMap.get(ServoImplEx.class, "lockHigher");

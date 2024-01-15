@@ -3,17 +3,14 @@ package org.firstinspires.ftc.teamcode.modules.subsystems;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.modules.statemachines.LauncherSM;
+public class Launcher implements Subsystem  {
 
-public class Launcher extends Subsystem  {
-
-    public LauncherSM statemachine;
 
     public Servo actuationServo;
 
     public Launcher(HardwareMap hardwareMap) {
         actuationServo = hardwareMap.get(Servo.class, "actuationServo");
-        statemachine = new LauncherSM(this);
+
     }
 
     public void fireDrone(boolean ifshoot){
@@ -26,6 +23,5 @@ public class Launcher extends Subsystem  {
 
     @Override
     public void update() {
-        statemachine.update();
     }
 }

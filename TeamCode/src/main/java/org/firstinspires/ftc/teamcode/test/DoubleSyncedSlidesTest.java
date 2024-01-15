@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.List;
 
-@TeleOp(name = "Dual Slides Test", group = "Test")
-public class DoubleSlidesTest extends LinearOpMode {
+@TeleOp(name = "Dual Synced Slides Test", group = "Test")
+public class DoubleSyncedSlidesTest extends LinearOpMode {
 
     DcMotor rightSlides;
     DcMotor leftSlides;
@@ -23,7 +23,7 @@ public class DoubleSlidesTest extends LinearOpMode {
 
         rightSlides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftSlides.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
 
@@ -39,19 +39,15 @@ public class DoubleSlidesTest extends LinearOpMode {
 
         while (!isStopRequested()) {
 
-            if (gamepad1.left_stick_y > 0.1) {
-                rightSlides.setPower(-gamepad1.left_stick_y*.4);
-            } else if (gamepad1.left_stick_y < -0.1) {
-                rightSlides.setPower(-gamepad1.left_stick_y);
-            } else {
-                rightSlides.setPower(0);
-            }
 
             if (gamepad1.right_stick_y > 0.1) {
-                leftSlides.setPower(-gamepad1.right_stick_y*.4);
-            } else if (gamepad1.right_stick_y < -0.1) {
+                rightSlides.setPower(-gamepad1.right_stick_y);
                 leftSlides.setPower(-gamepad1.right_stick_y);
+            } else if (gamepad1.right_stick_y < -0.1) {
+                rightSlides.setPower(-gamepad1.right_stick_y*.4);
+                leftSlides.setPower(-gamepad1.right_stick_y*.4);
             } else {
+                rightSlides.setPower(0);
                 leftSlides.setPower(0);
             }
 

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * This class contains the declaration and setup for all subsystems of the robot.
  */
-public class RobotCore extends Subsystem {
+public class RobotCore implements Subsystem {
 
     /*
      * Declare the different subsystems of the robot here.
@@ -45,14 +45,15 @@ public class RobotCore extends Subsystem {
 
         intake = new Intake(hardwareMap);
         slides = new Slides(hardwareMap);
-        drone = new Launcher(hardwareMap);
-        vision = new Vision(hardwareMap);
+        //drone = new Launcher(hardwareMap);
+        //vision = new Vision(hardwareMap);
 
         subsystems = Arrays.asList(
+                drive,
                 intake,
-                slides,
-                drone,
-                vision
+                slides
+                //drone,
+                //vision
         );
 
     }
@@ -62,10 +63,6 @@ public class RobotCore extends Subsystem {
      */
     @Override
     public void update() {
-
-        drive.update();
-        for (Subsystem system: subsystems) {
-            system.update();
-        }
+        for (Subsystem system: subsystems) system.update();
     }
 }

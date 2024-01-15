@@ -15,26 +15,23 @@ public class SlidesSM implements StateMachine {
     /**
      * The current state of this subsystem.
      */
-    SLIDESTATE currentState;
+    SLIDESTATE currentState = SLIDESTATE.MANUAL_CONTROL;
 
 
     /**
      * Enum declaring all the states of this state machine.
      */
     public enum SLIDESTATE {
-        REACHED_OUT,
-        FOLDED_IN,
-        RESTING
+        MANUAL_CONTROL,
+        RUN_WITH_PID
     }
 
     /**
      * Enum declaring all the events of this state machine.
      */
     public enum EVENT {
-        REACH_BUTTON_PRESSED,
-        FOLD_BUTTON_PRESSED,
-        REACHED_TOP,
-        AT_BOTTOM,
+        ENABLE_MANUAL,
+        ENABLE_PID
     }
 
     /**
@@ -61,19 +58,10 @@ public class SlidesSM implements StateMachine {
      */
     public void transition(SlidesSM.EVENT event) {
         switch (event) {
-            case REACH_BUTTON_PRESSED:
-                slides.setTargetPosition(300);
-                currentState = SLIDESTATE.REACHED_OUT;
-                break;
-            case FOLD_BUTTON_PRESSED:
-                slides.setTargetPosition(0);
-                currentState = SLIDESTATE.FOLDED_IN;
-                break;
-            case AT_BOTTOM:
-                currentState = SLIDESTATE.RESTING;
-                break;
-            case REACHED_TOP:
-                currentState = SLIDESTATE.RESTING;
+            case ENABLE_MANUAL:
+                currentState = SLIDESTATE.MANUAL_CONTROL;
+            case ENABLE_PID:
+                currentState = SLIDESTATE.RUN_WITH_PID;
                 break;
         }
     }
@@ -83,7 +71,13 @@ public class SlidesSM implements StateMachine {
      * You can define transitions to other states internally here as well.
      */
     public void update() {
-
+        switch (currentState) {
+            case RUN_WITH_PID:
+                slides.setPIDPower();
+                break;
+            default:
+                break;
+        }
     }
 
 }

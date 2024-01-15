@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.teamcode.util.RoadrunnerUtil.Encoder;
+import org.firstinspires.ftc.teamcode.modules.util.RoadrunnerUtil.Encoder;
 
 import java.util.Arrays;
 import java.util.List;

@@ -8,14 +8,15 @@ import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
+import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
+
 import java.util.List;
 
 @Config
-@TeleOp(name = "Slides PIDF Test", group = "Slides-Test")
+@TeleOp(name = "Slides PID Test", group = "Slides-Test")
 public class SlidesPIDFTest extends LinearOpMode {
 
-    DcMotorImplEx rightSlides;
-    DcMotorImplEx leftSlides;
+    Slides slides;
 
     public static double kP = 0.01;
     public static double kI = 0;
@@ -26,41 +27,18 @@ public class SlidesPIDFTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        rightSlides = hardwareMap.get(DcMotorImplEx.class, "rightSlide");
-        leftSlides = hardwareMap.get(DcMotorImplEx.class, "leftSlide");
-
-
-
-        rightSlides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftSlides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftSlides.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
-
-        rightSlides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftSlides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        for (LynxModule hub : allHubs) {
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
+        slides = new Slides(hardwareMap);
 
         while (opModeInInit()) {
         }
 
         while (!isStopRequested()) {
 
-            rightSlides.setPIDCoefficients(DcMotor.RunMode.RUN_TO_POSITION,
-                    new PIDCoefficients(kP,kI,kD));
-
-            leftSlides.setPIDCoefficients(DcMotor.RunMode.RUN_TO_POSITION,
-                    new PIDCoefficients(kP,kI,kD));
-
-            rightSlides.setTargetPosition(setPoint);
-            leftSlides.setTargetPosition(setPoint);
+            slides.setPID(kP,kI,kD);
+            slides.setTargetPosition(setPoint);
 
             // Telemetry
-            telemetry.addData("Right Slide Motor", rightSlides.getCurrentPosition());
-            telemetry.addData("Left Slide Motor", leftSlides.getCurrentPosition());
+            telemetry.addData("Left Slide Motor", slides.leftmotor.getCurrentPosition());
             telemetry.update();
 
         }

@@ -1,76 +1,155 @@
 package org.firstinspires.ftc.teamcode.modules.subsystems;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
-import org.firstinspires.ftc.teamcode.modules.statemachines.StateMachine;
+import org.firstinspires.ftc.teamcode.modules.util.AxonEncoder;
 
-public class Intake extends Subsystem {
-    double closed = 0.25;
-    double open = 0;
-    double out = 0.5;
-    double in = 0;
-    double extend = 0.25;
-    double retract = 0;
+@Config
+public class Intake implements Subsystem {
+
+    public DcMotorImplEx intakeMotor;
+    public ServoImplEx flipLeft;
+    public AxonEncoder flipLeftEncoder;
+    public ServoImplEx flipRight;
+    public AxonEncoder flipRightEncoder;
+    public ServoImplEx lockLower;
+    public ServoImplEx lockHigher;
+
     public IntakeSM statemachine;
 
-    public Servo claw;
-    public Servo stage1Right;
-    public Servo stage1Left;
-    public Servo stage2Right;
-    public Servo stage2Left;
-
     public Intake(HardwareMap hardwareMap) {
-        //4 servos
-        stage1Right = hardwareMap.get(Servo.class, "stage1right");
-        stage1Left = hardwareMap.get(Servo.class, "stage1left");
-        stage2Right = hardwareMap.get(Servo.class, "stage2right");
-        stage2Left = hardwareMap.get(Servo.class, "stage2left");
-        claw = hardwareMap.get(Servo.class, "claw");
 
-        stage1Left.setDirection(Servo.Direction.REVERSE);
-        stage2Left.setDirection(Servo.Direction.REVERSE);
-        claw.setDirection(Servo.Direction.REVERSE);
+        intakeMotor = hardwareMap.get(DcMotorImplEx.class, "IntakeMotor");
+
+        flipLeft = hardwareMap.get(ServoImplEx.class, "flipLeft");
+        flipRight = hardwareMap.get(ServoImplEx.class, "flipRight");
+        flipLeft.setDirection(Servo.Direction.REVERSE);
+
+        flipLeftEncoder = new AxonEncoder(hardwareMap.get(AnalogInput.class, "flipLeftEncoder"));
+        flipRightEncoder = new AxonEncoder(hardwareMap.get(AnalogInput.class, "flipRightEncoder"));
+
+        lockLower = hardwareMap.get(ServoImplEx.class, "lockLower");
+        lockHigher = hardwareMap.get(ServoImplEx.class, "lockHigher");
 
         statemachine = new IntakeSM(this);
     }
 
-    public void setClawPos(double pos1) {claw.setPosition(pos1);}
-
-
-    public void setIntake(double clawpos, double s1, double s2){
-        claw.setPosition(clawpos);
-        stage1Right.setPosition(s1);
-        stage1Left.setPosition(s1-0.05);
-        stage2Right.setPosition(s2);
-        stage2Left.setPosition(s2+0.07);
+    /**
+     * Sets the power to the rolling intake manually.
+     * @param power
+     */
+    public void setIntakePower(double power) {
+        intakeMotor.setPower(power);
     }
 
-    public void intakeStageOne() {
-        claw.setPosition(0.3);
-        stage1Right.setPosition(0.7);
-        stage1Left.setPosition(0.7);
-        stage2Right.setPosition(0.8);
-        stage2Left.setPosition(0.8);
+    static double lockLowerClearPos = 0;
+    static double lockLowerLockPos = 0.5;
+    static double lockHigherClearPos = 0.5;
+    static double lockHigherLockPos = 0;
+
+    /**
+     * Engages the servos to lock pixels in the deposit.
+     * @param lower Lock the lower section
+     * @param higher Lock the higher section
+     */
+    public void engageLock(boolean lower, boolean higher) {
+        if (lower) {
+            lockLower.setPosition(lockLowerLockPos);
+        }
+        if (higher) {
+            lockHigher.setPosition(lockHigherLockPos);
+        }
     }
 
-    public void intakeStageTwo() {
-        claw.setPosition(0.6);
-        stage1Right.setPosition(0.75);
-        stage1Left.setPosition(0.75);
-        stage2Right.setPosition(0.8);
-        stage2Left.setPosition(0.8);
+    /**
+     * Disengages the servos to drop pixels
+     * @param lower Clear the lower lock
+     * @param higher Clear the upper lock
+     */
+    public void clearLock(boolean lower, boolean higher) {
+        if (lower) {
+            lockLower.setPosition(lockLowerClearPos);
+        }
+        if (higher) {
+            lockHigher.setPosition(lockHigherClearPos);
+        }
     }
 
-    public void intakeStageThree() {
-        claw.setPosition(0.2);
-        stage1Right.setPosition(0.73);
-        stage1Left.setPosition(0.73);
-        stage2Right.setPosition(0.8);
-        stage2Left.setPosition(0.8);
+    public void clearLowerLock() {
+        lockLower.setPosition(lockLowerClearPos);
+    }
+
+    public void clearHigherLock() {
+        lockHigher.setPosition(lockHigherClearPos);
+    }
+
+    static double leftFlipDepositPos = 1.00;
+    static double rightFlipDepositPos = 0.92;
+
+    /**
+     * Sets the deposit box to deposit position.
+     */
+    public void flipDeposit() {
+        flipLeft.setPosition(leftFlipDepositPos);
+        flipRight.setPosition(rightFlipDepositPos);
+    }
+
+    static double leftFlipIntakePos = 0.08;
+    static double rightFlipIntakePos = 0.02;
+
+    /**
+     * Sets the deposit box to intake position.
+     */
+    public void flipIntake() {
+        flipLeft.setPosition(leftFlipIntakePos);
+        flipRight.setPosition(rightFlipIntakePos);
+    }
+
+    public void flipSafe() {
+        flipLeft.setPosition(0.12);
+        flipRight.setPosition(0.10);
+    }
+
+
+    /**
+     * Checks if the deposit box in at or near the deposit position
+     * @return True if in position, false if not
+     */
+    public boolean inDepositPosition() {
+        double tolerance = 1.5;
+        double rightFlipDepositEncoderPos = 0;
+        double leftFlipDepositEncoderPos = 0;
+        // If both encoder readings are in tolerance, return true
+        if (
+                Math.abs(rightFlipDepositEncoderPos - flipRightEncoder.getReadingDegrees()) < tolerance &&
+                Math.abs(leftFlipDepositEncoderPos - flipLeftEncoder.getReadingDegrees()) < tolerance
+        ) {
+            return true;
+        } else return false;
+    }
+
+    /**
+     * Checks if the deposit box in at or near the intake position
+     * @return True if in position, false if not
+     */
+    public boolean inIntakePosition() {
+        double tolerance = 1.5;
+
+        // If both encoder readings are in tolerance, return true
+        double rightFlipIntakeEncoderPos = 0;
+        double leftFlipIntakeEncoderPos = 0;
+        if (
+                Math.abs(rightFlipIntakeEncoderPos - flipRightEncoder.getReadingDegrees()) < tolerance &&
+                        Math.abs(leftFlipIntakeEncoderPos - flipLeftEncoder.getReadingDegrees()) < tolerance
+        ) {
+            return true;
+        } else return false;
     }
 
     @Override

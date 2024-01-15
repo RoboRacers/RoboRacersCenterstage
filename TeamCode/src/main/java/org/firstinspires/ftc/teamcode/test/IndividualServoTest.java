@@ -48,8 +48,8 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-@TeleOp(name = "Concept: Scan Servo", group = "Test")
-public class ConceptScanServo extends LinearOpMode {
+@TeleOp(name = "Individual Scan Servo", group = "Test")
+public class IndividualServoTest extends LinearOpMode {
 
     static final double INCREMENT   = 0.02;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   40;     // period of each cycle
@@ -64,8 +64,12 @@ public class ConceptScanServo extends LinearOpMode {
     double  lposition = .72; // Start at halfway position
 
 
-    // L midpos : 0.72
-    // R midpos: 0.60
+    // L Deposit Pos : 0.96
+    // L safe pos: 0.12
+    // L intake pos: 0.02
+    // R deposit pos: 0.88
+    // R safe pos: 0.10
+    // R Intake pos: 0
     boolean rampUp = true;
     boolean lrampUp = true;
 
@@ -96,35 +100,9 @@ public class ConceptScanServo extends LinearOpMode {
         // Scan servo till stop pressed.
         while(opModeIsActive()){
 
-            // slew the servo, according to the rampUp (direction) variable.
-            if (gamepad1.dpad_up) {
-                // Keep stepping up until we hit the max value.
-                position += INCREMENT ;
-                lposition += INCREMENT;
-                if (position >= MAX_POS ) {
-                    position = MAX_POS;
-                }
-                if (lposition >= MAX_POS) {
-                    lposition = MAX_POS;
-                }
-                rightServo.setPosition(position);
-                leftServo.setPosition(lposition);
-            }
-            else if (gamepad1.dpad_down) {
-                // Keep stepping down until we hit the min value.
-                position -= INCREMENT;
-                lposition -= INCREMENT;
-                if (position <= MIN_POS ) {
-                    position = MIN_POS;
-                }
-                if (lposition <= MIN_POS) {
-                    lposition = MIN_POS;
-                }
-                rightServo.setPosition(position);
-                leftServo.setPosition(lposition);
-            }
 
             if (gamepad1.triangle) {
+                rightServo.setPwmDisable();
                 // Keep stepping up until we hit the max value.
                 lposition += INCREMENT ;
                 if (lposition >= MAX_POS ) {
@@ -134,6 +112,7 @@ public class ConceptScanServo extends LinearOpMode {
                 leftServo.setPosition(lposition);
             }
             else if (gamepad1.cross) {
+                rightServo.setPwmDisable();
                 // Keep stepping down until we hit the min value.
                 lposition -= INCREMENT ;
                 if (lposition <= MIN_POS ) {
@@ -144,6 +123,7 @@ public class ConceptScanServo extends LinearOpMode {
             }
 
             if (gamepad1.dpad_up) {
+                leftServo.setPwmDisable();
                 // Keep stepping up until we hit the max value.
                 position += INCREMENT ;
                 if (position >= MAX_POS ) {
@@ -153,6 +133,7 @@ public class ConceptScanServo extends LinearOpMode {
                 rightServo.setPosition(position);
             }
             else if (gamepad1.dpad_down) {
+                leftServo.setPwmDisable();
                 // Keep stepping down until we hit the min value.
                 position -= INCREMENT ;
                 if (position <= MIN_POS ) {
@@ -181,9 +162,9 @@ public class ConceptScanServo extends LinearOpMode {
             }
 
             // Display the current value
-            telemetry.addData("Right Servo Position", "%5.2f", position);
+            telemetry.addData("Right Servo Position", "%5.2f", rightServo.getPosition());
 
-            telemetry.addData("Left Servo Position", "%5.2f", lposition);
+            telemetry.addData("Left Servo Position", "%5.2f", leftServo.getPosition());
             telemetry.addData("Right Servo enable", rightServo.isPwmEnabled());
             telemetry.addData("Left Servo Enable", leftServo.isPwmEnabled());
             telemetry.addData(">", "Press Stop to end test." );

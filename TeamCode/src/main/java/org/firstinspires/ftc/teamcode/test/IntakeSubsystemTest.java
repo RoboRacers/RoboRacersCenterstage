@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.test;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 
 @Config
@@ -12,12 +14,6 @@ import org.firstinspires.ftc.teamcode.modules.subsystems.Intake;
 public class IntakeSubsystemTest extends LinearOpMode {
 
     Intake intake;
-
-    public static double stage1pos = 0.5;
-
-    public static double stage2pos = 0.5;
-
-    public static double clawPos = 0.0;
 
     @Override
     public void runOpMode(){
@@ -28,11 +24,28 @@ public class IntakeSubsystemTest extends LinearOpMode {
 
         }
 
+        Gamepad prevGamepad1= gamepad1;
+
         while (opModeIsActive()){
 
-            intake.setIntake(clawPos, stage1pos, stage2pos);
-            telemetry.update();
 
+
+            if (gamepad1.a) {
+                intake.statemachine.transition(
+                        IntakeSM.EVENT.START_INTAKE
+                );
+                telemetry.addLine("Action run!");
+            }
+
+            if (gamepad1.left_bumper) {
+                intake.intakeMotor.setPower(.6);
+            } else if (gamepad1.right_bumper) {
+                intake.intakeMotor.setPower(-.6);
+            } else intake.intakeMotor.setPower(0);
+
+            telemetry.addData("Current Intake State", intake.statemachine.getState());
+            telemetry.update();
+            intake.update();
         }
     }
 

@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
-import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
+import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
 
 import java.util.List;
@@ -44,17 +43,11 @@ public class BlueFarAuton extends LinearOpMode{
                 .splineTo(new Vector2d(35.76, 20.48), Math.toRadians(40.24))
                 // Scoring
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.EXTEND_WITH_PIXEL
-                    );
                     robot.slides.setTargetPosition(800);
                     robot.slides.setPower(.8);
                 })
                 .splineTo(new Vector2d(46.00, 41.00), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.OPEN_CLAW
-                    );
                 })
                 .waitSeconds(.75)
                 .setReversed(false)
@@ -62,9 +55,6 @@ public class BlueFarAuton extends LinearOpMode{
                 .setReversed(true)
                 .addDisplacementMarker(() -> {
                     robot.slides.setTargetPosition(0);
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.CLOSED_WITH_PIXEL
-                    );
                 })
                 .splineTo(new Vector2d(42.24, 9.70), Math.toRadians(-60.34))
                 .splineTo(new Vector2d(61.46, 9.50), Math.toRadians(2.39))
@@ -82,27 +72,18 @@ public class BlueFarAuton extends LinearOpMode{
                 .splineTo(new Vector2d(33.88, 17.08), Math.toRadians(35.22))
                 // Scoring
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.EXTEND_WITH_PIXEL
-                    );
                     robot.slides.setTargetPosition(820);
                     robot.slides.setPower(.8);
                 })
                 // To backboard
                 .splineTo(new Vector2d(46.50, 34.90), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.OPEN_CLAW
-                    );
                 })
                 .waitSeconds(.75)
                 .setReversed(false)
                 .splineTo(new Vector2d(39, 34.90), Math.toRadians(180))
                 .addDisplacementMarker(() -> {
                     robot.slides.setTargetPosition(0);
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.CLOSED_WITH_PIXEL
-                    );
                 })
                 .setReversed(true)
                 .splineTo(new Vector2d(42.24, 9.70), Math.toRadians(-60.34))
@@ -119,18 +100,12 @@ public class BlueFarAuton extends LinearOpMode{
                 .splineTo(new Vector2d(9.28, 5.57), Math.toRadians(5.78))
                 .splineTo(new Vector2d(38.98, 21.98), Math.toRadians(43.26))
                 .addSpatialMarker(new Vector2d(33,-33),() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.EXTEND_WITH_PIXEL
-                    );
                     robot.slides.setTargetPosition(800);
                     robot.slides.setPower(.8);
                 })
                 // To backboard
                 .splineTo(new Vector2d(49.50, 27.3), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.OPEN_CLAW
-                    );
                 })
                 .waitSeconds(.75)
                 .setReversed(false)
@@ -138,16 +113,12 @@ public class BlueFarAuton extends LinearOpMode{
                 .setReversed(true)
                 .addDisplacementMarker(() -> {
                     robot.slides.setTargetPosition(0);
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.CLOSED_WITH_PIXEL
-                    );
                 })
                 .splineTo(new Vector2d(42.24, 9.70), Math.toRadians(-60.34))
                 .splineTo(new Vector2d(61.46, 9.50), Math.toRadians(2.39))
                 .build();
 
         // Close claw
-        robot.intake.statemachine.transition(IntakeSM.EVENT.CLOSE_CLAW);
 
         robot.vision.startPropDetection();
 

@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
-import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
+import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
 
 import java.util.List;
@@ -156,7 +155,6 @@ public class RedFarAuton extends LinearOpMode{
                 .build();
 
         // Close claw
-        robot.intake.statemachine.transition(IntakeSM.EVENT.CLOSE_CLAW);
 
         robot.vision.startPropDetection();
 

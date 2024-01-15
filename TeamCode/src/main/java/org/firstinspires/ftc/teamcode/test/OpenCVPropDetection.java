@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 import org.firstinspires.ftc.teamcode.modules.subsystems.Vision;
-import org.firstinspires.ftc.teamcode.util.SpikeMarkerLocation;
-import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp(name="Team Prop Detection OpMode", group="Test")

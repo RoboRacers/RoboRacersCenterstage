@@ -42,35 +42,6 @@ public class TeleopLM2 extends LinearOpMode {
                     )
             );
 
-            // Claw control
-            if (gamepad2.dpad_down) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.CLOSED_WITH_PIXEL
-                );
-            } else if (gamepad2.dpad_left) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.CLOSING_FOR_PIXEL
-                );
-            } else if (gamepad2.dpad_right) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.OPEN_FOR_PIXEL
-                );
-            } else if (gamepad2.dpad_up) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.EXTEND_WITH_PIXEL
-                );
-            }
-
-            if (gamepad2.right_bumper) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.OPEN_CLAW
-                );
-            } else if (gamepad2.left_bumper) {
-                robot.intake.statemachine.transition(
-                        IntakeSM.EVENT.CLOSE_CLAW
-                );
-            }
-
             if (gamepad2.cross){
                 robot.drone.fireDrone(true);
             }
@@ -97,14 +68,14 @@ public class TeleopLM2 extends LinearOpMode {
             */
 
             if (gamepad2.right_stick_y > 0.2 && gamepad2.right_trigger < 0.1) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y*retractionSpeed);
+                robot.slides.setPower(-gamepad2.right_stick_y*retractionSpeed);
             } else if (gamepad2.right_stick_y > 0.2 && gamepad2.right_trigger >= 0.1) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y);
+                robot.slides.setPower(-gamepad2.right_stick_y);
                 telemetry.addLine("Lift TURBO Mode");
             } else if (gamepad2.right_stick_y < -0.2) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y*extensionSpeed);
+                robot.slides.setPower(-gamepad2.right_stick_y*extensionSpeed);
             } else {
-                robot.slides.setManualPower(0);
+                robot.slides.setPower(0);
             }
 
             robot.update();

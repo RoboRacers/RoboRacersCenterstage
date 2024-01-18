@@ -19,11 +19,9 @@ public class DoubleSyncedSlidesTest extends LinearOpMode {
         rightSlides = hardwareMap.get(DcMotor.class, "rightSlide");
         leftSlides = hardwareMap.get(DcMotor.class, "leftSlide");
 
-
-
         rightSlides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        rightSlides.setDirection(DcMotorSimple.Direction.REVERSE);
 
         List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
 

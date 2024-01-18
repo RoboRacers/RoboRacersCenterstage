@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.RobotCore;
 @TeleOp(name = "Flip Deposit Pos", group = "16481-Template")
 public class FlipDepositPos extends LinearOpMode {
     RobotCore robot;
-
     ServoImplEx flipLeft;
     ServoImplEx flipRight;
 

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.modules.statemachines;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.teamcode.modules.subsystems.Slides;
 
 /**
@@ -15,15 +17,16 @@ public class SlidesSM implements StateMachine {
     /**
      * The current state of this subsystem.
      */
-    SLIDESTATE currentState = SLIDESTATE.MANUAL_CONTROL;
+    STATE currentState = STATE.MANUAL_CONTROL;
 
 
     /**
      * Enum declaring all the states of this state machine.
      */
-    public enum SLIDESTATE {
+    public enum STATE {
         MANUAL_CONTROL,
-        RUN_WITH_PID
+        RUN_WITH_PID,
+        RUN_TO_POSITION
     }
 
     /**
@@ -31,7 +34,8 @@ public class SlidesSM implements StateMachine {
      */
     public enum EVENT {
         ENABLE_MANUAL,
-        ENABLE_PID
+        ENABLE_PID,
+        ENABLE_RTP
     }
 
     /**
@@ -47,7 +51,7 @@ public class SlidesSM implements StateMachine {
      * Returns the current state of this state machine.
      * @return
      */
-    public SlidesSM.SLIDESTATE getState() {
+    public SlidesSM.STATE getState() {
         return currentState;
     }
 
@@ -59,10 +63,20 @@ public class SlidesSM implements StateMachine {
     public void transition(SlidesSM.EVENT event) {
         switch (event) {
             case ENABLE_MANUAL:
-                currentState = SLIDESTATE.MANUAL_CONTROL;
+                slides.leftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                slides.rightmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                currentState = STATE.MANUAL_CONTROL;
             case ENABLE_PID:
-                currentState = SLIDESTATE.RUN_WITH_PID;
+                slides.leftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                slides.rightmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                //currentState = SLIDESTATE.RUN_WITH_PID;
                 break;
+            case ENABLE_RTP:
+                slides.leftmotor.setTargetPosition(slides.getTargetPosition());
+                slides.rightmotor.setTargetPosition(slides.getTargetPosition());
+                slides.leftmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slides.rightmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                currentState = STATE.RUN_TO_POSITION;
         }
     }
 
@@ -73,7 +87,11 @@ public class SlidesSM implements StateMachine {
     public void update() {
         switch (currentState) {
             case RUN_WITH_PID:
-                slides.setPIDPower();
+                //slides.setPIDPower();
+                break;
+            case RUN_TO_POSITION:
+                slides.rightmotor.setTargetPosition(slides.getTargetPosition());
+                slides.leftmotor.setTargetPosition(slides.getTargetPosition());
                 break;
             default:
                 break;

@@ -43,7 +43,9 @@ public class SlidesPIDFTest extends LinearOpMode {
             slides.setTargetPosition(setPoint);
 
             // Telemetry
-            telemetry.addData("Slides Current Pos", slides.get());
+            telemetry.addData("Slides Current Pos", slides.getCurrentPosition());
+            telemetry.addData("Targets Pos", slides.getTargetPosition());
+            telemetry.addData("Power", slides.leftmotor.getPower());
             telemetry.update();
             slides.update();
         }

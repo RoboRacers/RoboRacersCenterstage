@@ -15,7 +15,7 @@ public class ThreeTrackingWheelLocalizer extends com.acmerobotics.roadrunner.loc
     public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.6889764;
     public static double GEAR_RATIO = 1;
-    public static double LATERAL_DISTANCE = 12.6375;
+    public static double LATERAL_DISTANCE = 12.557;
     public static double FORWARD_OFFSET = 4.97;
     public static double X_MULTIPLIER = 1.0256410256;
     public static double Y_MULTIPLIER = 1.0322580645;
@@ -29,7 +29,7 @@ public class ThreeTrackingWheelLocalizer extends com.acmerobotics.roadrunner.loc
 
 
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Br")); // Port Number 2
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder")); // Port Number 2
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Bl")); // Port Number 2
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "Fr")); // Port Number 3
 
         rightEncoder.setDirection(Encoder.Direction.REVERSE);

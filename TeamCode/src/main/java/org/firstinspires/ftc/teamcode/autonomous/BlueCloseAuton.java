@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
 
@@ -55,17 +58,45 @@ public class BlueCloseAuton extends LinearOpMode{
                 .build();
 
         TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .splineToLinearHeading(new Pose2d(21.42, 28.03, Math.toRadians(25.74)), Math.toRadians(25.74))
                 .addDisplacementMarker(() -> {
-                    robot.intake.setIntakePower(-0.7);
+                    robot.intake.engageLock(true,true);
+                    robot.intake.flipDeposit();
+                })
+                .splineToLinearHeading(new Pose2d(21.42, 27.03, Math.toRadians(25.74)), Math.toRadians(25.74))
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.setIntakePower(-0.5);
                 })
                 .waitSeconds(2)
-                .splineTo(new Vector2d(39.16, 36.33), Math.toRadians(0.00))
-                .addDisplacementMarker(() -> {
+                // Go to backboard
+                .splineTo(new Vector2d(50.00, 36.33), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+
+                    robot.slides.setTargetPosition(-1000);
+                    robot.slides.setPower(0.8);
+
                 })
-                .waitSeconds(2)
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                    robot.intake.clearHigherLock();
+                    robot.intake.clearLowerLock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                    robot.intake.flipIntake();
+                    robot.slides.setTargetPosition(0);
+                    robot.slides.setPower(0.8);
+
+                })
+                .waitSeconds(3)
+                .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
                 .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
+                .addDisplacementMarker(() -> {
+                    robot.slides.setPower(0);
+                    robot.intake.setIntakePower(0);
+                    robot.slides.setTargetPosition(0);
+                })
                 .build();
 
 
@@ -189,6 +220,13 @@ public class BlueCloseAuton extends LinearOpMode{
 
         while (opModeIsActive() && !isStopRequested()) {
             robot.update();
+
+            telemetry.addData("Setpoint", robot.slides.getTargetPosition());
+            telemetry.addData("Right Slide Motor", robot.slides.rightmotor.getCurrentPosition());
+            telemetry.addData("Left Slide Motor", robot.slides.leftmotor.getCurrentPosition());
+            telemetry.addData("Right Target", robot.slides.rightmotor.getTargetPosition());
+            telemetry.addData("Left Target", robot.slides.leftmotor.getTargetPosition());
+            telemetry.update();
         }
 
     }

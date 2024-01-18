@@ -20,14 +20,14 @@ public class Slides implements Subsystem {
      * More variables/objects related to the operation of this subsystem.
      */
 
-    public DcMotorImplEx rightmotor;
-    public DcMotorImplEx leftmotor;
+    public DcMotor rightmotor;
+    public DcMotor leftmotor;
 
     private int targetPosition = 0;
 
     double kP = 0.01;
     double kI = 0;
-    double kD = 0.01;
+    double kD = 0;
 
     /**
      * The constructor class for this subsystem. Do all the setup
@@ -36,11 +36,16 @@ public class Slides implements Subsystem {
      */
     public Slides(HardwareMap hardwareMap) {
         // Set up the motor related to this subsystem
-        rightmotor = hardwareMap.get(DcMotorImplEx.class, "rightSlide");
-        leftmotor = hardwareMap.get(DcMotorImplEx.class, "leftSlide");
+        rightmotor = hardwareMap.get(DcMotor.class, "rightSlide");
+        leftmotor = hardwareMap.get(DcMotor.class, "leftSlide");
 
         rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        leftmotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rightmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -70,9 +75,18 @@ public class Slides implements Subsystem {
         kD = d;
     }
 
+    public int getCurrentPosition() {
+        return leftmotor.getCurrentPosition();
+    }
+
     public void setPower(double power){
-        rightmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightmotor.setPower(power);
+        leftmotor.setPower(power);
+    }
+
+    public void setManualPower(double power){
         leftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightmotor.setPower(power);
         leftmotor.setPower(power);
     }
@@ -98,7 +112,7 @@ public class Slides implements Subsystem {
         double currentPosition = leftmotor.getCurrentPosition();
         BasicPID pid = new BasicPID(new PIDCoefficients(kP, kI, kD));
 
-        double power = pid.calculate(targetPosition, currentPosition);
+        double power = -pid.calculate(targetPosition, currentPosition);
 
         leftmotor.setPower(power);
         rightmotor.setPower(power);

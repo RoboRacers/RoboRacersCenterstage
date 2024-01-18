@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
+import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 
 @Config
 @TeleOp(name = "Teleop for LM3", group = "16481-Centerstage")
@@ -28,6 +29,10 @@ public class TeleopLM3 extends LinearOpMode {
         Gamepad previousGamepad1 = gamepad1;
         Gamepad previousGamepad2 = gamepad2;
 
+        robot.slides.statemachine.transition(
+                SlidesSM.EVENT.ENABLE_MANUAL
+        );
+
         while (opModeInInit()) {
         }
 
@@ -35,7 +40,7 @@ public class TeleopLM3 extends LinearOpMode {
 
             robot.drive.setWeightedDrivePower(
                     new Pose2d(
-                            -gamepad1.left_stick_y * speedMultiplier,
+                            gamepad1.left_stick_y * speedMultiplier,
                             gamepad1.left_stick_x * speedMultiplier, //imperfect strafing fix, must be tuned for new drivetrain
                             -gamepad1.right_stick_x * strafeMultiplier
                     )
@@ -43,20 +48,20 @@ public class TeleopLM3 extends LinearOpMode {
 
             // Slides control
             if (gamepad2.right_stick_y > 0.1 && gamepad2.left_bumper) {
-                robot.slides.setPower(-gamepad2.right_stick_y);
+                robot.slides.setManualPower(-gamepad2.right_stick_y);
             } else if (gamepad2.right_stick_y < -0.1) {
-                robot.slides.setPower(-gamepad2.right_stick_y);
+                robot.slides.setManualPower(-gamepad2.right_stick_y);
             } else if (gamepad2.right_stick_y > 0.1) {
-                robot.slides.setPower(-gamepad2.right_stick_y*.4);
+                robot.slides.setManualPower(-gamepad2.right_stick_y*.4);
             } else {
-                robot.slides.setPower(0);
+                robot.slides.setManualPower(0);
             }
 
             // Intake control
             if (gamepad1.right_trigger > 0.1) {
-                robot.intake.setIntakePower(1);
+                robot.intake.setIntakePower(gamepad1.right_trigger);
             } else if (gamepad1.left_trigger > 0.1) {
-                robot.intake.setIntakePower(-1);
+                robot.intake.setIntakePower(-gamepad1.left_trigger);
             } else {
                 robot.intake.setIntakePower(0);
             }
@@ -80,13 +85,16 @@ public class TeleopLM3 extends LinearOpMode {
                 robot.intake.flipIntake();
             }
 
-
             robot.update();
 
             previousGamepad1 = gamepad1;
             previousGamepad2 = gamepad2;
 
             telemetry.addLine("\uD83C\uDFCE RoboRacers Teleop for League Meet 3");
+            telemetry.addData("Slides RunMode", robot.slides.statemachine.getState());
+            telemetry.addData("Slides Power", robot.slides.leftmotor.getPower());
+            telemetry.addData("Slides Target Position", robot.slides.getTargetPosition());
+            telemetry.addData("Intake Power", robot.intake.intakeMotor.getPower());
             telemetry.update();
         }
     }

@@ -61,33 +61,15 @@ public class BlueFarAuton extends LinearOpMode{
                 .build();
 
         TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .setReversed(true)
-                // Push purple pixel
-                .splineTo(new Vector2d(-36.32, 32.00), Math.toRadians(270.00))
-                .setReversed(false)
-                .splineTo(new Vector2d(-48.03, 47.84), Math.toRadians(-220.60))
-                .setReversed(true)
-                .splineTo(new Vector2d(-55.96, 15.38), Math.toRadians(-66.80))
-                .splineTo(new Vector2d(-2.36, 2.36), Math.toRadians(-2.79))
-                .splineTo(new Vector2d(33.88, 17.08), Math.toRadians(35.22))
-                // Scoring
                 .addDisplacementMarker(() -> {
-                    robot.slides.setTargetPosition(820);
-                    robot.slides.setPower(.8);
+                    robot.intake.engageLock(true,true);
+                    robot.intake.flipDeposit();
                 })
-                // To backboard
-                .splineTo(new Vector2d(46.50, 34.90), Math.toRadians(0.00))
-                .addDisplacementMarker(() -> {
+                .splineToLinearHeading(new Pose2d(-28.7, 24.03, Math.toRadians(180)), Math.toRadians(-25.74))
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.setIntakePower(-0.3);
                 })
-                .waitSeconds(.75)
-                .setReversed(false)
-                .splineTo(new Vector2d(39, 34.90), Math.toRadians(180))
-                .addDisplacementMarker(() -> {
-                    robot.slides.setTargetPosition(0);
-                })
-                .setReversed(true)
-                .splineTo(new Vector2d(42.24, 9.70), Math.toRadians(-60.34))
-                .splineTo(new Vector2d(61.46, 9.50), Math.toRadians(2.39))
+                .waitSeconds(1.333)
                 .build();
 
         TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
@@ -120,7 +102,7 @@ public class BlueFarAuton extends LinearOpMode{
 
         // Close claw
 
-        robot.vision.startPropDetection();
+        //robot.vision.startPropDetection();
 
         boolean manualPropControl = false;
 
@@ -151,10 +133,11 @@ public class BlueFarAuton extends LinearOpMode{
             telemetry.addLine("VISION -----");
 
             // Switch between manual and automatic vision control
+            manualPropControl = true;
             if (gamepad1.left_bumper) {
                 manualPropControl = true;
             } else if (gamepad1.right_bumper) {
-                manualPropControl = false;
+                //manualPropControl = false;
             }
 
             if (!manualPropControl) {
@@ -180,9 +163,7 @@ public class BlueFarAuton extends LinearOpMode{
             telemetry.update();
         }
 
-        robot.vision.stopPropDetection();
-        
-        waitForStart();
+        //robot.vision.stopPropDetection();
 
         if (isStopRequested()) return;
 

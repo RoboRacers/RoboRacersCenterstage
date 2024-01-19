@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -9,6 +10,8 @@ import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.statemachines.IntakeSM;
 
 @Config
+@Disabled
+@Deprecated
 @TeleOp(name = "Teleop for LM2", group = "16481-Centerstage")
 public class TeleopLM2 extends LinearOpMode {
 

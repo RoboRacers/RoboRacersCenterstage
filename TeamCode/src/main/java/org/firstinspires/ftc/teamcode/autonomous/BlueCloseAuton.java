@@ -34,48 +34,24 @@ public class BlueCloseAuton extends LinearOpMode{
         Pose2d startLocation = new Pose2d(15.85, 62.00, Math.toRadians(-90));
 
         TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .setReversed(true)
-                .splineTo(new Vector2d(18.00, 33.70), Math.toRadians(-25.20))
-                .setReversed(false)
-                .splineTo(new Vector2d(6.00, 43.00), Math.toRadians(142.70))
-                .setReversed(true)
-                .splineTo(new Vector2d(26.89, 48.60), Math.toRadians(-19.54))
-                .addDisplacementMarker(() -> {
-                    //robot.slides.setTargetPosition(800);
-                    //robot.slides.setPower(.8);
-                })
-                .splineTo(new Vector2d(47.00, 43.5), Math.toRadians(0.00))
-                .addDisplacementMarker(() -> {
-                })
-                .waitSeconds(.75)
-                .setReversed(false)
-                .splineTo(new Vector2d(40.54,43.5), Math.toRadians(180.00))
-                .setReversed(true)
-                .addDisplacementMarker(() -> {
-                    //robot.slides.setTargetPosition(0);
-                })
-                .splineTo(new Vector2d(58.01, 60.21), Math.toRadians(0.00))
-                .build();
-
-        TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .addDisplacementMarker(() -> {
                     robot.intake.engageLock(true,true);
                     robot.intake.flipDeposit();
                 })
-                .splineToLinearHeading(new Pose2d(21.42, 27.03, Math.toRadians(25.74)), Math.toRadians(25.74))
+                .splineToLinearHeading(new Pose2d(35.00, 33.00, Math.toRadians(0)), Math.toRadians(25.74))
                 .UNSTABLE_addTemporalMarkerOffset(0,() -> {
-                    robot.intake.setIntakePower(-0.5);
+                    robot.intake.setIntakePower(-0.3);
                 })
-                .waitSeconds(2)
+                .waitSeconds(1.333)
                 // Go to backboard
-                .splineTo(new Vector2d(50.00, 36.33), Math.toRadians(0.00))
+                .splineTo(new Vector2d(52.70, 40.25), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
                     );
 
-                    robot.slides.setTargetPosition(-1000);
+                    robot.slides.setTargetPosition(-800);
                     robot.slides.setPower(0.8);
 
                 })
@@ -89,49 +65,107 @@ public class BlueCloseAuton extends LinearOpMode{
                     robot.slides.setPower(0.8);
 
                 })
-                .waitSeconds(3)
+                .waitSeconds(1)
                 .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
                 .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
-                .addDisplacementMarker(() -> {
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    // Unpower slides
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_MANUAL
+                    );
                     robot.slides.setPower(0);
+                })
+                .build();
+
+        TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
+                .addDisplacementMarker(() -> {
+                    robot.intake.engageLock(true,true);
+                    robot.intake.flipDeposit();
+                })
+                .splineToLinearHeading(new Pose2d(21.42, 24.03, Math.toRadians(0)), Math.toRadians(25.74))
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.setIntakePower(-0.3);
+                })
+                .waitSeconds(1.333)
+                // Go to backboard
+                .splineTo(new Vector2d(52.70, 34.50), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+
+                    robot.slides.setTargetPosition(-800);
+                    robot.slides.setPower(0.8);
+
+                })
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                    robot.intake.clearHigherLock();
+                    robot.intake.clearLowerLock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                    robot.intake.flipIntake();
                     robot.slides.setTargetPosition(0);
+                    robot.slides.setPower(0.8);
+
+                })
+                .waitSeconds(1)
+                .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    // Unpower slides
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_MANUAL
+                    );
+                    robot.slides.setPower(0);
                 })
                 .build();
 
 
         TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .setReversed(true)
-                // Pushing purple pixel
-                .splineTo(new Vector2d(11.56, 46.20), Math.toRadians(270.00))
-                .splineTo(new Vector2d(5.27, 32.90), Math.toRadians(232.84))
-                .setReversed(false)
-                // Moving backwards
-                .splineTo(new Vector2d(14.32, 44.35), Math.toRadians(45.92))
-                .setReversed(true)
-                .addSpatialMarker(new Vector2d(33,33),() -> {
-
-
-                })
-                // To backboard
-                .splineTo(new Vector2d(47.00, 29.3), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    /*
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.OPEN_CLAW
+                    robot.intake.engageLock(true,true);
+                    robot.intake.flipDeposit();
+                })
+                .splineToLinearHeading(new Pose2d(18.00, 35.5, Math.toRadians(25.74)), Math.toRadians(25.74))
+                .splineToConstantHeading(new Vector2d(8.00, 36.5), Math.toRadians(25.74))
+                .splineToConstantHeading(new Vector2d(10.33, 36.5), Math.toRadians(25.74))
+                .UNSTABLE_addTemporalMarkerOffset(0,() -> {
+                    robot.intake.setIntakePower(-0.3);
+                })
+                .waitSeconds(1.333)
+                // Go to backboard
+                .splineTo(new Vector2d(52.00, 26.00), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(0);
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
                     );
 
-                     */
-                })
-                .waitSeconds(.75)
-                .setReversed(false)
-                .splineTo(new Vector2d(39, 28.3), Math.toRadians(180))
-                .setReversed(true)
-                .addDisplacementMarker(() -> {
-                    //robot.slides.setTargetPosition(0);
+                    robot.slides.setTargetPosition(-750);
+                    robot.slides.setPower(0.8);
 
                 })
-                .splineTo(new Vector2d(58,60), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                    robot.intake.clearHigherLock();
+                    robot.intake.clearLowerLock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                    robot.intake.flipIntake();
+                    robot.slides.setTargetPosition(0);
+                    robot.slides.setPower(0.8);
+
+                })
+                .waitSeconds(1)
+                .splineToConstantHeading(new Vector2d(40.00, 26.00), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    // Unpower slides
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_MANUAL
+                    );
+                    robot.slides.setPower(0);
+                })
                 .build();
         // Close claw
 

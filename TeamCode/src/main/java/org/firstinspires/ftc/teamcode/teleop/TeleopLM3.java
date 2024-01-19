@@ -15,11 +15,11 @@ public class TeleopLM3 extends LinearOpMode {
     RobotCore robot;
 
     public static double speedMultiplier = .7;
-    public static double strafeMultiplier = .8;
-    public static double retractionSpeed = 0.5;
+    public static double strafeMultiplier = .6;
+    public static double turnMultiplier = .8;
+    public static double retractionSpeed = .5;
     public static double extensionSpeed = 1;
-    public static double feedforward = 0.0;
-    public static boolean liftRetractionOverride = false;
+    public static double rtpLockPower = 0.3;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -28,6 +28,8 @@ public class TeleopLM3 extends LinearOpMode {
 
         Gamepad previousGamepad1 = gamepad1;
         Gamepad previousGamepad2 = gamepad2;
+
+        boolean test = false;
 
         robot.slides.statemachine.transition(
                 SlidesSM.EVENT.ENABLE_MANUAL
@@ -38,23 +40,30 @@ public class TeleopLM3 extends LinearOpMode {
 
         while (!isStopRequested()) {
 
+            // Drive control
             robot.drive.setWeightedDrivePower(
                     new Pose2d(
                             gamepad1.left_stick_y * speedMultiplier,
-                            gamepad1.left_stick_x * speedMultiplier, //imperfect strafing fix, must be tuned for new drivetrain
-                            -gamepad1.right_stick_x * strafeMultiplier
+                            gamepad1.left_stick_x * strafeMultiplier,
+                            -gamepad1.right_stick_x * turnMultiplier
                     )
             );
 
             // Slides control
             if (gamepad2.right_stick_y > 0.1 && gamepad2.left_bumper) {
                 robot.slides.setManualPower(-gamepad2.right_stick_y);
-            } else if (gamepad2.right_stick_y < -0.1) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y);
             } else if (gamepad2.right_stick_y > 0.1) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y*.4);
+                robot.slides.setManualPower(-gamepad2.right_stick_y*extensionSpeed);
+            } else if (gamepad2.right_stick_y < -0.1) {
+                robot.slides.setManualPower(-gamepad2.right_stick_y*retractionSpeed);
             } else {
-                robot.slides.setManualPower(0);
+                robot.slides.setTargetPosition(
+                        robot.slides.getCurrentPosition()
+                );
+                robot.slides.statemachine.transition(
+                        SlidesSM.EVENT.ENABLE_RTP
+                );
+                robot.slides.setPower(rtpLockPower);
             }
 
             // Intake control
@@ -79,22 +88,35 @@ public class TeleopLM3 extends LinearOpMode {
                 robot.intake.clearHigherLock();
             }
 
+            // Flip deposit
             if (gamepad2.dpad_up) {
                 robot.intake.flipDeposit();
             } else if (gamepad2.dpad_down) {
                 robot.intake.flipIntake();
+            } else if (!gamepad2.dpad_left && previousGamepad2.dpad_left) {
+                robot.intake.incrementFlip(-0.1);
+                telemetry.addLine("Increment Down");
+                test = true;
+            } else if (!gamepad2.dpad_right && previousGamepad2.dpad_right) {
+                robot.intake.incrementFlip(0.1);
+                telemetry.addLine("Increment Down");
+                test = true;
             }
 
+            // Update all state machines
             robot.update();
 
+            // Previous gamepad for edge detection
             previousGamepad1 = gamepad1;
             previousGamepad2 = gamepad2;
 
+            // Telemetry
             telemetry.addLine("\uD83C\uDFCE RoboRacers Teleop for League Meet 3");
             telemetry.addData("Slides RunMode", robot.slides.statemachine.getState());
             telemetry.addData("Slides Power", robot.slides.leftmotor.getPower());
             telemetry.addData("Slides Target Position", robot.slides.getTargetPosition());
             telemetry.addData("Intake Power", robot.intake.intakeMotor.getPower());
+            telemetry.addLine(String.valueOf(test));
             telemetry.update();
         }
     }

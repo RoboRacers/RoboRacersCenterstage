@@ -96,8 +96,7 @@ public class Intake implements Subsystem {
      * Sets the deposit box to deposit position.
      */
     public void flipDeposit() {
-        flipLeft.setPosition(leftFlipDepositPos);
-        flipRight.setPosition(rightFlipDepositPos);
+        setFlipPosition(leftFlipDepositPos, rightFlipDepositPos);
     }
 
     static double leftFlipIntakePos = 0.08;
@@ -107,8 +106,19 @@ public class Intake implements Subsystem {
      * Sets the deposit box to intake position.
      */
     public void flipIntake() {
-        flipLeft.setPosition(leftFlipIntakePos);
-        flipRight.setPosition(rightFlipIntakePos);
+        setFlipPosition(leftFlipIntakePos, rightFlipIntakePos);
+    }
+
+    public void incrementFlip(double step) {
+        setFlipPosition(
+                flipLeft.getPosition() + step,
+                flipRight.getPosition() + step
+        );
+    }
+
+    public void setFlipPosition(double leftPos, double rightPos) {
+        flipLeft.setPosition(leftPos);
+        flipRight.setPosition(rightPos);
     }
 
     public void flipSafe() {

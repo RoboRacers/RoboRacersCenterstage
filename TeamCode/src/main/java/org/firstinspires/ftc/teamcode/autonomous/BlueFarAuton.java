@@ -28,8 +28,7 @@ public class BlueFarAuton extends LinearOpMode{
 
         robot = new RobotCore(hardwareMap);
 
-        Pose2d startLocation = new Pose2d(-40,  62.00, Math.toRadians(90));
-
+        Pose2d startLocation = new Pose2d(-40,  62.00, Math.toRadians(-90));
 
         TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .setReversed(true)
@@ -65,11 +64,15 @@ public class BlueFarAuton extends LinearOpMode{
                     robot.intake.engageLock(true,true);
                     robot.intake.flipDeposit();
                 })
-                .splineToLinearHeading(new Pose2d(-28.7, 24.03, Math.toRadians(180)), Math.toRadians(-25.74))
+                .splineToLinearHeading(new Pose2d(-33.12, 18.31, Math.toRadians(-36.10)), Math.toRadians(-36.10))
                 .UNSTABLE_addTemporalMarkerOffset(0,() -> {
                     robot.intake.setIntakePower(-0.3);
                 })
                 .waitSeconds(1.333)
+                .setReversed(true)
+                .splineTo(new Vector2d(-60.15, 11.61), Math.toRadians(177.51))
+                //.splineTo(new Vector2d(-15.57, 10.47), Math.toRadians(2.06))
+                //.splineTo(new Vector2d(28.78, 16.51), Math.toRadians(17.74))
                 .build();
 
         TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)

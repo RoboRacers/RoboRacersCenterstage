@@ -154,7 +154,7 @@ public class Vision implements Subsystem {
 
     }
 
-    private class TeamPropPipeline extends OpenCvPipeline {
+    public static class TeamPropPipeline extends OpenCvPipeline {
 
         Mat gray = new Mat();
         Mat shadowMask = new Mat();
@@ -166,7 +166,6 @@ public class Vision implements Subsystem {
         Mat blackCountImg = new Mat();
 
         int frameCount = 1;
-
 
         private SpikeMarkerLocation direction = SpikeMarkerLocation.CENTER;
 

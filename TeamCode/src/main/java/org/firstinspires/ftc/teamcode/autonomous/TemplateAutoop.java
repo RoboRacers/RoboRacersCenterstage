@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
@@ -42,7 +43,6 @@ public class TemplateAutoop extends LinearOpMode{
         if (isStopRequested()) return;
 
         robot.drive.followTrajectorySequenceAsync(traj2);
-
 
     }
 

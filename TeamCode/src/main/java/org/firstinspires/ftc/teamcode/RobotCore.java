@@ -45,14 +45,14 @@ public class RobotCore implements Subsystem {
 
         intake = new Intake(hardwareMap);
         slides = new Slides(hardwareMap);
-        //drone = new Launcher(hardwareMap);
+        drone = new Launcher(hardwareMap);
         //vision = new Vision(hardwareMap);
 
         subsystems = Arrays.asList(
                 drive,
                 intake,
-                slides
-                //drone,
+                slides,
+                drone
                 //vision
         );
 

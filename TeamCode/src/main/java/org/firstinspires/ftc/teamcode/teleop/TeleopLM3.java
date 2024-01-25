@@ -29,6 +29,9 @@ public class TeleopLM3 extends LinearOpMode {
         Gamepad previousGamepad1 = gamepad1;
         Gamepad previousGamepad2 = gamepad2;
 
+        Gamepad currentGamepad1 = new Gamepad();
+        Gamepad currentGamepad2 = new Gamepad();
+
         boolean test = false;
 
         robot.slides.statemachine.transition(
@@ -39,6 +42,12 @@ public class TeleopLM3 extends LinearOpMode {
         }
 
         while (!isStopRequested()) {
+
+            previousGamepad1 = currentGamepad1;
+            previousGamepad2 = currentGamepad2;
+
+            currentGamepad1 = gamepad1;
+            currentGamepad2 = gamepad2;
 
             // Drive control
             robot.drive.setWeightedDrivePower(
@@ -51,11 +60,11 @@ public class TeleopLM3 extends LinearOpMode {
 
             // Slides control
             if (gamepad2.right_stick_y > 0.1 && gamepad2.left_bumper) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y);
-            } else if (gamepad2.right_stick_y > 0.1) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y*extensionSpeed);
+                robot.slides.setManualPower(gamepad2.right_stick_y);
             } else if (gamepad2.right_stick_y < -0.1) {
-                robot.slides.setManualPower(-gamepad2.right_stick_y*retractionSpeed);
+                robot.slides.setManualPower(gamepad2.right_stick_y*extensionSpeed);
+            } else if (gamepad2.right_stick_y > 0.1) {
+                robot.slides.setManualPower(gamepad2.right_stick_y*retractionSpeed);
             } else {
                 robot.slides.setTargetPosition(
                         robot.slides.getCurrentPosition()
@@ -68,15 +77,17 @@ public class TeleopLM3 extends LinearOpMode {
 
             // Intake control
             if (gamepad1.right_trigger > 0.1) {
-                robot.intake.setIntakePower(gamepad1.right_trigger);
+                robot.intake.setIntakePower(gamepad1.right_trigger*.9);
             } else if (gamepad1.left_trigger > 0.1) {
-                robot.intake.setIntakePower(-gamepad1.left_trigger);
+                robot.intake.setIntakePower(-gamepad1.left_trigger*.9);
             } else {
                 robot.intake.setIntakePower(0);
             }
 
             // Lock deposit
             if (gamepad2.right_bumper) {
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
                 robot.intake.engageLock(true, true);
             }
 
@@ -93,22 +104,27 @@ public class TeleopLM3 extends LinearOpMode {
                 robot.intake.flipDeposit();
             } else if (gamepad2.dpad_down) {
                 robot.intake.flipIntake();
-            } else if (!gamepad2.dpad_left && previousGamepad2.dpad_left) {
+            }
+
+            // Increment Deposit
+            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left) {
                 robot.intake.incrementFlip(-0.1);
-                telemetry.addLine("Increment Down");
-                test = true;
-            } else if (!gamepad2.dpad_right && previousGamepad2.dpad_right) {
+            } else if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right) {
                 robot.intake.incrementFlip(0.1);
-                telemetry.addLine("Increment Down");
-                test = true;
+            }
+
+            if (gamepad1.dpad_up) {
+                robot.drone.actuationServo.setPwmEnable();
+                robot.drone.fireDrone(true);
+            } else if (gamepad1.dpad_down) {
+                robot.drone.actuationServo.setPwmEnable();
+                robot.drone.fireDrone(false);
+            } else if (gamepad1.dpad_left) {
+                robot.drone.actuationServo.setPwmDisable();
             }
 
             // Update all state machines
             robot.update();
-
-            // Previous gamepad for edge detection
-            previousGamepad1 = gamepad1;
-            previousGamepad2 = gamepad2;
 
             // Telemetry
             telemetry.addLine("\uD83C\uDFCE RoboRacers Teleop for League Meet 3");

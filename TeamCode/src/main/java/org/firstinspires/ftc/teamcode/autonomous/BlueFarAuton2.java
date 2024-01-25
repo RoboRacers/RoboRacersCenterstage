@@ -4,33 +4,59 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
-import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.List;
 
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Deprecated
-@Disabled
-@Autonomous(name = "Blue Far Side Auton Buggin", group = "16481-Centerstage")
-public class BlueFarAuton extends LinearOpMode{
+@Autonomous(name = "Blue Far Side Auton", group = "16481-Centerstage")
+public class BlueFarAuton2 extends LinearOpMode{
 
     RobotCore robot;
+
+    Vision.TeamPropPipeline teamPropDetectionPipeline = null;
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
     @Override
     public void runOpMode() {
 
+        OpenCvCamera camera;
+
         robot = new RobotCore(hardwareMap);
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources()
+                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
+                .get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                teamPropDetectionPipeline = new Vision.TeamPropPipeline();
+                camera.setPipeline(teamPropDetectionPipeline);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
 
         Pose2d startLocation = new Pose2d(-40,  62.00, Math.toRadians(-90));
 
@@ -131,9 +157,7 @@ public class BlueFarAuton extends LinearOpMode{
                 .build();
 
         TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .setReversed(true)
                 .splineTo(new Vector2d(-42.30, 34.49), Math.toRadians(-135.00))
-
                 /*
                 .setReversed(false)
                 .splineTo(new Vector2d(-36.07, 53.24), Math.toRadians(-262.41))
@@ -160,10 +184,8 @@ public class BlueFarAuton extends LinearOpMode{
                 .splineTo(new Vector2d(61.46, 9.50), Math.toRadians(2.39))
                 */
                 .build();
-
         // Close claw
 
-        //robot.vision.startPropDetection();
 
         boolean manualPropControl = false;
 
@@ -194,17 +216,16 @@ public class BlueFarAuton extends LinearOpMode{
             telemetry.addLine("VISION -----");
 
             // Switch between manual and automatic vision control
-            manualPropControl = true;
             if (gamepad1.left_bumper) {
                 manualPropControl = true;
             } else if (gamepad1.right_bumper) {
-                //manualPropControl = false;
+                manualPropControl = false;
             }
 
             if (!manualPropControl) {
                 telemetry.addLine("Prop Detection mode is AUTOMATIC");
-                if (robot.vision.getDirection() != null) {
-                    spikeMarkerLocation = robot.vision.getDirection();
+                if (teamPropDetectionPipeline != null) {
+                    spikeMarkerLocation = teamPropDetectionPipeline.getDirection();
                     telemetry.addData("Spike Marker Location", spikeMarkerLocation);
                 } else {
                     telemetry.addLine("Camera not initialized");
@@ -224,7 +245,9 @@ public class BlueFarAuton extends LinearOpMode{
             telemetry.update();
         }
 
-        //robot.vision.stopPropDetection();
+        camera.stopStreaming();
+
+        waitForStart();
 
         if (isStopRequested()) return;
 

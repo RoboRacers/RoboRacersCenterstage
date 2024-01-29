@@ -67,47 +67,13 @@ public class RedFarAuton extends LinearOpMode{
 
         TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .addDisplacementMarker(() -> {
-                    robot.intake.engageLock(true,true);
-                    robot.intake.flipDeposit();
-                })
-                .splineToConstantHeading(new Vector2d(22.9, 40.00), Math.toRadians(-90))
-                .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(27.30, 50.00), Math.toRadians(-90))
-                // Go to backboard
-                .splineTo(new Vector2d(49.25, 40.25), Math.toRadians(0.00))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    robot.intake.setIntakePower(0);
-                    robot.slides.statemachine.transition(
-                            SlidesSM.EVENT.ENABLE_RTP
-                    );
-
-                    robot.slides.setTargetPosition(-700);
-                    robot.slides.setPower(0.8);
-
-                })
-                .waitSeconds(2)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    robot.intake.clearHigherLock();
+                    robot.intake.engageLock(false,true);
                     robot.intake.clearLowerLock();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
                     robot.intake.flipIntake();
-                    robot.slides.setTargetPosition(0);
-                    robot.slides.setPower(0.8);
+                })
+                
 
-                })
-                .splineToConstantHeading(new Vector2d(40.00, 26.00), Math.toRadians(0.00))
-                .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
-                .splineToConstantHeading(new Vector2d(53.43, 55.83), Math.toRadians(0.00))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    // Unpower slides
-                    robot.slides.statemachine.transition(
-                            SlidesSM.EVENT.ENABLE_MANUAL
-                    );
-                    robot.slides.setPower(0);
-                })
                 .build();
-
 
 
 

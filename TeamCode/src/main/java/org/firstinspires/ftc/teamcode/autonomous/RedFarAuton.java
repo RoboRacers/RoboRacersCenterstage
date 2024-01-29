@@ -3,160 +3,236 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RobotCore;
+import org.firstinspires.ftc.teamcode.modules.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.modules.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.List;
 
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Autonomous(name = "Red Far Side Auton", group = "16481-Centerstage")
+@Autonomous(name = "Red Far Side Auton 3", group = "16481-Centerstage")
 public class RedFarAuton extends LinearOpMode{
 
     RobotCore robot;
+
+    Vision.TeamPropPipeline teamPropDetectionPipeline = null;
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
     @Override
     public void runOpMode() {
 
+        OpenCvCamera camera;
+
         robot = new RobotCore(hardwareMap);
 
-        Pose2d startLocation = new Pose2d(-40, -62.00, Math.toRadians(-90));
+        int cameraMonitorViewId = hardwareMap.appContext.getResources()
+                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .setReversed(true)
-                // Push purple pixel
-                .splineTo(new Vector2d(-36.32, -29.93), Math.toRadians(-270.00))
-                .setReversed(false)
-                .splineTo(new Vector2d(-48.03, -47.84), Math.toRadians(220.60))
-                .setReversed(true)
-                /*
-                .splineTo(new Vector2d(-55.96, -15.38), Math.toRadians(66.80))
-                .splineTo(new Vector2d(-2.36, -2.36), Math.toRadians(2.79))
-                .splineTo(new Vector2d(33.88, -17.08), Math.toRadians(-35.22))
-                // Scoring
-                .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.EXTEND_WITH_PIXEL
-                    );
-                    robot.slides.setTargetPosition(820);
-                    robot.slides.setPower(.8);
-                })
-                // To backboard
-                .splineTo(new Vector2d(48.50, -34.90), Math.toRadians(0.00))
-                .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.OPEN_CLAW
-                    );
-                })
-                .waitSeconds(.75)
-                .setReversed(false)
-                .splineTo(new Vector2d(39, -34.90), Math.toRadians(-180))
-                .addDisplacementMarker(() -> {
-                    robot.slides.setTargetPosition(0);
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.CLOSED_WITH_PIXEL
-                    );
-                })
-                .setReversed(true)
-                .splineTo(new Vector2d(42.24, -9.70), Math.toRadians(60.34))
-                .splineTo(new Vector2d(61.46, -9.50), Math.toRadians(-2.39))
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
+                .get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-                 */
-                .build();
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                teamPropDetectionPipeline = new Vision.TeamPropPipeline();
+                camera.setPipeline(teamPropDetectionPipeline);
+            }
 
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+
+        Pose2d startLocation = new Pose2d(-43, -62.00, Math.toRadians(90));
 
         TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .setReversed(true)
-                .splineTo(new Vector2d(-31.05, -34.25), Math.toRadians(22.44))
-                .setReversed(false)
-                .splineTo(new Vector2d(-46.52, -49.73), Math.toRadians(270.00))
-                .setReversed(true)
-                /*
-                .splineTo(new Vector2d(-45.39, -14.82), Math.toRadians(39.67))
-                .splineTo(new Vector2d(-12.55, -8.59), Math.toRadians(-4.55))
-                .splineTo(new Vector2d(24.25, -10.29), Math.toRadians(-7.52))
-                .splineTo(new Vector2d(35.76, -20.48), Math.toRadians(-40.24))
-                // Scoring
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.EXTEND_WITH_PIXEL
-                    );
-                    robot.slides.setTargetPosition(800);
-                    robot.slides.setPower(.8);
+                    robot.intake.engageLock(true,true);
+                    robot.intake.flipDeposit();
                 })
-                .splineTo(new Vector2d(48.00, -41.00), Math.toRadians(0.00))
-                .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.OPEN_CLAW
+                .splineToConstantHeading(new Vector2d(22.9, 40.00), Math.toRadians(-90))
+                .waitSeconds(0.1)
+                .splineToConstantHeading(new Vector2d(27.30, 50.00), Math.toRadians(-90))
+                // Go to backboard
+                .splineTo(new Vector2d(49.25, 40.25), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(0);
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
                     );
-                })
-                .waitSeconds(.75)
-                .setReversed(false)
-                .splineTo(new Vector2d(40.54,-41.00), Math.toRadians(-180.00))
-                .setReversed(true)
-                .addDisplacementMarker(() -> {
-                    robot.slides.setTargetPosition(0);
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.CLOSED_WITH_PIXEL
-                    );
-                })
-                .splineTo(new Vector2d(42.24, -9.70), Math.toRadians(60.34))
-                .splineTo(new Vector2d(61.46, -9.50), Math.toRadians(-2.39))
 
-                 */
+                    robot.slides.setTargetPosition(-700);
+                    robot.slides.setPower(0.8);
+
+                })
+                .waitSeconds(2)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.clearHigherLock();
+                    robot.intake.clearLowerLock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                    robot.intake.flipIntake();
+                    robot.slides.setTargetPosition(0);
+                    robot.slides.setPower(0.8);
+
+                })
+                .splineToConstantHeading(new Vector2d(40.00, 26.00), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(53.43, 55.83), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    // Unpower slides
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_MANUAL
+                    );
+                    robot.slides.setPower(0);
+                })
                 .build();
+
+
+
+
+
+
+        TrajectorySequence CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
+                .addDisplacementMarker(() -> {
+                    robot.intake.engageLock(false,true);
+                    robot.intake.clearLowerLock();
+                    robot.intake.flipIntake();
+                })
+                .splineToConstantHeading(new Vector2d(-40.11, -33.16), Math.toRadians(-270.00))
+                .waitSeconds(0.1)
+                .splineToConstantHeading(new Vector2d(-40.11, -40.16), Math.toRadians(-270.00))
+                //move to starter stack
+                .setReversed(true)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                  robot.intake.setIntakePower(0.6);
+                })
+                .splineTo(new Vector2d(-62.58, -39.53), Math.toRadians(-180))
+                .splineToConstantHeading(new Vector2d(-62.58, -31.53), Math.toRadians(-180))
+                .waitSeconds(3)
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                    robot.intake.engageLock(true,true);
+                })
+                .splineToConstantHeading(new Vector2d(-58.30, -31.53), Math.toRadians(-270))
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(-1);
+                })
+                .splineToConstantHeading(new Vector2d(-58.30, -15.53), Math.toRadians(-270))
+
+
+                //move to backdrop
+
+                .splineToConstantHeading(new Vector2d(-43.43, -10.13), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-20.16, -10.7), Math.toRadians(0))
+
+                .splineToConstantHeading(new Vector2d(18.41, -8.73), Math.toRadians(0))
+                .addDisplacementMarker(() -> {
+                    robot.intake.setIntakePower(0);
+                    robot.intake.engageLock(true,true);
+                    robot.intake.flipDeposit();
+                })
+                .splineToConstantHeading(new Vector2d(48.5, -37.14), Math.toRadians(0))//in front of backdrop
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(0);
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+
+                    robot.slides.setTargetPosition(-700);
+                    robot.slides.setPower(0.8);
+
+                })
+                .waitSeconds(2)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.clearHigherLock();
+                    robot.intake.clearLowerLock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                    robot.intake.flipIntake();
+                    robot.slides.setTargetPosition(0);
+                    robot.slides.setPower(0.8);
+
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    // Unpower slides
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_MANUAL
+                    );
+                    robot.slides.setPower(0);
+                })
+                .splineToConstantHeading(new Vector2d(55.00, -10.12), Math.toRadians(0.00))
+                .build();
+
+
 
         TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .setReversed(true)
-                .splineTo(new Vector2d(-42.30, -34.49), Math.toRadians(135.00))
-                .setReversed(false)
-                .splineTo(new Vector2d(-36.07, -53.24), Math.toRadians(262.41))
-                /*
-                .setReversed(true)
-                .splineTo(new Vector2d(-35.00, -15.34), Math.toRadians(45.00))
-                .splineTo(new Vector2d(9.28, -5.57), Math.toRadians(-5.78))
-                .splineTo(new Vector2d(38.98, -21.98), Math.toRadians(-43.26))
-                .addSpatialMarker(new Vector2d(33,-33),() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.EXTEND_WITH_PIXEL
-                    );
-                    robot.slides.setTargetPosition(800);
-                    robot.slides.setPower(.8);
-                })
-                // To backboard
-                .splineTo(new Vector2d(49.50, -27.3), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.OPEN_CLAW
-                    );
+                    robot.intake.engageLock(true,true);
+                    robot.intake.flipDeposit();
                 })
-                .waitSeconds(.75)
-                .setReversed(false)
-                .splineTo(new Vector2d(39, -27.3), Math.toRadians(-180))
-                .setReversed(true)
-                .addDisplacementMarker(() -> {
+                .splineTo(new Vector2d(8, 39), Math.toRadians(-135))
+                .waitSeconds(0.1)
+                .splineToConstantHeading(new Vector2d(18, 39), Math.toRadians(-135))
+                .splineToLinearHeading(new Pose2d(30, 34, Math.toRadians(0)), Math.toRadians(0))
+                // Go to backboard
+                .splineTo(new Vector2d(52.25, 26.00), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(0);
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+
+                    robot.slides.setTargetPosition(-700);
+                    robot.slides.setPower(0.8);
+
+                })
+                .waitSeconds(2)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.clearHigherLock();
+                    robot.intake.clearLowerLock();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                    robot.intake.flipIntake();
                     robot.slides.setTargetPosition(0);
-                    robot.intake.statemachine.transition(
-                            IntakeSM.EVENT.CLOSED_WITH_PIXEL
-                    );
+                    robot.slides.setPower(0.8);
+
                 })
-                .splineTo(new Vector2d(42.24, -9.70), Math.toRadians(60.34))
-                .splineTo(new Vector2d(61.46, -9.50), Math.toRadians(-2.39))
-
-                 */
+                .splineToConstantHeading(new Vector2d(40.00, 26.00), Math.toRadians(0.00))
+                .waitSeconds(0.1)
+                .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    // Unpower slides
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_MANUAL
+                    );
+                    robot.slides.setPower(0);
+                })
                 .build();
-
         // Close claw
 
-        robot.vision.startPropDetection();
+
+        //robot.vision.startPropDetection();
 
         boolean manualPropControl = false;
 
@@ -195,8 +271,8 @@ public class RedFarAuton extends LinearOpMode{
 
             if (!manualPropControl) {
                 telemetry.addLine("Prop Detection mode is AUTOMATIC");
-                if (robot.vision.getDirection() != null) {
-                    spikeMarkerLocation = robot.vision.getDirection();
+                if (teamPropDetectionPipeline != null) {
+                    spikeMarkerLocation = teamPropDetectionPipeline.getDirection();
                     telemetry.addData("Spike Marker Location", spikeMarkerLocation);
                 } else {
                     telemetry.addLine("Camera not initialized");
@@ -216,7 +292,7 @@ public class RedFarAuton extends LinearOpMode{
             telemetry.update();
         }
 
-        robot.vision.stopPropDetection();
+        camera.stopStreaming();
 
         waitForStart();
 
@@ -227,14 +303,25 @@ public class RedFarAuton extends LinearOpMode{
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {
             case LEFT:
-                robot.drive.followTrajectorySequence(RightNoCycle);
+                robot.drive.followTrajectorySequenceAsync(LeftNoCycle);
                 break;
             case CENTER:
-                robot.drive.followTrajectorySequence(CenterNoCycle);
+                robot.drive.followTrajectorySequenceAsync(CenterNoCycle);
                 break;
             case RIGHT:
-                robot.drive.followTrajectorySequence(LeftNoCycle);
+                robot.drive.followTrajectorySequenceAsync(RightNoCycle);
                 break;
+        }
+
+        while (opModeIsActive() && !isStopRequested()) {
+            robot.update();
+
+            telemetry.addData("Setpoint", robot.slides.getTargetPosition());
+            telemetry.addData("Right Slide Motor", robot.slides.rightmotor.getCurrentPosition());
+            telemetry.addData("Left Slide Motor", robot.slides.leftmotor.getCurrentPosition());
+            telemetry.addData("Right Target", robot.slides.rightmotor.getTargetPosition());
+            telemetry.addData("Left Target", robot.slides.leftmotor.getTargetPosition());
+            telemetry.update();
         }
 
     }

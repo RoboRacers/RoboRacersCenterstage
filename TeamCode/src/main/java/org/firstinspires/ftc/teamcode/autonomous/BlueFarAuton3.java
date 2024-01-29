@@ -113,12 +113,12 @@ public class BlueFarAuton3 extends LinearOpMode{
                     robot.intake.engageLock(false,true);
                     robot.intake.flipIntake();
                 })
-                .splineToConstantHeading(new Vector2d(-38.91, 33.16), Math.toRadians(270.00))
+                .splineToConstantHeading(new Vector2d(-40.11, 33.16), Math.toRadians(270.00))
                 .waitSeconds(0.1)
                 .splineToConstantHeading(new Vector2d(-38.91, 40.16), Math.toRadians(270.00))
                 //move to starter stack
                 .setReversed(true)
-                .splineTo(new Vector2d(-62.58, 31.53), Math.toRadians(180))
+                .splineTo(new Vector2d(-62.58, 32.53), Math.toRadians(180))
                 //.UNSTABLE_addTemporalMarkerOffset(1, () -> {
                   //  robot.intake.setIntakePower(0.6);
                 //})
@@ -130,7 +130,7 @@ public class BlueFarAuton3 extends LinearOpMode{
 
                 .splineToConstantHeading(new Vector2d(-43.43, 10.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, 10.7), Math.toRadians(0))
-                /*
+
                 .splineToConstantHeading(new Vector2d(18.41, 8.73), Math.toRadians(0))
                 .addDisplacementMarker(() -> {
                     robot.intake.setIntakePower(0);
@@ -139,7 +139,7 @@ public class BlueFarAuton3 extends LinearOpMode{
                 })
                 .splineToConstantHeading(new Vector2d(45.5, 37.14), Math.toRadians(0))//in front of backdrop
 
-                 */
+
                 .build();
                 /*
                 .splineToConstantHeading(new Vector2d(14.00, 31.55), Math.toRadians(-90))

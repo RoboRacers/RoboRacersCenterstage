@@ -127,9 +127,9 @@ public class Vision implements Subsystem {
 
                 Transform3d robotToCameraTransform = new Transform3d(
                         new VectorF(
-                                34.00f - 42.30f,
-                                 35.88f - 29.700f,
-                                8.50f
+                                0,
+                                 0,
+                                0
                         ),
                         new Quaternion(0,0,1f,0, System.nanoTime())
                 );
@@ -137,7 +137,7 @@ public class Vision implements Subsystem {
 
                 Transform3d robotPose = cameraPose.plus(cameraToRobotTransform);
 
-                poses.add(robotPose.toPose2d());
+                poses.add(cameraPose.toPose2d());
             }
         }
 

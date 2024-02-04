@@ -58,6 +58,5 @@ public class VisionSimpleTest extends LinearOpMode {
             telemetry.update();
         }
 
-        //camera.closeCameraDevice();
     }
 }

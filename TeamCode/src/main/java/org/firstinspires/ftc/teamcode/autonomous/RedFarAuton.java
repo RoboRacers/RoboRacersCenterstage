@@ -101,35 +101,32 @@ public class RedFarAuton extends LinearOpMode{
                     robot.intake.setIntakePower(0.5);
                 })
                 .splineTo(new Vector2d(-63.58, -40.53), Math.toRadians(-180))
+                // Sweep the stack
                 .splineToConstantHeading(new Vector2d(-62.58, -31.53), Math.toRadians(-180))
-                //.waitSeconds(0.1)
                 .splineToConstantHeading(new Vector2d(-61.58, -34.53), Math.toRadians(-180))
+                // wait to intake
                 .waitSeconds(0.75)
                 .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
                     robot.intake.engageLock(true,true);
                 })
                 .splineToConstantHeading(new Vector2d(-58.30, -31.53), Math.toRadians(-270))
-                .UNSTABLE_addTemporalMarkerOffset(0.65, () -> {
+                // wait and them outtake
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(-0.8);
                 })
                 .splineToConstantHeading(new Vector2d(-58.30, -15.53), Math.toRadians(-270))
-
 
                 //move to backdrop
 
                 .splineToConstantHeading(new Vector2d(-43.43, -10.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, -10.7), Math.toRadians(0))
-
                 .splineToConstantHeading(new Vector2d(18.41, -8.73), Math.toRadians(0))
                 .addDisplacementMarker(() -> {
                     robot.intake.setIntakePower(0);
-                    robot.intake.engageLock(true,true);
                     robot.intake.flipDeposit();
-                    robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
                     );
-
                     robot.slides.setTargetPosition(-650);
                     robot.slides.setPower(0.8);
                 })
@@ -183,8 +180,6 @@ public class RedFarAuton extends LinearOpMode{
                 })
 
                 .splineToConstantHeading(new Vector2d(-58.30, -15.53), Math.toRadians(180))
-
-
                 //move to backdrop 2
                 .setReversed(false)
                 .splineTo(new Vector2d(-43.43, -10.13), Math.toRadians(0))
@@ -223,8 +218,6 @@ public class RedFarAuton extends LinearOpMode{
 
                 //.splineToConstantHeading(new Vector2d(55.00, -37.4), Math.toRadians(0.00))
                 .build();
-
-
 
         if (isStopRequested()) return;
 

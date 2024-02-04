@@ -3,13 +3,14 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 
 @Config
-@TeleOp(name = "Teleop for LM3", group = "16481-Centerstage")
+@TeleOp(name = "Teleop for LT", group = "16481-Centerstage")
 public class TeleopLT extends LinearOpMode {
 
     RobotCore robot;
@@ -83,7 +84,7 @@ public class TeleopLT extends LinearOpMode {
             if (gamepad2.triangle) {
                 presetEnabled = true;
                 robot.slides.setTargetPosition(
-                        -650
+                        -1700
                 );
                 robot.slides.statemachine.transition(
                         SlidesSM.EVENT.ENABLE_RTP
@@ -92,7 +93,7 @@ public class TeleopLT extends LinearOpMode {
             } else if (gamepad2.square) {
                 presetEnabled = true;
                 robot.slides.setTargetPosition(
-                        -850
+                        -700
                 );
                 robot.slides.statemachine.transition(
                         SlidesSM.EVENT.ENABLE_RTP
@@ -101,12 +102,20 @@ public class TeleopLT extends LinearOpMode {
             } else if (gamepad2.cross) {
                 presetEnabled = true;
                 robot.slides.setTargetPosition(
-                        -1000
+                        -10
                 );
                 robot.slides.statemachine.transition(
                         SlidesSM.EVENT.ENABLE_RTP
                 );
                 robot.slides.setPower(rtpRunPower);
+            } else if (gamepad2.circle) {
+                robot.slides.setPower(0);
+                robot.slides.leftmotor.setMode(
+                        DcMotor.RunMode.STOP_AND_RESET_ENCODER
+                );
+                robot.slides.rightmotor.setMode(
+                        DcMotor.RunMode.STOP_AND_RESET_ENCODER
+                );
             }
 
             // Intake control

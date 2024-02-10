@@ -18,6 +18,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -25,16 +26,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.teamcode.modules.util.RoadrunnerUtil.LynxModuleUtil;
+import org.firstinspires.ftc.teamcode.modules.util.UltrasonicDistanceSensor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.firstinspires.ftc.teamcode.modules.drive.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.modules.drive.DriveConstants.MAX_ANG_ACCEL;
@@ -74,6 +79,12 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
+
+    // Custom Stuff
+    public UltrasonicDistanceSensor leftUltrasonic;
+    public UltrasonicDistanceSensor rightUltrasonic;
+
+    private TrajectorySequence queuedTrajectorySequence;
 
     public MecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -157,6 +168,11 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         setLocalizer(new ThreeTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+
+        // More custom stuff
+
+        leftUltrasonic = new UltrasonicDistanceSensor(hardwareMap.get(AnalogInput.class, "leftUltrasonic"));
+        rightUltrasonic = new UltrasonicDistanceSensor(hardwareMap.get(AnalogInput.class, "rightUltrasonic"));
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -222,6 +238,39 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         updatePoseEstimate();
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
+
+        if (waiting) {
+            switch (side) {
+                case RIGHT:
+                    double rightDistance = rightUltrasonic.getDistance(DistanceUnit.INCH);
+                    if (rightDistance > minDistance) {
+                        followTrajectorySequenceAsync(queuedTrajectorySequence);
+                        queuedTrajectorySequence = null;
+                        waiting = false;
+                        break;
+                    } else if (timer.time(TimeUnit.MILLISECONDS) > timeout) {
+                        followTrajectorySequenceAsync(queuedTrajectorySequence);
+                        queuedTrajectorySequence = null;
+                        waiting = false;
+                        break;
+                    }
+                    break;
+                case LEFT:
+                    double leftDistance = leftUltrasonic.getDistance(DistanceUnit.INCH);
+                    if (leftDistance > minDistance) {
+                        followTrajectorySequenceAsync(queuedTrajectorySequence);
+                        queuedTrajectorySequence = null;
+                        waiting = false;
+                        break;
+                    } else if (timer.time(TimeUnit.MILLISECONDS) > timeout) {
+                        followTrajectorySequenceAsync(queuedTrajectorySequence);
+                        queuedTrajectorySequence = null;
+                        waiting = false;
+                        break;
+                    }
+                    break;
+            }
+        }
     }
 
     public void waitForIdle() {
@@ -328,4 +377,31 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
     }
+
+    public void setQueuedTrajectorySequence(TrajectorySequence trajSeq) {
+        queuedTrajectorySequence = trajSeq;
+    }
+
+    public boolean waiting = false;
+    private double minDistance = 30.0;
+    private double timeout = 3000;
+    private Side side = Side.LEFT;
+
+    private ElapsedTime timer = new ElapsedTime();
+
+    public enum Side {
+        LEFT,
+        RIGHT,
+    }
+    public void setWaitConstraints(double minDistance, double timeout, Side side) {
+        this.minDistance = minDistance;
+        this.timeout = timeout;
+        this.side = side;
+    }
+
+    public void startWaiting() {
+        waiting = true;
+        timer.reset();
+    }
+
 }

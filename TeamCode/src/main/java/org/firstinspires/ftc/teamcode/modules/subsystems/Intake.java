@@ -90,7 +90,7 @@ public class Intake implements Subsystem {
     }
 
     static double leftFlipDepositPos = 1.00;
-    static double rightFlipDepositPos = 0.92;
+    static double rightFlipDepositPos = 0.95;
 
     /**
      * Sets the deposit box to deposit position.
@@ -100,7 +100,7 @@ public class Intake implements Subsystem {
     }
 
     static double leftFlipIntakePos = 0.08;
-    static double rightFlipIntakePos = 0.02;
+    static double rightFlipIntakePos = 0.03;
 
     /**
      * Sets the deposit box to intake position.

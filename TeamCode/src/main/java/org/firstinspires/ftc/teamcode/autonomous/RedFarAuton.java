@@ -3,15 +3,12 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RobotCore;
-import org.firstinspires.ftc.teamcode.modules.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
@@ -36,11 +33,16 @@ public class RedFarAuton extends LinearOpMode{
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
-    TrajectorySequence LeftNoCycle;
-    TrajectorySequence CenterNoCycle;
+    TrajectorySequence LeftSpikeMarker;
+    TrajectorySequence LeftDeposit1;
+    TrajectorySequence CenterSpikeMarker;
+    TrajectorySequence CenterDeposit1;
+    TrajectorySequence CenterDeposit2;
     TrajectorySequence CenterCycle;
+    TrajectorySequence RightSpikeMarker;
+    TrajectorySequence RightDeposit1;
 
-    TrajectorySequence RightNoCycle;
+    public static double backBoardX = 47.0;
 
 
     @Override
@@ -71,57 +73,46 @@ public class RedFarAuton extends LinearOpMode{
         });
 
         Pose2d startLocation = new Pose2d(-43, -62.00, Math.toRadians(90));
+        robot.drive.setPoseEstimate(startLocation);
 
         if (isStopRequested()) return;
 
-        LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
+        LeftSpikeMarker = robot.drive.trajectorySequenceBuilder(startLocation)
                 .addDisplacementMarker(() -> {
                     robot.intake.engageLock(false,true);
                     robot.intake.clearLowerLock();
                     robot.intake.flipIntake();
                 })
-                .splineToConstantHeading(new Vector2d(-43.01, -62.01), Math.toRadians(90))
-
-
-                .build();
-
-        if (isStopRequested()) return;
-
-        CenterNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
-                .addDisplacementMarker(() -> {
-                    robot.intake.engageLock(false,true);
-                    robot.intake.clearLowerLock();
-                    robot.intake.flipIntake();
-                })
-                .splineToConstantHeading(new Vector2d(-40.11, -30.75), Math.toRadians(-270.00))
+                .splineToConstantHeading(new Vector2d(-50.64, -37.91), Math.toRadians(-270.00))
                 //.splineToConstantHeading(new Vector2d(-40.5, -40.16), Math.toRadians(-270.00))
                 //move to starter stack
                 .setReversed(true)
+                .splineTo(new Vector2d(-50.64, -48.50), Math.toRadians(270))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0.5);
                 })
-                .splineTo(new Vector2d(-63.58, -40.53), Math.toRadians(-180))
+                .splineTo(new Vector2d(-62.25, -40.53), Math.toRadians(-180))
                 // Sweep the stack
-                .splineToConstantHeading(new Vector2d(-62.58, -31.53), Math.toRadians(-180))
-                .splineToConstantHeading(new Vector2d(-61.58, -34.53), Math.toRadians(-180))
+                .splineToConstantHeading(new Vector2d(-61.00, -31.53), Math.toRadians(-180))
+                .splineToConstantHeading(new Vector2d(-62.00, -34.53), Math.toRadians(-180))
                 // wait to intake
                 .waitSeconds(0.75)
                 .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
                     robot.intake.engageLock(true,true);
                 })
-                .splineToConstantHeading(new Vector2d(-58.30, -31.53), Math.toRadians(-270))
+                .splineToConstantHeading(new Vector2d(-60.30, -31.53), Math.toRadians(-270))
                 // wait and them outtake
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(-0.8);
                 })
-                .splineToConstantHeading(new Vector2d(-58.30, -15.53), Math.toRadians(-270))
+                .splineToConstantHeading(new Vector2d(-60.30, -15.53), Math.toRadians(-270))
 
                 //move to backdrop
 
-                .splineToConstantHeading(new Vector2d(-43.43, -10.13), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-20.16, -10.7), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(18.41, -8.73), Math.toRadians(0))
-                .addDisplacementMarker(() -> {
+                .splineToConstantHeading(new Vector2d(-43.43, -8.77), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-20.16, -8.77), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(38.41, -8.73), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();
                     robot.slides.statemachine.transition(
@@ -129,8 +120,17 @@ public class RedFarAuton extends LinearOpMode{
                     );
                     robot.slides.setTargetPosition(-650);
                     robot.slides.setPower(0.8);
+
+                    robot.drive.setQueuedTrajectorySequence(
+                            LeftDeposit1
+                    );
+                    robot.drive.setWaitConstraints(30, 4000, MecanumDrive.Side.RIGHT);
+                    robot.drive.startWaiting();
                 })
-                .splineToConstantHeading(new Vector2d(47.5, -35.90), Math.toRadians(0))//in front of backdrop
+                .build();
+
+        LeftDeposit1 = robot.drive.trajectorySequenceBuilder(LeftSpikeMarker.end())
+                .splineToConstantHeading(new Vector2d(backBoardX, -29.90), Math.toRadians(0))//in front of backdrop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
 
 
@@ -146,13 +146,89 @@ public class RedFarAuton extends LinearOpMode{
                     robot.slides.setPower(0.8);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.33, () -> {
-                    robot.drive.followTrajectorySequenceAsync(CenterCycle);
+                    //robot.drive.followTrajectorySequenceAsync(CenterCycle);
+                })
+                .build();
+
+
+        if (isStopRequested()) return;
+
+        CenterSpikeMarker = robot.drive.trajectorySequenceBuilder(startLocation)
+                .addDisplacementMarker(() -> {
+                    robot.intake.engageLock(false,true);
+                    robot.intake.clearLowerLock();
+                    robot.intake.flipIntake();
+                })
+                .splineToConstantHeading(new Vector2d(-40.11, -30.75), Math.toRadians(-270.00))
+                //.splineToConstantHeading(new Vector2d(-40.5, -40.16), Math.toRadians(-270.00))
+                //move to starter stack
+                .setReversed(true)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(0.5);
+                })
+                .splineTo(new Vector2d(-59.58, -40.53), Math.toRadians(-180))
+                // Sweep the stack
+                .splineToConstantHeading(new Vector2d(-61.58, -31.53), Math.toRadians(-180))
+                .splineToConstantHeading(new Vector2d(-60.58, -34.53), Math.toRadians(-180))
+                // wait to intake
+                .waitSeconds(0.75)
+                .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
+                    robot.intake.engageLock(true,true);
+
+                })
+                .splineToConstantHeading(new Vector2d(-58.30, -31.53), Math.toRadians(-270))
+                // wait and them outtake
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(-0.8);
+                })
+                .splineToConstantHeading(new Vector2d(-58.30, -15.53), Math.toRadians(-270))
+
+                //move to backdrop
+
+                .splineToConstantHeading(new Vector2d(-43.43, -10.13), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-20.16, -10.7), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(38.41, -8.73), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                    robot.intake.setIntakePower(0);
+                    robot.intake.flipDeposit();
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+                    robot.slides.setTargetPosition(-650);
+                    robot.slides.setPower(0.8);
+
+                    robot.drive.setQueuedTrajectorySequence(
+                            CenterDeposit1
+                    );
+                    robot.drive.setWaitConstraints(30, 4000, MecanumDrive.Side.RIGHT);
+                    robot.drive.startWaiting();
+                })
+                .build();
+
+        CenterDeposit1 = robot.drive.trajectorySequenceBuilder(CenterSpikeMarker.end())
+                .splineToConstantHeading(new Vector2d(backBoardX-0.5, -35.90), Math.toRadians(0))//in front of backdrop
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+
+
+                })
+                .waitSeconds(0.33)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.clearHigherLock();
+                    robot.intake.clearLowerLock();
+                })
+                .splineToConstantHeading(new Vector2d(45.5, -37.14), Math.toRadians(0))//in front of backdrop
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    robot.slides.setTargetPosition(-10);
+                    robot.slides.setPower(0.8);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.33, () -> {
+                    //robot.drive.followTrajectorySequenceAsync(CenterCycle);
                 })
                 .build();
 
         if (isStopRequested()) return;
 
-        CenterCycle = robot.drive.trajectorySequenceBuilder(CenterNoCycle.end())
+        CenterCycle = robot.drive.trajectorySequenceBuilder(CenterDeposit1.end())
                 .setReversed(true)
                 // Come back to stack
                 .splineTo(new Vector2d(29.72, -14.82), Math.toRadians(170.54))
@@ -198,7 +274,10 @@ public class RedFarAuton extends LinearOpMode{
                     robot.slides.setTargetPosition(-750);
                     robot.slides.setPower(0.8);
                 })
-                .splineToConstantHeading(new Vector2d(45.5, -37.14), Math.toRadians(0))//in front of backdrop
+                .build();
+
+        CenterDeposit2 = robot.drive.trajectorySequenceBuilder(CenterCycle.end())
+                .splineToConstantHeading(new Vector2d(backBoardX, -37.14), Math.toRadians(0))//in front of backdrop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
 
 
@@ -221,47 +300,76 @@ public class RedFarAuton extends LinearOpMode{
 
         if (isStopRequested()) return;
 
-        RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
+        RightSpikeMarker = robot.drive.trajectorySequenceBuilder(startLocation)
                 .addDisplacementMarker(() -> {
-                    robot.intake.engageLock(true,true);
-                    robot.intake.flipDeposit();
+                    robot.intake.engageLock(false,true);
+                    robot.intake.clearLowerLock();
+                    robot.intake.flipIntake();
                 })
-                .splineTo(new Vector2d(8, 39), Math.toRadians(-135))
-                .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(18, 39), Math.toRadians(-135))
-                .splineToLinearHeading(new Pose2d(30, 34, Math.toRadians(0)), Math.toRadians(0))
-                // Go to backboard
-                .splineTo(new Vector2d(52.25, 26.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-32.93, -31.82), Math.toRadians(38.66))
+                //.splineToConstantHeading(new Vector2d(-40.5, -40.16), Math.toRadians(-270.00))
+                //move to starter stack
+                .setReversed(true)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    robot.intake.setIntakePower(0.5);
+                })
+                .splineTo(new Vector2d(-61.58, -40.53), Math.toRadians(-180))
+                // Sweep the stack
+                .splineToConstantHeading(new Vector2d(-61.0, -31.53), Math.toRadians(-180))
+                .splineToConstantHeading(new Vector2d(-61.0, -34.53), Math.toRadians(-180))
+                // wait to intake
+                .waitSeconds(0.75)
+                .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
+                    robot.intake.engageLock(true,true);
+                })
+                .splineToConstantHeading(new Vector2d(-58.30, -31.53), Math.toRadians(-270))
+                // wait and them outtake
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    robot.intake.setIntakePower(-0.8);
+                })
+                .splineToConstantHeading(new Vector2d(-58.30, -15.53), Math.toRadians(-270))
+
+                //move to backdrop
+
+                .splineToConstantHeading(new Vector2d(-43.43, -10.13), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-20.16, -10.7), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(38.41, -8.73), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
+                    robot.intake.flipDeposit();
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
                     );
-
-                    robot.slides.setTargetPosition(-700);
+                    robot.slides.setTargetPosition(-650);
                     robot.slides.setPower(0.8);
 
+                    robot.drive.setQueuedTrajectorySequence(
+                            RightDeposit1
+                    );
+                    robot.drive.setWaitConstraints(30, 15000, MecanumDrive.Side.RIGHT);
+                    robot.drive.startWaiting();
                 })
-                .waitSeconds(2)
+                .build();
+
+        RightDeposit1 = robot.drive.trajectorySequenceBuilder(LeftSpikeMarker.end())
+                .splineToConstantHeading(new Vector2d(backBoardX-5, -35.90), Math.toRadians(0))//in front of backdrop
+                .splineToConstantHeading(new Vector2d(backBoardX, -43.33), Math.toRadians(0))//in front of backdrop
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+
+
+                })
+                .waitSeconds(0.33)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
-                    robot.intake.flipIntake();
+                .splineToConstantHeading(new Vector2d(45.5, -27.14), Math.toRadians(0))//in front of backdrop
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
-
                 })
-                .splineToConstantHeading(new Vector2d(40.00, 26.00), Math.toRadians(0.00))
-                .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    // Unpower slides
-                    robot.slides.statemachine.transition(
-                            SlidesSM.EVENT.ENABLE_MANUAL
-                    );
-                    robot.slides.setPower(0);
+                .UNSTABLE_addTemporalMarkerOffset(0.33, () -> {
+                    robot.drive.followTrajectorySequenceAsync(CenterCycle);
                 })
                 .build();
 
@@ -329,18 +437,17 @@ public class RedFarAuton extends LinearOpMode{
 
         if (isStopRequested()) return;
 
-        robot.drive.setPoseEstimate(startLocation);
 
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {
             case LEFT:
-                robot.drive.followTrajectorySequenceAsync(LeftNoCycle);
+                robot.drive.followTrajectorySequenceAsync(LeftSpikeMarker);
                 break;
             case CENTER:
-                robot.drive.followTrajectorySequenceAsync(CenterNoCycle);
+                robot.drive.followTrajectorySequenceAsync(CenterSpikeMarker);
                 break;
             case RIGHT:
-                robot.drive.followTrajectorySequenceAsync(RightNoCycle);
+                robot.drive.followTrajectorySequenceAsync(RightSpikeMarker);
                 break;
         }
 
@@ -352,6 +459,9 @@ public class RedFarAuton extends LinearOpMode{
             telemetry.addData("Left Slide Motor", robot.slides.leftmotor.getCurrentPosition());
             telemetry.addData("Right Target", robot.slides.rightmotor.getTargetPosition());
             telemetry.addData("Left Target", robot.slides.leftmotor.getTargetPosition());
+            telemetry.addData("Left Ultrasonic", robot.drive.leftUltrasonic.getDistance(DistanceUnit.INCH));
+            telemetry.addData("Right Ultrasonic", robot.drive.rightUltrasonic.getDistance(DistanceUnit.INCH));
+            telemetry.addData("Waiting?", robot.drive.waiting);
             telemetry.update();
         }
 

@@ -35,6 +35,8 @@ public class BlueCloseAuton extends LinearOpMode{
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
+    double backBoardX = 49.55;
+
     @Override
     public void runOpMode() {
 
@@ -63,6 +65,7 @@ public class BlueCloseAuton extends LinearOpMode{
         });
 
         Pose2d startLocation = new Pose2d(15.85, 62.00, Math.toRadians(-90));
+        robot.drive.setPoseEstimate(startLocation);
 
         TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .addDisplacementMarker(() -> {
@@ -73,7 +76,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .waitSeconds(0.1)
                 .splineToConstantHeading(new Vector2d(27.30, 50.00), Math.toRadians(-90))
                 // Go to backboard
-                .splineTo(new Vector2d(49.25, 40.25), Math.toRadians(0.00))
+                .splineTo(new Vector2d(backBoardX, 40.25), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
@@ -117,7 +120,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(14.00, 38), Math.toRadians(-90))
                 .splineToLinearHeading(new Pose2d(14.00, 41.00, Math.toRadians(-45)), Math.toRadians(45))
                 // Go to backboard
-                .splineTo(new Vector2d(52.25, 34.50), Math.toRadians(0.00))
+                .splineTo(new Vector2d(backBoardX, 34.50), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
@@ -162,7 +165,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(18, 39), Math.toRadians(-135))
                 .splineToLinearHeading(new Pose2d(30, 34, Math.toRadians(0)), Math.toRadians(0))
                 // Go to backboard
-                .splineTo(new Vector2d(52.25, 26.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(backBoardX, 26.00), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
@@ -264,7 +267,6 @@ public class BlueCloseAuton extends LinearOpMode{
 
         if (isStopRequested()) return;
 
-        robot.drive.setPoseEstimate(startLocation);
 
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {

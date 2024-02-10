@@ -3,26 +3,24 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 
 @Config
-@TeleOp(name = "Teleop for LT", group = "16481-Centerstage")
-public class TeleopLT extends LinearOpMode {
+@TeleOp(name = "Teleop for Demo", group = "16481-Centerstage")
+public class TeleopDemo extends LinearOpMode {
 
     RobotCore robot;
 
-    public static double speedMultiplier = 0.85;
-    public static double strafeMultiplier = 0.9;
-    public static double turnMultiplier = 0.8;
-    public static double retractionSpeed = 0.5;
+    public static double speedMultiplier = .2;
+    public static double strafeMultiplier = .2;
+    public static double turnMultiplier = .3;
+    public static double retractionSpeed = .5;
     public static double extensionSpeed = 1;
     public static double rtpLockPower = 0.3;
-    public static double rtpRunPower = 1;
-    public static double intakeSpeed = 0.7;
+    public static double rtpRunPower = 0.8;
     private boolean presetEnabled = false;
 
     @Override
@@ -84,9 +82,8 @@ public class TeleopLT extends LinearOpMode {
 
             if (gamepad2.triangle) {
                 presetEnabled = true;
-                robot.intake.flipDeposit();
                 robot.slides.setTargetPosition(
-                        -1350
+                        -650
                 );
                 robot.slides.statemachine.transition(
                         SlidesSM.EVENT.ENABLE_RTP
@@ -94,9 +91,8 @@ public class TeleopLT extends LinearOpMode {
                 robot.slides.setPower(rtpRunPower);
             } else if (gamepad2.square) {
                 presetEnabled = true;
-                robot.intake.flipDeposit();
                 robot.slides.setTargetPosition(
-                        -950
+                        -850
                 );
                 robot.slides.statemachine.transition(
                         SlidesSM.EVENT.ENABLE_RTP
@@ -104,38 +100,28 @@ public class TeleopLT extends LinearOpMode {
                 robot.slides.setPower(rtpRunPower);
             } else if (gamepad2.cross) {
                 presetEnabled = true;
-                robot.intake.flipIntake();
                 robot.slides.setTargetPosition(
-                        0
+                        -1000
                 );
                 robot.slides.statemachine.transition(
                         SlidesSM.EVENT.ENABLE_RTP
                 );
                 robot.slides.setPower(rtpRunPower);
-            } else if (gamepad2.circle && gamepad2.dpad_left) {
-                robot.slides.setManualPower(0);
-                presetEnabled = true;
-                robot.slides.leftmotor.setMode(
-                        DcMotor.RunMode.STOP_AND_RESET_ENCODER
-                );
-                robot.slides.rightmotor.setMode(
-                        DcMotor.RunMode.STOP_AND_RESET_ENCODER
-                );
             }
 
             // Intake control
             if (gamepad1.right_trigger > 0.1) {
-                robot.intake.setIntakePower(gamepad1.right_trigger*intakeSpeed);
+                robot.intake.setIntakePower(gamepad1.right_trigger*.9);
             } else if (gamepad1.left_trigger > 0.1) {
-                robot.intake.setIntakePower(-gamepad1.left_trigger*intakeSpeed);
+                robot.intake.setIntakePower(-gamepad1.left_trigger*.9);
             } else {
                 robot.intake.setIntakePower(0);
             }
 
             // Lock deposit
             if (gamepad2.right_bumper) {
-                gamepad1.rumble(300);
-                gamepad2.rumble(300);
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
                 robot.intake.engageLock(true, true);
             }
 

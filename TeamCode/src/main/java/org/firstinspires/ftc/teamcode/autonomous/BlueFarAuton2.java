@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -22,7 +23,9 @@ import java.util.List;
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Autonomous(name = "Blue Far Side Auton", group = "16481-Centerstage")
+@Disabled
+@Deprecated
+@Autonomous(name = "Blue Far Side Auton 2", group = "16481-Centerstage")
 public class BlueFarAuton2 extends LinearOpMode{
 
     RobotCore robot;

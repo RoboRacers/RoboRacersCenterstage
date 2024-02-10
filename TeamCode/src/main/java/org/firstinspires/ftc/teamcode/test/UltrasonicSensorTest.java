@@ -9,19 +9,23 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RobotCore;
+import org.firstinspires.ftc.teamcode.modules.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.modules.util.UltrasonicDistanceSensor;
 
 import java.util.List;
 
-@Disabled
+
 @TeleOp(name = "Ultrasonic Sensor Test", group = "Test")
 public class UltrasonicSensorTest extends LinearOpMode {
 
-    AnalogInput ultrasonicSensor;
-
+    MecanumDrive drive;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        drive = new MecanumDrive(hardwareMap);
 
         List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
 
@@ -29,29 +33,13 @@ public class UltrasonicSensorTest extends LinearOpMode {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        ultrasonicSensor = hardwareMap.get(AnalogInput.class, "ultrasonic1");
-
-        KalmanFilter kalmanFilter = new KalmanFilter(0.7, 2,3 );
-        LowPassFilter lowPassFilter = new LowPassFilter(0.5);
-
-        while (opModeInInit()) {
-        }
-
-        double range = 0;
-        double kalmanRange;
-        double lowPassRange;
 
         while (!isStopRequested()) {
 
-            range = (ultrasonicSensor.getVoltage() * 312.5)/2.54;
-            kalmanRange = kalmanFilter.estimate(range);
-            lowPassRange = lowPassFilter.estimate(range);
-
             // Telemetry
-            telemetry.addData("Ultrasonic Testing", "");
-            telemetry.addData("Raw Sensor Range (Inches)", range);
-            telemetry.addData("Kalman Sensor Range (Inches)", kalmanRange);
-            telemetry.addData("Low Pass Sensor Range (Inches)", lowPassRange);
+            telemetry.addLine("Ultrasonic Testing");
+            telemetry.addData("Left Ultrasonic", drive.leftUltrasonic.getDistance(DistanceUnit.INCH));
+            telemetry.addData("Right Ultrasonic", drive.rightUltrasonic.getDistance(DistanceUnit.INCH));
             telemetry.update();
 
         }

@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -12,8 +11,8 @@ import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 import org.firstinspires.ftc.teamcode.modules.subsystems.Vision;
-import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.teamcode.modules.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -23,9 +22,7 @@ import java.util.List;
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Disabled
-@Deprecated
-@Autonomous(name = "Red Close Side Auton Bugged", group = "16481-Centerstage")
+@Autonomous(name = "Red Close Side Auton", group = "16481-Centerstage")
 public class RedCloseAuton extends LinearOpMode{
 
     RobotCore robot;
@@ -33,6 +30,8 @@ public class RedCloseAuton extends LinearOpMode{
     Vision.TeamPropPipeline teamPropDetectionPipeline = null;
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
+
+    double backBoardX = 49.55;
 
     @Override
     public void runOpMode() {
@@ -62,41 +61,42 @@ public class RedCloseAuton extends LinearOpMode{
         });
 
         Pose2d startLocation = new Pose2d(15.85, -62.00, Math.toRadians(90));
+        robot.drive.setPoseEstimate(startLocation);
 
         TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .addDisplacementMarker(() -> {
                     robot.intake.engageLock(true,true);
                     robot.intake.flipDeposit();
                 })
-                .splineToConstantHeading(new Vector2d(21.5, -40.00), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(22.9, -40.00), Math.toRadians(90))
                 .waitSeconds(0.1)
                 .splineToConstantHeading(new Vector2d(27.30, -50.00), Math.toRadians(90))
                 // Go to backboard
-                .splineTo(new Vector2d(47.0, -40.25), Math.toRadians(0.00))
+                .splineTo(new Vector2d(backBoardX, -40.25), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
                     );
 
-                    robot.slides.setTargetPosition(-775);
+                    robot.slides.setTargetPosition(-700);
                     robot.slides.setPower(0.8);
 
                 })
-                .waitSeconds(1)
+                .waitSeconds(2)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
                     robot.intake.flipIntake();
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
 
                 })
-                .splineToConstantHeading(new Vector2d(40.50, -40.0), Math.toRadians(0.00))
-                .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(53.43, -58.83), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(40.00, -26.00), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(46.50, -43.0), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(53.43, -55.83), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     // Unpower slides
                     robot.slides.statemachine.transition(
@@ -116,30 +116,30 @@ public class RedCloseAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(14.00, -38), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(14.00, -41.00, Math.toRadians(45)), Math.toRadians(45))
                 // Go to backboard
-                .splineTo(new Vector2d(47.0, -34.50), Math.toRadians(0.00))
+                .splineTo(new Vector2d(backBoardX, -34.50), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
                     );
 
-                    robot.slides.setTargetPosition(-775);
+                    robot.slides.setTargetPosition(-700);
                     robot.slides.setPower(0.8);
 
                 })
-                .waitSeconds(1)
+                .waitSeconds(2)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
                     robot.intake.flipIntake();
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
 
                 })
-                .splineToConstantHeading(new Vector2d(46.50, -34.50), Math.toRadians(0.00))
-                .waitSeconds(0.1)
+                .splineToConstantHeading(new Vector2d(40.00, -26.00), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(46.50, -43.0), Math.toRadians(0.00))
                 .splineToConstantHeading(new Vector2d(53.43, -58.83), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     // Unpower slides
@@ -150,7 +150,7 @@ public class RedCloseAuton extends LinearOpMode{
                 })
                 .build();
 
-        // Reversed till here
+
         TrajectorySequence RightNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
                 .addDisplacementMarker(() -> {
                     robot.intake.engageLock(true,true);
@@ -161,23 +161,23 @@ public class RedCloseAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(18, -39), Math.toRadians(135))
                 .splineToLinearHeading(new Pose2d(30, -34, Math.toRadians(0)), Math.toRadians(0))
                 // Go to backboard
-                .splineTo(new Vector2d(47.0, -26.00), Math.toRadians(0.00))
+                .splineTo(new Vector2d(backBoardX, -26.00), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
                     );
 
-                    robot.slides.setTargetPosition(-775);
+                    robot.slides.setTargetPosition(-700);
                     robot.slides.setPower(0.8);
 
                 })
-                .waitSeconds(1)
+                .waitSeconds(2)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
                     robot.intake.flipIntake();
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
@@ -194,8 +194,11 @@ public class RedCloseAuton extends LinearOpMode{
                     robot.slides.setPower(0);
                 })
                 .build();
-
         // Close claw
+
+
+        //robot.vision.startPropDetection();
+
         boolean manualPropControl = false;
 
         while(!isStopRequested() && !opModeIsActive()) {
@@ -259,8 +262,6 @@ public class RedCloseAuton extends LinearOpMode{
         waitForStart();
 
         if (isStopRequested()) return;
-
-        robot.drive.setPoseEstimate(startLocation);
 
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {

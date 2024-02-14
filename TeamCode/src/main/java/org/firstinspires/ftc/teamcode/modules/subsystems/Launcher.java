@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode.modules.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+@Config
 public class Launcher implements Subsystem  {
 
 
     public ServoImplEx actuationServo;
+
+    public static double firePos = 0.45;
 
     public Launcher(HardwareMap hardwareMap) {
         actuationServo = hardwareMap.get(ServoImplEx.class, "actuationServo");
@@ -16,7 +20,7 @@ public class Launcher implements Subsystem  {
 
     public void fireDrone(boolean ifshoot){
         if(ifshoot){
-            actuationServo.setPosition(0.45);
+            actuationServo.setPosition(firePos);
         } else {
             actuationServo.setPosition(0.5);
         }

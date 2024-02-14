@@ -31,7 +31,7 @@ public class RedCloseAuton extends LinearOpMode{
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
-    double backBoardX = 49.55;
+    double backBoardX = 51.00;
 
     @Override
     public void runOpMode() {
@@ -156,7 +156,7 @@ public class RedCloseAuton extends LinearOpMode{
                     robot.intake.engageLock(true,true);
                     robot.intake.flipDeposit();
                 })
-                .splineTo(new Vector2d(8, -39), Math.toRadians(135))
+                .splineTo(new Vector2d(9, -39), Math.toRadians(135))
                 .waitSeconds(0.1)
                 .splineToConstantHeading(new Vector2d(18, -39), Math.toRadians(135))
                 .splineToLinearHeading(new Pose2d(30, -34, Math.toRadians(0)), Math.toRadians(0))

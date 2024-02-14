@@ -42,7 +42,7 @@ public class BlueFarAuton extends LinearOpMode{
     TrajectorySequence RightSpikeMarker;
     TrajectorySequence RightDeposit1;
 
-    public static double backBoardX = 47.5;
+    public static double backBoardX = 46.66;
 
 
 
@@ -75,10 +75,11 @@ public class BlueFarAuton extends LinearOpMode{
 
         Pose2d startLocation = new Pose2d(-43, 62.00, Math.toRadians(-90));
         robot.drive.setPoseEstimate(startLocation);
-        
+
         if (isStopRequested()) return;
 
         LeftSpikeMarker = robot.drive.trajectorySequenceBuilder(startLocation)
+                .waitSeconds(4)
                 .addDisplacementMarker(() -> {
                     robot.intake.engageLock(false,true);
                     robot.intake.clearLowerLock();
@@ -92,40 +93,36 @@ public class BlueFarAuton extends LinearOpMode{
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0.5);
                 })
-                .splineTo(new Vector2d(-63.58, 40.53), Math.toRadians(180))
+                .splineTo(new Vector2d(-62.25, 40.53), Math.toRadians(180))
                 // Sweep the stack
-                .splineToConstantHeading(new Vector2d(-60.00, 31.53), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-60.00, 34.53), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-61.00, 31.53), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-62.00, 34.53), Math.toRadians(180))
                 // wait to intake
                 .waitSeconds(0.75)
                 .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
                     robot.intake.engageLock(true,true);
                 })
-                .splineToConstantHeading(new Vector2d(-58.30, 31.53), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-62.30, 31.53), Math.toRadians(270))
                 // wait and them outtake
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(-0.8);
                 })
-                .splineToConstantHeading(new Vector2d(-58.30, 15.53), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-60.30, 15.53), Math.toRadians(270))
 
                 //move to backdrop
 
-                .splineToConstantHeading(new Vector2d(-43.43, 10.13), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-20.16, 10.7), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-43.43, 8.77), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-20.16, 8.77), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(38.41, 8.73), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();
-                    robot.slides.statemachine.transition(
-                            SlidesSM.EVENT.ENABLE_RTP
-                    );
-                    robot.slides.setTargetPosition(-650);
-                    robot.slides.setPower(0.8);
+
 
                     robot.drive.setQueuedTrajectorySequence(
                             LeftDeposit1
                     );
-                    robot.drive.setWaitConstraints(30, 4000, MecanumDrive.Side.LEFT);
+                    robot.drive.setWaitConstraints(30, 8000, MecanumDrive.Side.LEFT);
                     robot.drive.startWaiting();
                 })
                 .build();
@@ -133,10 +130,14 @@ public class BlueFarAuton extends LinearOpMode{
         LeftDeposit1 = robot.drive.trajectorySequenceBuilder(LeftSpikeMarker.end())
                 .splineToConstantHeading(new Vector2d(backBoardX, 29.90), Math.toRadians(0))//in front of backdrop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+                    robot.slides.setTargetPosition(-650);
+                    robot.slides.setPower(0.8);
 
                 })
-                .waitSeconds(0.33)
+                .waitSeconds(2)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
@@ -155,6 +156,7 @@ public class BlueFarAuton extends LinearOpMode{
         if (isStopRequested()) return;
 
         CenterSpikeMarker = robot.drive.trajectorySequenceBuilder(startLocation)
+                .waitSeconds(4)
                 .addDisplacementMarker(() -> {
                     robot.intake.engageLock(false,true);
                     robot.intake.clearLowerLock();
@@ -167,10 +169,10 @@ public class BlueFarAuton extends LinearOpMode{
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0.5);
                 })
-                .splineTo(new Vector2d(-63.58, 40.53), Math.toRadians(180))
+                .splineTo(new Vector2d(-62.00, 40.53), Math.toRadians(180))
                 // Sweep the stack
-                .splineToConstantHeading(new Vector2d(-62.58, 31.53), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-61.58, 34.53), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-60.58, 31.53), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-60.58, 34.53), Math.toRadians(180))
                 // wait to intake
                 .waitSeconds(0.75)
                 .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
@@ -191,16 +193,12 @@ public class BlueFarAuton extends LinearOpMode{
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();
-                    robot.slides.statemachine.transition(
-                            SlidesSM.EVENT.ENABLE_RTP
-                    );
-                    robot.slides.setTargetPosition(-650);
-                    robot.slides.setPower(0.8);
+
 
                     robot.drive.setQueuedTrajectorySequence(
                             CenterDeposit1
                     );
-                    robot.drive.setWaitConstraints(30, 4000, MecanumDrive.Side.LEFT);
+                    robot.drive.setWaitConstraints(30, 8000, MecanumDrive.Side.LEFT);
                     robot.drive.startWaiting();
                 })
                 .build();
@@ -208,10 +206,14 @@ public class BlueFarAuton extends LinearOpMode{
         CenterDeposit1 = robot.drive.trajectorySequenceBuilder(CenterSpikeMarker.end())
                 .splineToConstantHeading(new Vector2d(backBoardX, 35.90), Math.toRadians(0))//in front of backdrop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+                    robot.slides.setTargetPosition(-650);
+                    robot.slides.setPower(0.8);
 
                 })
-                .waitSeconds(0.33)
+                .waitSeconds(2)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
@@ -222,13 +224,14 @@ public class BlueFarAuton extends LinearOpMode{
                     robot.slides.setPower(0.8);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0.33, () -> {
-                    robot.drive.followTrajectorySequenceAsync(CenterCycle);
+                    //robot.drive.followTrajectorySequenceAsync(CenterCycle);
                 })
                 .build();
 
         if (isStopRequested()) return;
 
         CenterCycle = robot.drive.trajectorySequenceBuilder(CenterDeposit1.end())
+
                 .setReversed(true)
                 // Come back to stack
                 .splineTo(new Vector2d(29.72, 14.82), Math.toRadians(-170.54))
@@ -277,7 +280,7 @@ public class BlueFarAuton extends LinearOpMode{
                     robot.drive.setQueuedTrajectorySequence(
                             CenterDeposit2
                     );
-                    robot.drive.setWaitConstraints(30, 4000, MecanumDrive.Side.LEFT);
+                    robot.drive.setWaitConstraints(30, 8000, MecanumDrive.Side.LEFT);
                     robot.drive.startWaiting();
                 })
                 .build();
@@ -307,6 +310,7 @@ public class BlueFarAuton extends LinearOpMode{
         if (isStopRequested()) return;
 
         RightSpikeMarker = robot.drive.trajectorySequenceBuilder(startLocation)
+                .waitSeconds(4)
                 .addDisplacementMarker(() -> {
                     robot.intake.engageLock(false,true);
                     robot.intake.clearLowerLock();
@@ -328,7 +332,7 @@ public class BlueFarAuton extends LinearOpMode{
                 .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
                     robot.intake.engageLock(true,true);
                 })
-                .splineToConstantHeading(new Vector2d(-58.30, 31.53), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-61.30, 31.53), Math.toRadians(270))
                 // wait and them outtake
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.setIntakePower(-0.8);
@@ -343,11 +347,6 @@ public class BlueFarAuton extends LinearOpMode{
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();
-                    robot.slides.statemachine.transition(
-                            SlidesSM.EVENT.ENABLE_RTP
-                    );
-                    //robot.slides.setTargetPosition(-650);
-                    robot.slides.setPower(0.8);
 
                     robot.drive.setQueuedTrajectorySequence(
                             RightDeposit1
@@ -360,10 +359,13 @@ public class BlueFarAuton extends LinearOpMode{
         RightDeposit1 = robot.drive.trajectorySequenceBuilder(LeftSpikeMarker.end())
                 .splineToConstantHeading(new Vector2d(backBoardX, 29.90), Math.toRadians(0))//in front of backdrop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-
-
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+                    robot.slides.setTargetPosition(-650);
+                    robot.slides.setPower(0.8);
                 })
-                .waitSeconds(0.33)
+                .waitSeconds(2)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
@@ -444,14 +446,15 @@ public class BlueFarAuton extends LinearOpMode{
 
         // Runs the trajectory based on the start location
         switch (spikeMarkerLocation) {
+            // Reversed
             case LEFT:
-                robot.drive.followTrajectorySequenceAsync(LeftSpikeMarker);
+                robot.drive.followTrajectorySequenceAsync(RightSpikeMarker);
                 break;
             case CENTER:
                 robot.drive.followTrajectorySequenceAsync(CenterSpikeMarker);
                 break;
             case RIGHT:
-                robot.drive.followTrajectorySequenceAsync(RightSpikeMarker);
+                robot.drive.followTrajectorySequenceAsync(LeftSpikeMarker);
                 break;
         }
 

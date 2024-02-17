@@ -35,7 +35,7 @@ public class BlueCloseAuton extends LinearOpMode{
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
-    double backBoardX = 49.55;
+    double backBoardX = 51.55;
 
     @Override
     public void runOpMode() {

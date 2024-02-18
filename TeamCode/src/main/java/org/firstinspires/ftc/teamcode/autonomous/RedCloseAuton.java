@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RobotCore;
 import org.firstinspires.ftc.teamcode.modules.drive.ThreeTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
@@ -63,7 +64,7 @@ public class RedCloseAuton extends LinearOpMode{
         Pose2d startLocation = new Pose2d(15.85, -62.00, Math.toRadians(90));
         robot.drive.setPoseEstimate(startLocation);
 
-        TrajectorySequence LeftNoCycle = robot.drive.trajectorySequenceBuilder(startLocation)
+        TrajectorySequence LeftNoCycle =  robot.drive.trajectorySequenceBuilder(startLocation)
                 .addDisplacementMarker(() -> {
                     robot.intake.engageLock(true,true);
                     robot.intake.flipDeposit();
@@ -277,8 +278,13 @@ public class RedCloseAuton extends LinearOpMode{
         }
 
         while (opModeIsActive() && !isStopRequested()) {
+            long loop = System.nanoTime();
             robot.update();
+            long loopTime = System.nanoTime();
 
+            long time = loopTime-loop;
+
+            telemetry.addData("Looptime", time/1e+6);
             telemetry.addData("Setpoint", robot.slides.getTargetPosition());
             telemetry.addData("Right Slide Motor", robot.slides.rightmotor.getCurrentPosition());
             telemetry.addData("Left Slide Motor", robot.slides.leftmotor.getCurrentPosition());

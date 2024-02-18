@@ -15,8 +15,8 @@ public class TeleopLT extends LinearOpMode {
 
     RobotCore robot;
 
-    public static double speedMultiplier = .7;
-    public static double strafeMultiplier = .6;
+    public static double speedMultiplier = .8;
+    public static double strafeMultiplier = .8;
     public static double turnMultiplier = .8;
     public static double retractionSpeed = .5;
     public static double extensionSpeed = 1;
@@ -83,6 +83,7 @@ public class TeleopLT extends LinearOpMode {
 
             if (gamepad2.triangle) {
                 presetEnabled = true;
+                robot.intake.flipDeposit();
                 robot.slides.setTargetPosition(
                         -1700
                 );
@@ -92,6 +93,7 @@ public class TeleopLT extends LinearOpMode {
                 robot.slides.setPower(rtpRunPower);
             } else if (gamepad2.square) {
                 presetEnabled = true;
+                robot.intake.flipDeposit();
                 robot.slides.setTargetPosition(
                         -700
                 );
@@ -101,15 +103,17 @@ public class TeleopLT extends LinearOpMode {
                 robot.slides.setPower(rtpRunPower);
             } else if (gamepad2.cross) {
                 presetEnabled = true;
+                robot.intake.flipIntake();
                 robot.slides.setTargetPosition(
-                        -10
+                        0
                 );
                 robot.slides.statemachine.transition(
                         SlidesSM.EVENT.ENABLE_RTP
                 );
                 robot.slides.setPower(rtpRunPower);
             } else if (gamepad2.circle) {
-                robot.slides.setPower(0);
+                robot.slides.setManualPower(0);
+                presetEnabled = true;
                 robot.slides.leftmotor.setMode(
                         DcMotor.RunMode.STOP_AND_RESET_ENCODER
                 );

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.modules.subsystems;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+import android.util.Size;
+
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -8,145 +10,122 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
-import org.firstinspires.ftc.teamcode.modules.vision.Transform3d;
+import org.firstinspires.ftc.teamcode.modules.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.opencv.core.*;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Vision implements Subsystem {
-    public TeamPropPipeline teamPropDetectionPipeline;
-
-    OpenCvCamera camera;
-
-    public VisionPortal visionPortal;
-
-    public AprilTagProcessor tagProcessor;
-
-    private static final String cameraname = "Webcam 1";
-    private static final int width = 640;
-    private static final int height = 480;
-
-    public boolean cameraOpened = false;
+    private final AprilTagProcessor aprilTagProcessor;
+    private final VisionPortal portal;
+    private final Vector2d cameraOffset = new Vector2d(5.3, 0);
 
     public Vision(HardwareMap hardwareMap) {
 
-        tagProcessor = new AprilTagProcessor.Builder()
-                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS)
+        aprilTagProcessor = new AprilTagProcessor.Builder()
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+//                .setTagLibrary(AprilTagGameDatabase.getCurrentGameTagLibrary())
+                .setTagLibrary(getCenterStageTagLibrary()) // use tweaked for less error
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
                 .build();
 
-        visionPortal = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(WebcamName.class, cameraname), tagProcessor);
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources()
-                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
-         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap
-        .get(WebcamName.class, cameraname), cameraMonitorViewId);
-
+        portal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .addProcessor(aprilTagProcessor)
+                .setAutoStopLiveView(true)
+                .build();
     }
 
+    public List<AprilTagDetection> getDetections() {
+        if (portal.getCameraState() != VisionPortal.CameraState.STREAMING)
+            return new ArrayList<>();
 
-    public void startPropDetection() {
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                cameraOpened = true;
-                camera.startStreaming(width, height, OpenCvCameraRotation.UPRIGHT);
-                teamPropDetectionPipeline = new TeamPropPipeline();
-                camera.setPipeline(teamPropDetectionPipeline);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-            }
-        });
-
+        return aprilTagProcessor.getDetections();
     }
 
-    public void stopPropDetection() {
-        camera.closeCameraDeviceAsync(() -> cameraOpened = false);
-    }
+    /**
+     * @param botheading In Radians.
+     * @return FC Pose of bot.
+     */
+    public Vector2d getFCPosition(AprilTagDetection detection, double botheading) {
+        // get coordinates of the robot in RC coordinates
+        // ensure offsets are RC
+        double x = detection.ftcPose.x - cameraOffset.getX();
+        double y = detection.ftcPose.y - cameraOffset.getY();
 
-    public SpikeMarkerLocation getDirection() {
-        if (cameraOpened) {
-            return teamPropDetectionPipeline.getDirection();
-        } else {
-            return null;
+        // invert heading to correct properly
+        botheading = -botheading;
+
+        // rotate RC coordinates to be field-centric
+        double x2 = x * Math.cos(botheading) + y * Math.sin(botheading);
+        double y2 = x * -Math.sin(botheading) + y * Math.cos(botheading);
+        double absX;
+        double absY;
+
+        // add FC coordinates to apriltag position
+        VectorF tagpose = detection.metadata.fieldPosition;
+        if (detection.metadata.id <= 6) { // first 6 are backdrop tags
+            absX = tagpose.get(0) + y2;
+            absY = tagpose.get(1) - x2;
+
+        } else { // then just reverse positions
+            absX = tagpose.get(0) - y2;
+            absY = tagpose.get(1) + x2;
         }
+        // Don't send over a pose, as apriltag heading can be off (see discord)
+        return new Vector2d(absX, absY);
     }
 
-    public void startAprilTagDetection() {
-        visionPortal.setProcessorEnabled(tagProcessor,true);
-        if (visionPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY) visionPortal.resumeStreaming();
+    public void shutdown() {
+        if (portal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_CLOSED)
+            return;
+
+        portal.close();
     }
 
-    public void stopAprilTagDetection() {
-        visionPortal.stopStreaming();
-    }
-
-    public ArrayList<Pose2d> getAprilTagPoses() {
-        ArrayList<AprilTagDetection> tags = new ArrayList<>();
-
-        if (visionPortal.getProcessorEnabled(tagProcessor)) {
-            tags = tagProcessor.getDetections();
-        }
-
-        ArrayList<Pose2d> poses = new ArrayList<>();
-
-        for (AprilTagDetection tag: tags) {
-            if (tag.metadata != null) {
-
-                Transform3d tagPose = new Transform3d(
-                        tag.metadata.fieldPosition,
-                        tag.metadata.fieldOrientation
-                );
-
-                Transform3d cameraToTagTransform = new Transform3d(
-                        new VectorF(
-                                (float) tag.rawPose.x,
-                                (float) tag.rawPose.y,
-                                (float) tag.rawPose.z
-                        ),
-                        Transform3d.MatrixToQuaternion(tag.rawPose.R)
-                );
-                Transform3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
-
-                Transform3d cameraPose = tagPose.plus(tagToCameraTransform);
-
-                Transform3d robotToCameraTransform = new Transform3d(
-                        new VectorF(
-                                0,
-                                 0,
-                                0
-                        ),
-                        new Quaternion(0,0,1f,0, System.nanoTime())
-                );
-                Transform3d cameraToRobotTransform = robotToCameraTransform.unaryMinusInverse();
-
-                Transform3d robotPose = cameraPose.plus(cameraToRobotTransform);
-
-                poses.add(cameraPose.toPose2d());
-            }
-        }
-
-        return poses;
-    }
-
-    public void closeAll() {
-        visionPortal.close();
-        stopPropDetection();
+    public static AprilTagLibrary getCenterStageTagLibrary() { // updated custom field coords from michael
+        return new AprilTagLibrary.Builder()
+                .addTag(1, "BlueAllianceLeft",
+                        2, new VectorF(61.75f, 41.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .addTag(2, "BlueAllianceCenter",
+                        2, new VectorF(61.75f, 35.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .addTag(3, "BlueAllianceRight",
+                        2, new VectorF(61.75f, 29.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .addTag(4, "RedAllianceLeft",
+                        2, new VectorF(61.75f, -29.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .addTag(5, "RedAllianceCenter",
+                        2, new VectorF(61.75f, -35.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .addTag(6, "RedAllianceRight",
+                        2, new VectorF(61.75f, -41.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .addTag(7, "RedAudienceWallLarge",
+                        5, new VectorF(-70.25f, -40.625f, 5.5f), DistanceUnit.INCH,
+                        new Quaternion(0.5f, -0.5f, -0.5f, 0.5f, 0))
+                .addTag(8, "RedAudienceWallSmall",
+                        2, new VectorF(-70.25f, -35.125f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.5f, -0.5f, -0.5f, 0.5f, 0))
+                .addTag(9, "BlueAudienceWallSmall",
+                        2, new VectorF(-70.25f, 35.125f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.5f, -0.5f, -0.5f, 0.5f, 0))
+                .addTag(10, "BlueAudienceWallLarge",
+                        5, new VectorF(-70.25f, 40.625f, 5.5f), DistanceUnit.INCH,
+                        new Quaternion(0.5f, -0.5f, -0.5f, 0.5f, 0))
+                .build();
     }
 
     @Override
@@ -306,3 +285,4 @@ public class Vision implements Subsystem {
 
     }
 }
+

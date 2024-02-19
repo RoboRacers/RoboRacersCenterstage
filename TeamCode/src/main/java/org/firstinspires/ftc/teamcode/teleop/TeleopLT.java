@@ -83,23 +83,27 @@ public class TeleopLT extends LinearOpMode {
 
             if (gamepad2.triangle) {
                 presetEnabled = true;
-                robot.intake.flipDeposit();
-                robot.slides.setTargetPosition(
-                        -1700
-                );
-                robot.slides.statemachine.transition(
-                        SlidesSM.EVENT.ENABLE_RTP
-                );
+                if (robot.intake.PIXELS_LOCKED) {
+                    robot.intake.flipDeposit();
+                    robot.slides.setTargetPosition(
+                            -1700
+                    );
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+                }
                 robot.slides.setPower(rtpRunPower);
             } else if (gamepad2.square) {
                 presetEnabled = true;
-                robot.intake.flipDeposit();
-                robot.slides.setTargetPosition(
-                        -700
-                );
-                robot.slides.statemachine.transition(
-                        SlidesSM.EVENT.ENABLE_RTP
-                );
+                if (robot.intake.PIXELS_LOCKED) {
+                    robot.intake.flipDeposit();
+                    robot.slides.setTargetPosition(
+                            -700
+                    );
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_RTP
+                    );
+                }
                 robot.slides.setPower(rtpRunPower);
             } else if (gamepad2.cross) {
                 presetEnabled = true;
@@ -131,7 +135,7 @@ public class TeleopLT extends LinearOpMode {
                 robot.intake.setIntakePower(0);
             }
 
-            // Lock deposit
+            // Lock deposit`
             if (gamepad2.right_bumper) {
                 gamepad1.rumble(500);
                 gamepad2.rumble(500);
@@ -148,7 +152,9 @@ public class TeleopLT extends LinearOpMode {
 
             // Flip deposit
             if (gamepad2.dpad_up) {
-                robot.intake.flipDeposit();
+                if (robot.intake.PIXELS_LOCKED) {
+                    robot.intake.flipDeposit();
+                }
             } else if (gamepad2.dpad_down) {
                 robot.intake.flipIntake();
             }

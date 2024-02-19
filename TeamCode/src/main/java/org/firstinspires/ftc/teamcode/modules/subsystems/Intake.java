@@ -23,6 +23,8 @@ public class Intake implements Subsystem {
 
     public IntakeSM statemachine;
 
+    public Boolean PIXELS_LOCKED = false;
+
     public Intake(HardwareMap hardwareMap) {
 
         intakeMotor = hardwareMap.get(DcMotorImplEx.class, "IntakeMotor");
@@ -65,28 +67,23 @@ public class Intake implements Subsystem {
         if (higher) {
             lockHigher.setPosition(lockHigherLockPos);
         }
-    }
 
-    /**
-     * Disengages the servos to drop pixels
-     * @param lower Clear the lower lock
-     * @param higher Clear the upper lock
-     */
-    public void clearLock(boolean lower, boolean higher) {
-        if (lower) {
-            lockLower.setPosition(lockLowerClearPos);
-        }
-        if (higher) {
-            lockHigher.setPosition(lockHigherClearPos);
+        if (
+                lockLower.getPosition() == lockLowerLockPos &&
+                lockHigher.getPosition() == lockHigherLockPos
+        ) {
+            PIXELS_LOCKED = true;
         }
     }
 
     public void clearLowerLock() {
         lockLower.setPosition(lockLowerClearPos);
+        PIXELS_LOCKED = false;
     }
 
     public void clearHigherLock() {
         lockHigher.setPosition(lockHigherClearPos);
+        PIXELS_LOCKED = false;
     }
 
     static double leftFlipDepositPos = 1.00;

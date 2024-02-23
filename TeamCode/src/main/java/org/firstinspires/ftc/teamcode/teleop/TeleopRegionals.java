@@ -1,20 +1,18 @@
 package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.RobotCore;
+import org.firstinspires.ftc.teamcode.autonomous.AprilTagDrive;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 
 @Config
-@Deprecated
-@Disabled
-@TeleOp(name = "Teleop for LT", group = "16481-Centerstage")
-public class TeleopLT extends LinearOpMode {
+@TeleOp(name = "Teleop for Regionals", group = "16481-Centerstage")
+public class TeleopRegionals extends LinearOpMode {
 
     RobotCore robot;
 
@@ -26,6 +24,8 @@ public class TeleopLT extends LinearOpMode {
     public static double rtpLockPower = 0.3;
     public static double rtpRunPower = 0.8;
     private boolean presetEnabled = false;
+
+    AprilTagDrive aprilTagDrive;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -39,6 +39,10 @@ public class TeleopLT extends LinearOpMode {
         Gamepad currentGamepad2 = new Gamepad();
 
         boolean test = false;
+
+        aprilTagDrive = new AprilTagDrive();
+        aprilTagDrive.initAprilTag(hardwareMap);
+
 
         robot.slides.statemachine.transition(
                 SlidesSM.EVENT.ENABLE_MANUAL
@@ -56,13 +60,18 @@ public class TeleopLT extends LinearOpMode {
             currentGamepad2 = gamepad2;
 
             // Drive control
-            robot.drive.setWeightedDrivePower(
-                    new Pose2d(
-                            gamepad1.left_stick_y * speedMultiplier,
-                            gamepad1.left_stick_x * strafeMultiplier,
-                            -gamepad1.right_stick_x * turnMultiplier
-                    )
-            );
+            if (gamepad1.left_bumper) {
+                aprilTagDrive.update(true, robot.drive);
+            } else {
+                robot.drive.setWeightedDrivePower(
+                        new Pose2d(
+                                gamepad1.left_stick_y * speedMultiplier,
+                                gamepad1.left_stick_x * strafeMultiplier,
+                                -gamepad1.right_stick_x * turnMultiplier
+                        )
+                );
+            }
+
 
             // Slides control
             if (gamepad2.right_stick_y > 0.1 && gamepad2.left_bumper) {
@@ -112,6 +121,7 @@ public class TeleopLT extends LinearOpMode {
             } else if (gamepad2.cross) {
                 presetEnabled = true;
                 robot.intake.flipIntake();
+                robot.intake.engageLock(false, true);
                 robot.slides.setTargetPosition(
                         0
                 );
@@ -161,6 +171,7 @@ public class TeleopLT extends LinearOpMode {
                 }
             } else if (gamepad2.dpad_down) {
                 robot.intake.flipIntake();
+                robot.intake.engageLock(false, true);
             }
 
             // Increment Deposit
@@ -181,11 +192,12 @@ public class TeleopLT extends LinearOpMode {
                 robot.drone.actuationServo.setPwmDisable();
             }
 
+
             // Update all state machines
             robot.update();
 
             // Telemetry
-            telemetry.addLine("\uD83C\uDFCE RoboRacers Teleop for League Meet 3");
+            telemetry.addLine("\uD83C\uDFCE RoboRacers Teleop for Regionals \uD83E\uDEE1");
             telemetry.addData("Slides RunMode", robot.slides.statemachine.getState());
             telemetry.addData("Slides Power", robot.slides.leftmotor.getPower());
             telemetry.addData("Slides Target Position", robot.slides.getTargetPosition());

@@ -81,12 +81,13 @@ public class TeleopLT extends LinearOpMode {
                 robot.slides.setPower(rtpLockPower);
             }
 
+            // Presets
             if (gamepad2.triangle) {
                 presetEnabled = true;
                 if (robot.intake.PIXELS_LOCKED) {
                     robot.intake.flipDeposit();
                     robot.slides.setTargetPosition(
-                            -1700
+                            -1500
                     );
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
@@ -127,7 +128,7 @@ public class TeleopLT extends LinearOpMode {
             }
 
             // Intake control
-            if (gamepad1.right_trigger > 0.1) {
+            if (gamepad1.right_trigger > 0.1 && !robot.intake.PIXELS_LOCKED) {
                 robot.intake.setIntakePower(gamepad1.right_trigger*.9);
             } else if (gamepad1.left_trigger > 0.1) {
                 robot.intake.setIntakePower(-gamepad1.left_trigger*.9);

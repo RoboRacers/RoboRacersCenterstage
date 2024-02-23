@@ -35,7 +35,7 @@ public class BlueCloseAuton extends LinearOpMode{
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
-    double backBoardX = 52.55;
+    double backBoardX = 51.13;
 
     @Override
     public void runOpMode() {
@@ -142,8 +142,8 @@ public class BlueCloseAuton extends LinearOpMode{
                     robot.slides.setPower(0.8);
 
                 })
-                .splineToConstantHeading(new Vector2d(40.00, 26.00), Math.toRadians(0.00))
-                .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(39.00, 26.00), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(46.00, 43.0), Math.toRadians(0.00))
                 .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     // Unpower slides
@@ -165,7 +165,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(18, 39), Math.toRadians(-135))
                 .splineToLinearHeading(new Pose2d(30, 34, Math.toRadians(0)), Math.toRadians(0))
                 // Go to backboard
-                .splineToConstantHeading(new Vector2d(backBoardX, 27.50), Math.toRadians(0.00))        //CHANGE THE BACKBOARD X BECAUSE GOING TO FORWARD
+                .splineToConstantHeading(new Vector2d(backBoardX, 29.25), Math.toRadians(0.00))        //CHANGE THE BACKBOARD X BECAUSE GOING TO FORWARD
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(

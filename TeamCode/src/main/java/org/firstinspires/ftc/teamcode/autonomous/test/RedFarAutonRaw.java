@@ -24,7 +24,7 @@ import java.util.List;
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Autonomous(name = "Red Far Side Auton Raw", group = "16481-Centerstage")
+@Autonomous(name = "Red Far Side Auton Raw", group = "16481-Centerstage-Raw")
 public class RedFarAutonRaw extends LinearOpMode{
 
     MecanumDrive drive;

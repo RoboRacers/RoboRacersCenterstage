@@ -11,13 +11,10 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.List;
-@Disabled
 @TeleOp(name = "Rev 2m Sensor Test", group = "Test")
 public class Rev2mSensorTest extends LinearOpMode {
 
     Rev2mDistanceSensor rev2mDistanceSensor;
-
-
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -30,29 +27,20 @@ public class Rev2mSensorTest extends LinearOpMode {
 
         rev2mDistanceSensor = hardwareMap.get(Rev2mDistanceSensor.class, "rev2m1");
 
-        KalmanFilter kalmanFilter = new KalmanFilter(0.7, 2,3 );
-        LowPassFilter lowPassFilter = new LowPassFilter(0.5);
-
 
         while (opModeInInit()) {
         }
 
         double range;
-        double kalmanRange;
-        double lowPassRange;
 
         while (!isStopRequested()) {
 
 
-            range = rev2mDistanceSensor.getDistance(DistanceUnit.INCH);
-            kalmanRange = kalmanFilter.estimate(range);
-            lowPassRange = lowPassFilter.estimate(range);
+            range = rev2mDistanceSensor.getDistance(DistanceUnit.MM);
 
             // Telemetry
             telemetry.addData("Rev2m Testing", "");
-            telemetry.addData("Raw Sensor Range (Inches)", range);
-            telemetry.addData("Kalman Sensor Range (Inches)", kalmanRange);
-            telemetry.addData("Low Pass Sensor Range (Inches)", lowPassRange);
+            telemetry.addData("Raw Sensor Range (MM)", range);
             telemetry.update();
 
         }

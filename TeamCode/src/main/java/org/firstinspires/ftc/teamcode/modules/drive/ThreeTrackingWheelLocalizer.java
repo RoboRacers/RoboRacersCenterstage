@@ -17,8 +17,8 @@ public class ThreeTrackingWheelLocalizer extends com.acmerobotics.roadrunner.loc
     public static double GEAR_RATIO = 1;
     public static double LATERAL_DISTANCE = 12.557;
     public static double FORWARD_OFFSET = 4.97;
-    public static double X_MULTIPLIER = 1.0256410256;
-    public static double Y_MULTIPLIER = 1.0322580645;
+    public static double X_MULTIPLIER = 1.002255073876221;
+    public static double Y_MULTIPLIER = 1.005446166720779;
     private Encoder leftEncoder, rightEncoder, frontEncoder;
     public ThreeTrackingWheelLocalizer(HardwareMap hardwareMap) {
         super(Arrays.asList(

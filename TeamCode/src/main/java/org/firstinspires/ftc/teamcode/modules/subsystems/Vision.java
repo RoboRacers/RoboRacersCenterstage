@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules.subsystems;
 
-import android.util.Size;
-
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -10,11 +8,9 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
-import org.firstinspires.ftc.teamcode.modules.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.modules.util.SpikeMarkerLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.opencv.core.Core;
@@ -85,6 +81,38 @@ public class Vision implements Subsystem {
         // Don't send over a pose, as apriltag heading can be off (see discord)
         return new Vector2d(absX, absY);
     }
+
+    public Vector2d getFCPosition2(AprilTagDetection detection, double botheading) {
+        // get coordinates of the robot in RC coordinates
+        // ensure offsets are RC
+        double x = detection.ftcPose.x-cameraOffset.getX();
+        double y = detection.ftcPose.y-cameraOffset.getY();
+
+        // invert heading to correct properly
+        botheading = -botheading;
+
+
+        // rotate RC coordinates to be field-centric
+        double x2 = x*Math.cos(botheading)+y*Math.sin(botheading);
+        double y2 = x*-Math.sin(botheading)+y*Math.cos(botheading);
+        double absX;
+        double absY;
+        // add FC coordinates to apriltag position
+        // tags is just the CS apriltag library
+        VectorF tagpose = getCenterStageTagLibrary().lookupTag(detection.id).fieldPosition;
+        if (detection.metadata.id <= 6) {
+            absX = tagpose.get(0) + y2;
+            absY = tagpose.get(1) - x2;
+
+        } else {
+            absX = tagpose.get(0) - y2;
+            absY = tagpose.get(1) + x2; // prev -
+
+        }
+        return new Vector2d(absX, absY);
+    }
+
+
 
     public void shutdown() {
         if (portal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_CLOSED)

@@ -24,8 +24,8 @@ import java.util.List;
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Autonomous(name = "Blue Far Side Auton", group = "16481-Centerstage")
-public class BlueFarAuton extends LinearOpMode{
+@Autonomous(name = "Blue Far Side Auton by shrek", group = "16481-Centerstage")
+public class BlueFarAutonSafe extends LinearOpMode{
 
     RobotCore robot;
 
@@ -319,31 +319,34 @@ public class BlueFarAuton extends LinearOpMode{
                     robot.intake.flipIntake();
                 })
                 .splineTo(new Vector2d(-32.93, 31.82), Math.toRadians(-38.66))
+                .setReversed(true)
+                .splineTo(new Vector2d(-50.93, 28.82), Math.toRadians(-38.66+180))
+                .setReversed(false)
                 //.splineToConstantHeading(new Vector2d(-40.5, -40.16), Math.toRadians(-270.00))
                 //move to starter stack
-                .setReversed(true)
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    robot.intake.setIntakePower(0.5);
-                })
-                .splineTo(new Vector2d(-62.00, 40.53), Math.toRadians(180))
-                // Sweep the stack
-                .splineToConstantHeading(new Vector2d(-62.58, 31.53), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-62.58, 35.53), Math.toRadians(180))
-                // wait to intake
-                .waitSeconds(0.75)
-                .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
-                    robot.intake.engageLock(true,true);
-                })
-                .splineToConstantHeading(new Vector2d(-58.30, 31.53), Math.toRadians(270))
-                // wait and them outtake
-                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
-                    robot.intake.setIntakePower(-0.8);
-                })
-                .splineToConstantHeading(new Vector2d(-58.30, 15.53), Math.toRadians(270))
+                //.setReversed(true)
+//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                    robot.intake.setIntakePower(0.5);
+//                })
+//                .splineTo(new Vector2d(-62.00, 40.53), Math.toRadians(180))
+//                // Sweep the stack
+//                .splineToConstantHeading(new Vector2d(-62.58, 31.53), Math.toRadians(180))
+//                .splineToConstantHeading(new Vector2d(-62.58, 35.53), Math.toRadians(180))
+//                // wait to intake
+//                .waitSeconds(0.75)
+//                .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
+//                    robot.intake.engageLock(true,true);
+//                })
+//                .splineToConstantHeading(new Vector2d(-58.30, 31.53), Math.toRadians(270))
+//                // wait and them outtake
+//                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
+//                    robot.intake.setIntakePower(-0.8);
+//                })
+//                .splineToConstantHeading(new Vector2d(-58.30, 15.53), Math.toRadians(270))
 
                 //move to backdrop
 
-                .splineToConstantHeading(new Vector2d(-43.43, 8.13), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-40.43, 8.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, 8.7), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(38.41, 8.73), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {

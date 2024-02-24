@@ -166,7 +166,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(18, 39), Math.toRadians(-135))
                 .splineToLinearHeading(new Pose2d(30, 34, Math.toRadians(0)), Math.toRadians(0))
                 // Go to backboard
-                .splineToConstantHeading(new Vector2d(backBoardX, 29.25), Math.toRadians(0.00))        //CHANGE THE BACKBOARD X BECAUSE GOING TO FORWARD
+                .splineToConstantHeading(new Vector2d(backBoardX, 28.00), Math.toRadians(0.00))        //CHANGE THE BACKBOARD X BECAUSE GOING TO FORWARD
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
@@ -182,6 +182,7 @@ public class BlueCloseAuton extends LinearOpMode{
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
                 })
+                .waitSeconds(2)
                 .UNSTABLE_addTemporalMarkerOffset(2, () -> {
                     robot.intake.flipIntake();
                     robot.slides.setTargetPosition(0);

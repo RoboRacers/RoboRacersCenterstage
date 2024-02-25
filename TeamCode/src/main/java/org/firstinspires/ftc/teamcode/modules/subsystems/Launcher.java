@@ -11,18 +11,17 @@ public class Launcher implements Subsystem  {
 
     public ServoImplEx actuationServo;
 
-    public static double firePos = 0.45;
+    public static double firePos = 0.17;
 
     public Launcher(HardwareMap hardwareMap) {
         actuationServo = hardwareMap.get(ServoImplEx.class, "actuationServo");
-
     }
 
     public void fireDrone(boolean ifshoot){
         if(ifshoot){
             actuationServo.setPosition(firePos);
         } else {
-            actuationServo.setPosition(0.5);
+            actuationServo.setPosition(0.43);
         }
     }
 

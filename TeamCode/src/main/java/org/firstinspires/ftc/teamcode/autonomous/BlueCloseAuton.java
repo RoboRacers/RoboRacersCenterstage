@@ -75,6 +75,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(24.5, 40.00), Math.toRadians(-90))
                 .waitSeconds(0.1)
                 .splineToConstantHeading(new Vector2d(27.30, 50.00), Math.toRadians(-90))
+                .waitSeconds(0.1)
                 // Go to backboard
                 .splineTo(new Vector2d(backBoardX, 41.0), Math.toRadians(0.00))       //CHANGE BACKBOARD X BECAUSE TOO CLOSE TO BACKBOARD
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -99,7 +100,7 @@ public class BlueCloseAuton extends LinearOpMode{
                     robot.slides.setPower(0.8);
 
                 })
-                .splineToConstantHeading(new Vector2d(backBoardX-3, 41.0), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(backBoardX-3, 41.0 ), Math.toRadians(0.00))
                 .waitSeconds(0.1)
                 .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
                 .splineToConstantHeading(new Vector2d(53.43, 55.83), Math.toRadians(0.00))
@@ -141,6 +142,7 @@ public class BlueCloseAuton extends LinearOpMode{
                 .waitSeconds(2)
                 .UNSTABLE_addTemporalMarkerOffset(2, () -> {
                     robot.intake.flipIntake();
+                    robot.intake.engageLock(false, true);
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
 
@@ -166,35 +168,38 @@ public class BlueCloseAuton extends LinearOpMode{
                 })
                 .splineTo(new Vector2d(8, 39), Math.toRadians(-135))
                 .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(18, 39), Math.toRadians(-135))
-                .splineToLinearHeading(new Pose2d(30, 34, Math.toRadians(0)), Math.toRadians(0))
+                .setReversed(true)
+                .splineTo(new Vector2d(30.00, 45), Math.toRadians(90))
+                .setReversed(false)
                 // Go to backboard
-                .splineToConstantHeading(new Vector2d(backBoardX, 28.00), Math.toRadians(0.00))        //CHANGE THE BACKBOARD X BECAUSE GOING TO FORWARD
+                .splineTo(new Vector2d(backBoardX, 27.88), Math.toRadians(0.00))        //CHANGE THE BACKBOARD X BECAUSE GOING TO FORWARD
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
                     );
 
-                    robot.slides.setTargetPosition(-700);
+                    robot.slides.setTargetPosition(-570);
                     robot.slides.setPower(0.8);
 
                 })
-                .waitSeconds(2)
+                .waitSeconds(.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
                 })
-                .waitSeconds(2)
-                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                .waitSeconds(.5)
+                .UNSTABLE_addTemporalMarkerOffset(.5, () -> {
                     robot.intake.flipIntake();
+                    robot.intake.engageLock(false, true);
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
 
                 })
-                .splineToConstantHeading(new Vector2d(40.00, 26.00), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(backBoardX-5, 26.45), Math.toRadians(0.00))
                 .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(53.43, 58.83), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(53.43, 55.83), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     // Unpower slides
                     robot.slides.statemachine.transition(
@@ -211,27 +216,8 @@ public class BlueCloseAuton extends LinearOpMode{
         boolean manualPropControl = false;
 
         while(!isStopRequested() && !opModeIsActive()) {
-            telemetry.addLine("SELF CHECK -----");
 
-            // Checks if the positions of the encoders to make sure they are not unplugged
-            robot.drive.updatePoseEstimate();
-            ThreeTrackingWheelLocalizer localizer = (ThreeTrackingWheelLocalizer) robot.drive.getLocalizer();
-            List<Double> deadwheelPositions = localizer.getWheelPositions();
-
-            telemetry.addData("Left Encoder Pos", deadwheelPositions.get(0));
-            telemetry.addData("Right Encoder Pos", deadwheelPositions.get(1));
-            telemetry.addData("Perpendicular Encoder Pos", deadwheelPositions.get(2));
-
-            if (deadwheelPositions.get(0) == 0) {
-                telemetry.addLine("LEFT ENCODER UNPLUGGED, Check wiring of Port x");
-            }
-            if (deadwheelPositions.get(1) == 0) {
-                telemetry.addLine("RIGHT ENCODER UNPLUGGED, Check wiring of Port x");
-            }
-            if (deadwheelPositions.get(2) == 0) {
-                telemetry.addLine("PERPENDICULAR ENCODER UNPLUGGED, Check wiring of Port x");
-            }
-
+            robot.telemetrySelfCheck(telemetry);
 
             // Vision code here
             telemetry.addLine("VISION -----");

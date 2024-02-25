@@ -115,6 +115,7 @@ public class BlueFarAuton extends LinearOpMode{
 
                 .splineToConstantHeading(new Vector2d(-43.43, 8.77), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, 8.77), Math.toRadians(0))
+                .waitSeconds(3)
                 .splineToConstantHeading(new Vector2d(38.41, 8.73), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
@@ -191,6 +192,7 @@ public class BlueFarAuton extends LinearOpMode{
 
                 .splineToConstantHeading(new Vector2d(-43.43, 8.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, 8.7), Math.toRadians(0))
+                .waitSeconds(3)
                 .splineToConstantHeading(new Vector2d(38.41, 8.73), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
@@ -345,6 +347,7 @@ public class BlueFarAuton extends LinearOpMode{
 
                 .splineToConstantHeading(new Vector2d(-43.43, 8.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, 8.7), Math.toRadians(0))
+                .waitSeconds(3)
                 .splineToConstantHeading(new Vector2d(38.41, 8.73), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);

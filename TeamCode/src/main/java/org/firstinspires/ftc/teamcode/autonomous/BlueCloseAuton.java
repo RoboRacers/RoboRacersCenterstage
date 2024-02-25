@@ -130,7 +130,7 @@ public class BlueCloseAuton extends LinearOpMode{
                             SlidesSM.EVENT.ENABLE_RTP
                     );
 
-                    robot.slides.setTargetPosition(-570);
+                    robot.slides.setTargetPosition(-600);
                     robot.slides.setPower(0.8);
 
                 })
@@ -151,6 +151,10 @@ public class BlueCloseAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(46.00, 43.0), Math.toRadians(0.00))
                 .waitSeconds(1)
                 .splineToConstantHeading(new Vector2d(53.43, 56.00), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(20.00, 56.00), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(20.00, 3), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(-30, 3), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(-50, 5), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     // Unpower slides
                     robot.slides.statemachine.transition(

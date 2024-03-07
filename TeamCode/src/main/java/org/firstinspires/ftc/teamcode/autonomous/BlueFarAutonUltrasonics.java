@@ -24,8 +24,8 @@ import java.util.List;
 // Localization is doesn't show drift, follower if it does
 
 @Config
-@Autonomous(name = "Blue Far Side Auton", group = "16481-Centerstage")
-public class BlueFarAuton extends LinearOpMode{
+@Autonomous(name = "Blue Far Side Auton Ultrasonic", group = "16481-Centerstage")
+public class BlueFarAutonUltrasonics extends LinearOpMode{
 
     RobotCore robot;
 
@@ -192,6 +192,7 @@ public class BlueFarAuton extends LinearOpMode{
                 .splineToConstantHeading(new Vector2d(-43.43, 8.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, 8.7), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(38.41, 8.73), Math.toRadians(0))
+
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();
@@ -215,20 +216,16 @@ public class BlueFarAuton extends LinearOpMode{
                     robot.slides.setPower(0.8);
 
                 })
-                .waitSeconds(2)
+                .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
                 })
-                .waitSeconds(2)
-                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
-                    robot.intake.flipIntake();
-                    robot.intake.engageLock(false, true);
-                    robot.slides.setTargetPosition(0);
-                    robot.slides.setPower(0.8);
-
-                })
                 .splineToConstantHeading(new Vector2d(backBoardX-3, 32.55), Math.toRadians(0))//in front of backdrop
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    robot.slides.setTargetPosition(-10);
+                    robot.slides.setPower(0.8);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(0.33, () -> {
                     //robot.drive.followTrajectorySequenceAsync(CenterCycle);
                 })
@@ -349,21 +346,43 @@ public class BlueFarAuton extends LinearOpMode{
 
                 .splineToConstantHeading(new Vector2d(-43.43, 8.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, 8.7), Math.toRadians(0))
+                //.splineToConstantHeading(new Vector2d(30.41, 8.72), Math.toRadians(0))
+                .waitSeconds(0.1)
+                .splineToConstantHeading(new Vector2d(31.33, 8.33), Math.toRadians(0))
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+                    double currentY = robot.drive.getPoseEstimate().getY();
+
+                    double relocalizedY = 72 - (robot.drive.leftUltrasonic.getDistance(DistanceUnit.INCH) + 8);
+
+                    if (Math.abs(currentY - relocalizedY) < 10) {
+                        robot.drive.setPoseEstimate( new Pose2d(
+                                        robot.drive.getPoseEstimate().getX(),
+                                        relocalizedY,
+                                        robot.drive.getPoseEstimate().getHeading()
+                                )
+                        );
+                        //sleep(30000);
+                        robot.drone.fireDrone(true );
+
+                        }
+                    })
                 .splineToConstantHeading(new Vector2d(38.41, 8.73), Math.toRadians(0))
-                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();
 
                     robot.drive.setQueuedTrajectorySequence(
                             RightDeposit1
                     );
-                    robot.drive.setWaitConstraints(30, 7000, MecanumDrive.Side.LEFT);
+                    robot.drive.setWaitConstraints(30, 4000, MecanumDrive.Side.LEFT);
                     robot.drive.startWaiting();
                 })
                 .build();
 
         RightDeposit1 = robot.drive.trajectorySequenceBuilder(LeftSpikeMarker.end())
-                .splineToConstantHeading(new Vector2d(backBoardX, 38.90), Math.toRadians(0))//in front of backdrop
+                .splineToConstantHeading(new Vector2d(backBoardX, 37.55), Math.toRadians(0))//in front of backdrop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP

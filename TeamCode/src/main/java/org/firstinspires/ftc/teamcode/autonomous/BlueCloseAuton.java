@@ -35,7 +35,7 @@ public class BlueCloseAuton extends LinearOpMode{
 
     SpikeMarkerLocation spikeMarkerLocation = SpikeMarkerLocation.CENTER; // Defaults to center
 
-    double backBoardX = 54.2;
+    double backBoardX = 53.2;
 
     @Override
     public void runOpMode() {
@@ -130,7 +130,7 @@ public class BlueCloseAuton extends LinearOpMode{
                             SlidesSM.EVENT.ENABLE_RTP
                     );
 
-                    robot.slides.setTargetPosition(-570);
+                    robot.slides.setTargetPosition(-560);
                     robot.slides.setPower(0.8);
 
                 })
@@ -198,8 +198,8 @@ public class BlueCloseAuton extends LinearOpMode{
                 })
                 .splineToConstantHeading(new Vector2d(backBoardX-5, 26.45), Math.toRadians(0.00))
                 .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(46.50, 43.0), Math.toRadians(0.00))
-                .splineToConstantHeading(new Vector2d(53.43, 55.83), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(44, 43.0), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(50.43, 57.83), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     // Unpower slides
                     robot.slides.statemachine.transition(

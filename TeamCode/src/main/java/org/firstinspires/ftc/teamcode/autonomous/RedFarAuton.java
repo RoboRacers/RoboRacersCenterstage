@@ -42,7 +42,7 @@ public class RedFarAuton extends LinearOpMode{
     TrajectorySequence RightSpikeMarker;
     TrajectorySequence RightDeposit1;
 
-    public static double backBoardX = 49.01;
+    public static double backBoardX = 45.45;
 
     public static double wait = 0.1;
 
@@ -94,10 +94,10 @@ public class RedFarAuton extends LinearOpMode{
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.intake.setIntakePower(0.5);
                 })
-                .splineTo(new Vector2d(-62.25, -40.53), Math.toRadians(-180))
+                .splineTo(new Vector2d(-65.45, -40.53), Math.toRadians(-180))
                 // Sweep the stack
-                .splineToConstantHeading(new Vector2d(-61.00, -31.53), Math.toRadians(-180))
-                .splineToConstantHeading(new Vector2d(-62.00, -34.53), Math.toRadians(-180))
+                .splineToConstantHeading(new Vector2d(-64.00, -31.53), Math.toRadians(-180))
+                .splineToConstantHeading(new Vector2d(-65.00, -34.53), Math.toRadians(-180))
                 // wait to intake
                 .waitSeconds(0.75)
                 .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
@@ -113,8 +113,8 @@ public class RedFarAuton extends LinearOpMode{
                 //move to backdrop
 
                 .splineToConstantHeading(new Vector2d(-43.43, -8.77), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-20.16, -8.77), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(38.41, -8.73), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-22.16, -8.77), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36.41, -8.73), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();
@@ -129,7 +129,7 @@ public class RedFarAuton extends LinearOpMode{
                 .build();
 
         LeftDeposit1 = robot.drive.trajectorySequenceBuilder(LeftSpikeMarker.end())
-                .splineToConstantHeading(new Vector2d(backBoardX, -29.90), Math.toRadians(0))//in front of backdrop
+                .splineToConstantHeading(new Vector2d(backBoardX, -27.00), Math.toRadians(0))//in front of backdrop
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
@@ -143,7 +143,8 @@ public class RedFarAuton extends LinearOpMode{
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
                 })
-                .splineToConstantHeading(new Vector2d(45.5, -37.14), Math.toRadians(0))//in front of backdrop
+                .waitSeconds(2)
+                .splineToConstantHeading(new Vector2d(44.5, -37.14), Math.toRadians(0))//in front of backdrop
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                     robot.slides.setTargetPosition(-10);
                     robot.slides.setPower(0.8);
@@ -191,7 +192,7 @@ public class RedFarAuton extends LinearOpMode{
 
                 .splineToConstantHeading(new Vector2d(-43.43, -8.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, -8.7), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(36.41, -8.73), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(37.41, -8.73), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();
@@ -343,7 +344,7 @@ public class RedFarAuton extends LinearOpMode{
 
                 .splineToConstantHeading(new Vector2d(-43.43, -10.13), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-20.16, -10.7), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(39.41, -8.73), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(37.41, -8.73), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     robot.intake.setIntakePower(0);
                     robot.intake.flipDeposit();

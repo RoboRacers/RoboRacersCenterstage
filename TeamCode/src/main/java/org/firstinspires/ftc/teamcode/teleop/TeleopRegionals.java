@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.autonomous.AprilTagDrive;
 import org.firstinspires.ftc.teamcode.modules.statemachines.SlidesSM;
 
 @Config
-@TeleOp(name = "bismallah", group = "16481-Centerstage")
+@TeleOp(name = "Telop for Regionals", group = "16481-Centerstage")
 public class TeleopRegionals extends LinearOpMode {
 
     RobotCore robot;

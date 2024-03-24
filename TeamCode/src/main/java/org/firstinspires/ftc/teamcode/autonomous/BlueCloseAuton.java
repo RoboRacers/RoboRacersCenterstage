@@ -176,10 +176,8 @@ public class BlueCloseAuton extends LinearOpMode{
                     robot.slides.statemachine.transition(
                             SlidesSM.EVENT.ENABLE_RTP
                     );
-
                     robot.slides.setTargetPosition(-560);
                     robot.slides.setPower(0.8);
-
                 })
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -188,13 +186,11 @@ public class BlueCloseAuton extends LinearOpMode{
                 })
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
                     robot.intake.flipIntake();
-
                 })
                 .waitSeconds(0.15)
                 .UNSTABLE_addTemporalMarkerOffset(2, () -> {
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
-
                 })
                 .splineToConstantHeading(new Vector2d(45.00, 33.00), Math.toRadians(0.00)) // Reverse from backdrop
                 //  .splineToConstantHeading(new Vector2d(46.00, 43.0), Math.toRadians(0.00))
@@ -233,9 +229,26 @@ public class BlueCloseAuton extends LinearOpMode{
                     robot.slides.setPower(0.8);
                 })
                 .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.75, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
+                })
+                .waitSeconds(0.5)
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    robot.intake.flipIntake();              //Flip Intake before retracting slides
+                })
+                .waitSeconds(0.15)
+                .UNSTABLE_addTemporalMarkerOffset(1.5, () -> {
+                    robot.slides.setTargetPosition(0);
+                    robot.slides.setPower(0.8);
+                })
+                .splineToConstantHeading(new Vector2d(backBoardX+0.05, 7.85), Math.toRadians(0.00))  // Align to purple pixel on spike marker
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    // Unpower slides
+                    robot.slides.statemachine.transition(
+                            SlidesSM.EVENT.ENABLE_MANUAL
+                    );
+                    robot.slides.setPower(0);
                 })
                 .build();
 

@@ -187,8 +187,8 @@ public class BlueCloseAuton extends LinearOpMode{
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
                     robot.intake.flipIntake();
                 })
-                .waitSeconds(0.15)
-                .UNSTABLE_addTemporalMarkerOffset(2, () -> {
+                .waitSeconds(0.10)
+                .UNSTABLE_addTemporalMarkerOffset(1.35, () -> {
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
                 })
@@ -228,7 +228,7 @@ public class BlueCloseAuton extends LinearOpMode{
                     robot.slides.setTargetPosition(-600);
                     robot.slides.setPower(0.8);
                 })
-                .waitSeconds(1.2)
+                .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     robot.intake.clearHigherLock();
                     robot.intake.clearLowerLock();
@@ -238,7 +238,7 @@ public class BlueCloseAuton extends LinearOpMode{
                     robot.intake.flipIntake();              //Flip Intake before retracting slides
                 })
                 .waitSeconds(0.15)
-                .UNSTABLE_addTemporalMarkerOffset(1.5, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(1.25, () -> {
                     robot.slides.setTargetPosition(0);
                     robot.slides.setPower(0.8);
                 })
